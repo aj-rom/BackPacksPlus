@@ -22,7 +22,6 @@ package sainttx;
 
 import org.bukkit.Bukkit;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +48,6 @@ public class ReflectionUtil {
      */
     private static Map<Class<?>, Map<String, Method>> loadedMethods = new HashMap<Class<?>, Map<String, Method>>();
 
-    /*
-     * Cache of fields that we've found in particular classes
-     */
-    private static Map<Class<?>, Map<String, Field>> loadedFields = new HashMap<Class<?>, Map<String, Field>>();
 
     /**
      * Gets the version string for NMS & OBC class paths
@@ -129,7 +124,7 @@ public class ReflectionUtil {
      */
     public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params) {
         if (!loadedMethods.containsKey(clazz)) {
-            loadedMethods.put(clazz, new HashMap<String, Method>());
+            loadedMethods.put(clazz, new HashMap<>());
         }
 
         Map<String, Method> methods = loadedMethods.get(clazz);
@@ -147,37 +142,6 @@ public class ReflectionUtil {
             e.printStackTrace();
             methods.put(methodName, null);
             loadedMethods.put(clazz, methods);
-            return null;
-        }
-    }
-
-    /**
-     * Get a field with a particular name from a class
-     *
-     * @param clazz     The class
-     * @param fieldName The name of the field
-     * @return The field object
-     */
-    public static Field getField(Class<?> clazz, String fieldName) {
-        if (!loadedFields.containsKey(clazz)) {
-            loadedFields.put(clazz, new HashMap<String, Field>());
-        }
-
-        Map<String, Field> fields = loadedFields.get(clazz);
-
-        if (fields.containsKey(fieldName)) {
-            return fields.get(fieldName);
-        }
-
-        try {
-            Field field = clazz.getField(fieldName);
-            fields.put(fieldName, field);
-            loadedFields.put(clazz, fields);
-            return field;
-        } catch (Exception e) {
-            e.printStackTrace();
-            fields.put(fieldName, null);
-            loadedFields.put(clazz, fields);
             return null;
         }
     }
