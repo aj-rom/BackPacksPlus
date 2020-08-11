@@ -1,6 +1,6 @@
 /*
  *     File: Main.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/11/20, 2:47 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -105,6 +105,8 @@ public final class Main extends JavaPlugin {
                         break;
                     case "CLOCK":
                         material = "WATCH";
+                        break;
+                    default:
                         break;
                 }
             }
