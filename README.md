@@ -4,7 +4,7 @@
 | Command | Permission | Description |
 |---|---|---|
 |/bpp|backpacksplus.use|Allow the player to see their currently available backpacks.|
-|/bpp give <BackPack> <Player> <Amount>|backpacksplus.give|Allow the player to give others backpacks|
+|/bpp give <BackPack> <Player> <Amount>|backpacksplus.give|Allow the player to give others backpacks.|
 |/bpp reload|backpacksplus.reload|Reload the plugin and files.|
 |/bpp help|backpacksplus.help|Show the help page.|
 
