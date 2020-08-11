@@ -1,7 +1,7 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/10/20, 8:10 PM
- *     Project: BackPacksPlus2
+ *     Last Modified: 8/11/20, 2:19 PM
+ *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -113,21 +113,12 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                int amt = 1;
-                final String amount = args[3];
-                if(amount != null && Integer.parseInt(amount) > 0) {
-                    amt = Integer.parseInt(amount);
+                String amount = "";
+                if(args[3] == null || args[3].isEmpty() || Integer.parseInt(args[3]) <= 0) {
+                    amount = "1";
                 }
 
-                final String recMsg = getMsg("OnReceive", targetToReceive, amount, backPackToGive.getDisplayName());
-                final String giveMsg = getMsg("OnGive", sender, amount, backPackToGive.getDisplayName());
-
-                ItemStack itemToGive = backPackToGive.getBackPackItem();
-                itemToGive.setAmount(amt);
-
-                targetToReceive.getInventory().addItem(itemToGive);
-                ChatUtil.msg(targetToReceive, recMsg);
-                ChatUtil.msg(sender, giveMsg);
+                sendBackPack(sender, targetToReceive, amount, backPackToGive);
                 return true;
             default:
                 ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
@@ -135,10 +126,44 @@ public class MainCommand implements CommandExecutor {
         }
     }
 
+    /**
+     * Sends a permission message to the player.
+     * @param sender the person executing the command
+     */
     private void sendPerm(CommandSender sender) {
         ChatUtil.msg(sender, plugin.getMessages().getString("General.Permission"));
     }
 
+
+    /**
+     * Gives the target the desired backpack and amount
+     * @param sender the person giving the backpack
+     * @param targetToReceive the person receiving the backpack
+     * @param amount the third argument (should be a string of an integer)
+     * @param backPackToGive the backpack to give the target
+     */
+    private void sendBackPack(CommandSender sender, Player targetToReceive, String amount, BackPack backPackToGive) {
+        int amt = Integer.parseInt(amount);
+
+        final String recMsg = getMsg("OnReceive", targetToReceive, amount, backPackToGive.getDisplayName());
+        final String giveMsg = getMsg("OnGive", sender, amount, backPackToGive.getDisplayName());
+
+        ItemStack itemToGive = backPackToGive.getBackPackItem();
+        itemToGive.setAmount(amt);
+
+        targetToReceive.getInventory().addItem(itemToGive);
+        ChatUtil.msg(targetToReceive, recMsg);
+        ChatUtil.msg(sender, giveMsg);
+    }
+
+    /**
+     * Gets the desired messages on BackPack send and replaces placeholders
+     * @param path the desired path (OnReceive/OnGive)
+     * @param sender who is sending the backpack
+     * @param amount the amount of backpacks to send
+     * @param displayName the display name of the backpack
+     * @return the replaced message
+     */
     private String getMsg(String path, CommandSender sender, String amount, String displayName) {
         String msg = plugin.getMessages().getString("BackPack." + path);
         if(msg == null) return "Error";

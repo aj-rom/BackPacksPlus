@@ -1,7 +1,7 @@
 /*
  *     File: SkullHelper.java
- *     Last Modified: 7/26/20, 10:39 PM
- *     Project: BackPacksPlus2
+ *     Last Modified: 8/11/20, 2:19 PM
+ *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import zombiestriker.MultiVersionLookupUtil;
 import zombiestriker.ReflectionsUtil;
 
 import java.util.Base64;
@@ -36,8 +35,7 @@ public class SkullHelper {
     /**
      * Return a skull that has a custom texture specified by url.
      *
-     * @param url
-     *            skin url
+     * @param url skin url
      * @return itemstack
      */
     public static ItemStack getCustomSkull(String url) {
@@ -48,8 +46,7 @@ public class SkullHelper {
     /**
      * Return a skull that has a custom texture specified by url.
      *
-     * @param url64
-     *            skin url
+     * @param url64 skin url
      * @return itemstack
      */
     @SuppressWarnings("deprecation")
@@ -62,7 +59,7 @@ public class SkullHelper {
         }
         String encodedData = new String(url64);
         propertyMap.put("textures", new Property("textures", encodedData));
-        ItemStack head = new ItemStack(MultiVersionLookupUtil.getSkull(), 1, (short) 3);
+        ItemStack head = new ItemStack(ReflectionsUtil.getSkull(), 1, (short) 3);
         ItemMeta headMeta = head.getItemMeta();
         Class<?> headMetaClass = headMeta.getClass();
         ReflectionsUtil.getField(headMetaClass, "profile", GameProfile.class).set(headMeta, profile);
