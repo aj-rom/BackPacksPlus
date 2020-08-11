@@ -61,7 +61,7 @@ public class Backend {
                 return;
             }
             plugin.updateMsg = true;
-            ChatUtil.logMsg("&aThere is a new update available. &eLINK HERE");
+            ChatUtil.logMsg("&aThere is a new update available. &ehttps://www.spigotmc.org/resources/backpacksplus.82612/");
         });
     }
 
