@@ -1,0 +1,34 @@
+name: BackPacksPlus
+version: ${project.version}
+main: io.github.coachluck.backpacksplus.Main
+api-version: 1.13
+prefix: BackPacksPlus
+authors: [CoachLuck]
+website: github.com/CoachLuck/BackPacksPlus
+commands:
+  bpp:
+    description: Main command
+    usage: /backpack
+    permission: backpacksplus.use
+    aliases:
+      - backpacksplus
+      - backpack
+
+permissions:
+  backpacksplus.*:
+    description: All permissions for BackPacksPlus
+    default: op
+    children:
+      backpacksplus.use: true
+
+  backpacksplus.use:
+    description: Cmd1 permission
+    default: op
+  backpacksplus.reload:
+    description: Reload BackPacksPlus completley.
+    default: op
+  backpacksplus.view:
+    description: View other online players backpacks.
+    children:
+      backpacksplus.use: true
+    default: op
