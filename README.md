@@ -18,7 +18,7 @@ In order to use custom textures you must first find a head skin from [MineCraftH
 Ensure that all of these under the desired backpack are set to PLAYER_HEAD, and custom data is unset.
 
 Next insert the desired textures link.
-```
+```Yaml
     Material: "PLAYER_HEAD"
     Texture: "http://textures.minecraft.net/texture/<YOURCUSTOMTEXTUREID>"
     CustomData:
