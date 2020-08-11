@@ -1,37 +1,37 @@
+/*
+ *     File: ReflectionsUtil.java
+ *     Last Modified: 8/11/20, 2:46 PM
+ *     Project: BackPacksPlus
+ *     Copyright (C) 2020 CoachL_ck
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package zombiestriker;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public class ReflectionsUtil {
 
-    // Deduce the net.minecraft.server.v* package
-    private static String OBC_PREFIX = Bukkit.getServer().getClass().getPackage().getName();
-    private static String NMS_PREFIX = OBC_PREFIX.replace("org.bukkit.craftbukkit", "net.minecraft.server");
-    private static String VERSION = OBC_PREFIX.replace("org.bukkit.craftbukkit", "").replace(".", "");
-    // Variable replacement
-    private static Pattern MATCH_VARIABLE = Pattern.compile("\\{([^\\}]+)\\}");
-
     private static Material skull;
-    private static final String SERVER_VERSION;
-
-
-    static {
-        String name = Bukkit.getServer().getClass().getName();
-        name = name.substring(name.indexOf("craftbukkit.")
-                + "craftbukkit.".length());
-        name = name.substring(0, name.indexOf("."));
-        SERVER_VERSION = name;
-    }
 
     private ReflectionsUtil() {
     }
-
 
     /**
      * Retrieve a field accessor for a specific field type and name.
