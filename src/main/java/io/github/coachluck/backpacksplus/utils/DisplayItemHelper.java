@@ -1,6 +1,6 @@
 /*
  *     File: DisplayItemHelper.java
- *     Last Modified: 7/23/20, 6:42 PM
+ *     Last Modified: 8/11/20, 2:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *

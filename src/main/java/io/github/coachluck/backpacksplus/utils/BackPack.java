@@ -1,7 +1,7 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 8/10/20, 8:48 PM
- *     Project: BackPacksPlus2
+ *     Last Modified: 8/11/20, 2:19 PM
+ *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
  *     This program is free software: you can redistribute it and/or modify
