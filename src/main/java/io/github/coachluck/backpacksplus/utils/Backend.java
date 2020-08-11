@@ -1,7 +1,7 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/10/20, 8:40 PM
- *     Project: BackPacksPlus2
+ *     Last Modified: 8/11/20, 2:22 PM
+ *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -49,10 +49,9 @@ public class Backend {
      * Checks for plugin updates
      */
     public void checkForUpdates() {
-        if(!plugin.getConfig().getBoolean("Check-For-Updates"))
+        if(!plugin.getConfig().getBoolean("Check-For-Update"))
             return;
 
-        // TODO - CHANGE resource ID
         new UpdateChecker(plugin, 82612).getVersion(version -> {
             int old = Integer.parseInt(plugin.getDescription().getVersion().replaceAll("\\.", ""));
             int newVer = Integer.parseInt(version.replaceAll("\\.", ""));

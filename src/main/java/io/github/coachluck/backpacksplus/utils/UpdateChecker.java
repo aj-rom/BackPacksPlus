@@ -1,6 +1,6 @@
 /*
  *     File: UpdateChecker.java
- *     Last Modified: 7/23/20, 2:54 AM
+ *     Last Modified: 8/11/20, 2:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
