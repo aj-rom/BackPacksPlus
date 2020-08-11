@@ -53,7 +53,7 @@ public class Backend {
             return;
 
         // TODO - CHANGE resource ID
-        new UpdateChecker(plugin, 12345).getVersion(version -> {
+        new UpdateChecker(plugin, 82612).getVersion(version -> {
             int old = Integer.parseInt(plugin.getDescription().getVersion().replaceAll("\\.", ""));
             int newVer = Integer.parseInt(version.replaceAll("\\.", ""));
             if (old >= newVer) {

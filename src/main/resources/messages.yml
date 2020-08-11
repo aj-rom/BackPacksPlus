@@ -24,11 +24,11 @@ BackPack:
       - ""
 Help:
   - ""
-  - "&7&m       &8[&cBack&ePacks&b+&8] &7&m      "
+  - "&7&m                  &r &8[&cBack&ePacks&b+&8] &7&m                "
   - " &e/bpp &8 - &7List all accessible backpacks."
   - " &e/bpp &ahelp &8- &7Shows this page."
   - " &e/bpp &agive &7<&cBackPack&7> <&cPlayer&7> [&camt&7]"
   - "   &8- &7Give the player the specified backpack"
   - " &e/bpp &areload &8- &7Reloads the plugin."
-  - "&7&m                                  "
+  - "&7&m                                                     "
   - ""
