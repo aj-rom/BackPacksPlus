@@ -1,4 +1,4 @@
-# BackPacks+
+# BackPacks+ [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c5cc669592e64634a1e070ac2ba6a200)](https://www.codacy.com/manual/CoachLuck/BackPacksPlus?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CoachLuck/BackPacksPlus&amp;utm_campaign=Badge_Grade)
 
 ### Commands
 | Command | Permission | Description |
