@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 7/25/20, 2:20 AM
+ *     Last Modified: 8/11/20, 2:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -39,24 +39,28 @@ public class BackPackCraftListener implements Listener {
     public void onCraft(CraftItemEvent e) {
         final Player player = (Player) e.getWhoClicked();
         final ItemStack craftedItem = e.getCurrentItem();
+
         for(BackPack backPack : plugin.backPacks) {
             ItemMeta loadedBackPackItem = backPack.getBackPackItem().getItemMeta();
             ItemMeta craftedItemMeta = craftedItem.getItemMeta();
+
             if(loadedBackPackItem.getDisplayName().equals(craftedItemMeta.getDisplayName())
                     && loadedBackPackItem.getLore().equals(craftedItemMeta.getLore())) {
+
                 if(!player.hasPermission(backPack.getPermission())) {
                     e.setCurrentItem(null);
                     e.setResult(Event.Result.DENY);
                     e.setCancelled(true);
                     ChatUtil.msg(player, plugin.getMessages().getString("General.CraftPerm"));
-                } else {
+                }
+                else {
                     e.setCurrentItem(backPack.getBackPackItem());
                     e.setResult(Event.Result.ALLOW);
                     plugin.getMessages().getStringList("BackPack.OnCraft").forEach(s ->
                             ChatUtil.msg(player, s.replaceAll("%backpack%", backPack.getDisplayName())));
                 }
+                return;
             }
         }
-
     }
 }

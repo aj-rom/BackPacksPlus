@@ -1,7 +1,7 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 7/26/20, 10:09 PM
- *     Project: BackPacksPlus2
+ *     Last Modified: 8/11/20, 2:19 PM
+ *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -83,7 +83,7 @@ public class BackPackUseListener implements Listener {
 
         int size = plugin.getConfig().getInt("BackPacks." + backPackName + ".Size");
 
-        String title = ChatUtil.format(plugin.getConfig().getString("BackPacks." + backPackName + ".Title"));
+        final String title = ChatUtil.format(plugin.getConfig().getString("BackPacks." + backPackName + ".Title"));
         Inventory finalInv = Bukkit.createInventory(null, size, title);
 
         finalInv.setContents(inv.getContents());
