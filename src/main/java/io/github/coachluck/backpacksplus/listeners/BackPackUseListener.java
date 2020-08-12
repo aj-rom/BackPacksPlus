@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/12/20, 2:19 PM
+ *     Last Modified: 8/12/20, 3:06 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -53,16 +54,20 @@ public class BackPackUseListener implements Listener {
         final int slot = player.getInventory().getHeldItemSlot();
         ItemStack item = e.getItem();
 
-        if(item.getType() == Material.AIR || !item.hasItemMeta() || item.getAmount() != 1)
+        if(item.getType() == Material.AIR || !item.hasItemMeta())
             return;
 
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         NamespacedKey nameKey = new NamespacedKey(plugin, "name");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
-                || !data.has(nameKey, PersistentDataType.STRING)
-                )
+                || !data.has(nameKey, PersistentDataType.STRING))
             return;
+
+        if(item.getAmount() != 1) {
+            e.setCancelled(true);
+            return;
+        }
 
         final String contents = data.get(contentKey, PersistentDataType.STRING);
         final String backPackName = data.get(nameKey, PersistentDataType.STRING);
@@ -95,14 +100,22 @@ public class BackPackUseListener implements Listener {
 
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
-        if(!plugin.viewingBackPack.containsKey(player))
+        final Player player = (Player) e.getWhoClicked();
+        if (!plugin.viewingBackPack.containsKey(player))
             return;
 
-        if(e.getClickedInventory() == e.getInventory())
-            return;
-
+        ClickType type = e.getClick();
         int slot = plugin.viewingBackPack.get(player);
+
+        // If clicking in top inventory
+        if (e.getClickedInventory() == e.getInventory())
+            if (type.isKeyboardClick()) {
+                if(e.getHotbarButton() == slot) {
+                    e.setCancelled(true);
+            }
+            return;
+        }
+
         if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) {
             if(slot == e.getHotbarButton()) {
                 e.setCancelled(true);
@@ -114,4 +127,5 @@ public class BackPackUseListener implements Listener {
         if(slot == clickedSLot)
             e.setCancelled(true);
     }
+
 }

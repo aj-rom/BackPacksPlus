@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 8/12/20, 1:11 PM
+ *     Last Modified: 8/12/20, 2:58 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -33,6 +33,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.UUID;
+
 
 public class BackPackCloseListener implements Listener {
 
@@ -59,6 +61,7 @@ public class BackPackCloseListener implements Listener {
 
         final String newContents = InventorySerializerUtil.toBase64(viewingInv.getTopInventory());
         data.set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, newContents);
+        data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
         backPack.setItemMeta(meta);
         plugin.viewingBackPack.remove(player);
     }
