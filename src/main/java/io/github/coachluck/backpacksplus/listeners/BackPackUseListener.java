@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -50,7 +51,7 @@ public class BackPackUseListener implements Listener {
 
         final Player player = e.getPlayer();
         final int slot = player.getInventory().getHeldItemSlot();
-        final ItemStack item = e.getItem();
+        ItemStack item = e.getItem();
 
         if(item.getType() == Material.AIR || !item.hasItemMeta())
             return;
@@ -58,9 +59,17 @@ public class BackPackUseListener implements Listener {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         NamespacedKey nameKey = new NamespacedKey(plugin, "name");
+        NamespacedKey uuid = new NamespacedKey(plugin, "uuid");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
                 || !data.has(nameKey, PersistentDataType.STRING))
             return;
+
+        if(item.getAmount() > 1) {
+            ItemStack copy = item;
+            item.setAmount(item.getAmount() - 1);
+            copy.setAmount(1);
+            item = copy;
+        }
 
         final String contents = data.get(contentKey, PersistentDataType.STRING);
         final String backPackName = data.get(nameKey, PersistentDataType.STRING);
@@ -101,9 +110,15 @@ public class BackPackUseListener implements Listener {
             return;
 
         int slot = plugin.viewingBackPack.get(player);
+        if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) {
+            if(slot == e.getHotbarButton()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
         int clickedSLot = e.getSlot();
         if(slot == clickedSLot)
             e.setCancelled(true);
-
     }
 }
