@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/12/20, 2:29 PM
+ *     Last Modified: 8/12/20, 2:33 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -30,7 +30,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 
 public class MainCommand implements CommandExecutor {
 
