@@ -179,6 +179,7 @@ public class BackPack {
         Inventory inv = Bukkit.createInventory(null, size, this.title);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, InventorySerializerUtil.toBase64(inv));
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, name);
+        itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "");
         if(customModelData != -1) {
             itemMeta.setCustomModelData(customModelData);
         }
