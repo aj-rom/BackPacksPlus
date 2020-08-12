@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/12/20, 2:25 PM
+ *     Last Modified: 8/12/20, 5:10 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -75,7 +75,8 @@ public class Backend {
         plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessages().getString("General.Permission")));
     }
 
-    public Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amt) {
+    public Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amount) {
+        int amt = amount;
         if(amt < 1) amt = 1;
         if(amt > 64) amt = 64;
         itemToGive.setAmount(amt);
