@@ -48,7 +48,9 @@ public class BackPackCloseListener implements Listener {
         int backPackSlot = plugin.viewingBackPack.get(player);
 
         ItemStack backPack = player.getInventory().getItem(backPackSlot);
-        if(backPack == null || !backPack.hasItemMeta())
+
+        // TODO : Check if you can open a backpack if stacked
+        if(backPack == null || !backPack.hasItemMeta() || backPack.getAmount() != 1)
             return;
 
         ItemMeta meta = backPack.getItemMeta();

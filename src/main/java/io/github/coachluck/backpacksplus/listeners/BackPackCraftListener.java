@@ -23,6 +23,7 @@ package io.github.coachluck.backpacksplus.listeners;
 import io.github.coachluck.backpacksplus.Main;
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -30,6 +31,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.util.UUID;
 
 public class BackPackCraftListener implements Listener {
 
@@ -40,6 +45,10 @@ public class BackPackCraftListener implements Listener {
         final Player player = (Player) e.getWhoClicked();
         final ItemStack craftedItem = e.getCurrentItem();
 
+        // TODO : Check if you can craft more than 1 backpack at once
+        if(craftedItem.getAmount() > 1) {
+            return;
+        }
         for(BackPack backPack : plugin.backPacks) {
             ItemMeta loadedBackPackItem = backPack.getBackPackItem().getItemMeta();
             ItemMeta craftedItemMeta = craftedItem.getItemMeta();
@@ -54,7 +63,12 @@ public class BackPackCraftListener implements Listener {
                     ChatUtil.msg(player, plugin.getMessages().getString("General.CraftPerm"));
                 }
                 else {
-                    e.setCurrentItem(backPack.getBackPackItem());
+                    // TODO : Check if stackable after craft
+                    ItemStack backPackItem = backPack.getBackPackItem();
+                    PersistentDataContainer dataContainer = backPackItem.getItemMeta().getPersistentDataContainer();
+                    String uuidString = UUID.randomUUID().toString();
+                    dataContainer.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuidString);
+                    e.setCurrentItem(backPackItem);
                     e.setResult(Event.Result.ALLOW);
                     plugin.getMessages().getStringList("BackPack.OnCraft").forEach(s ->
                             ChatUtil.msg(player, s.replaceAll("%backpack%", backPack.getDisplayName())));

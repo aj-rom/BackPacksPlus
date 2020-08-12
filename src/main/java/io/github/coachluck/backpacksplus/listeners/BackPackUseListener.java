@@ -59,7 +59,6 @@ public class BackPackUseListener implements Listener {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         NamespacedKey nameKey = new NamespacedKey(plugin, "name");
-        NamespacedKey uuid = new NamespacedKey(plugin, "uuid");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
                 || !data.has(nameKey, PersistentDataType.STRING))
             return;
