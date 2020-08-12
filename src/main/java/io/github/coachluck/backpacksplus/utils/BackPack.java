@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/12/20, 2:26 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -175,7 +175,6 @@ public class BackPack {
         ItemMeta itemMeta = backPackItem.getItemMeta();
         itemMeta.setDisplayName(ChatUtil.format(displayName));
         itemMeta.setLore(lore);
-
         Inventory inv = Bukkit.createInventory(null, size, this.title);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, InventorySerializerUtil.toBase64(inv));
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, name);

@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/12/20, 2:26 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -25,19 +25,11 @@ import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.DisplayItemHelper;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class MainCommand implements CommandExecutor {
 
@@ -124,6 +116,8 @@ public class MainCommand implements CommandExecutor {
                 String amount = "";
                 if(args[3] == null || args[3].isEmpty() || Integer.parseInt(args[3]) <= 0) {
                     amount = "1";
+                } else {
+                    amount = args[3];
                 }
 
                 sendBackPack(sender, targetToReceive, amount, backPackToGive);
@@ -152,21 +146,12 @@ public class MainCommand implements CommandExecutor {
      */
     private void sendBackPack(CommandSender sender, Player targetToReceive, String amount, BackPack backPackToGive) {
         int amt = Integer.parseInt(amount);
-
-        final String recMsg = getMsg("OnReceive", targetToReceive, amount, backPackToGive.getDisplayName());
-        final String giveMsg = getMsg("OnGive", sender, amount, backPackToGive.getDisplayName());
-
         ItemStack itemToGive = backPackToGive.getBackPackItem();
 
-        // TODO : Check that this works
-        for(int i = 0; i < amt; i++) {
-            String uuidString = UUID.randomUUID().toString();
-            ItemMeta meta = itemToGive.getItemMeta();
-            PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+        amt = plugin.getBackend().sendBackPackItems(targetToReceive, itemToGive, amt);
 
-            dataContainer.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, uuidString);
-            targetToReceive.getInventory().addItem(itemToGive);
-        }
+        final String recMsg = getMsg("OnReceive", targetToReceive, amt, backPackToGive.getDisplayName());
+        final String giveMsg = getMsg("OnGive", sender, amt, backPackToGive.getDisplayName());
 
         ChatUtil.msg(targetToReceive, recMsg);
         ChatUtil.msg(sender, giveMsg);
@@ -180,12 +165,12 @@ public class MainCommand implements CommandExecutor {
      * @param displayName the display name of the backpack
      * @return the replaced message
      */
-    private String getMsg(String path, CommandSender sender, String amount, String displayName) {
+    private String getMsg(String path, CommandSender sender, Integer amount, String displayName) {
         String msg = plugin.getMessages().getString("BackPack." + path);
         if(msg == null) return "Error";
         msg = msg
                 .replaceAll("%player%", sender.getName())
-                .replaceAll("%amt%", amount)
+                .replaceAll("%amt%", Integer.toString(amount))
                 .replaceAll("%backpack%", displayName);
 
         return msg;

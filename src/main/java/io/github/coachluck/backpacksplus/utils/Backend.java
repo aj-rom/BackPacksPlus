@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/11/20, 2:22 PM
+ *     Last Modified: 8/12/20, 2:25 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -25,6 +25,8 @@ import io.github.coachluck.backpacksplus.commands.MainCommand;
 import io.github.coachluck.backpacksplus.listeners.BackPackCloseListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackCraftListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackUseListener;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 public class Backend {
@@ -71,5 +73,14 @@ public class Backend {
         pm.registerEvents(new BackPackCloseListener(), plugin);
         plugin.getCommand("bpp").setExecutor(new MainCommand(plugin));
         plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessages().getString("General.Permission")));
+    }
+
+    public Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amt) {
+        if(amt < 1) amt = 1;
+        if(amt > 64) amt = 64;
+        itemToGive.setAmount(amt);
+        targetToReceive.getInventory().addItem(itemToGive);
+
+        return amt;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/12/20, 1:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -49,8 +49,7 @@ public class BackPackCloseListener implements Listener {
 
         ItemStack backPack = player.getInventory().getItem(backPackSlot);
 
-        // TODO : Check if you can open a backpack if stacked
-        if(backPack == null || !backPack.hasItemMeta() || backPack.getAmount() != 1)
+        if(backPack == null || !backPack.hasItemMeta())
             return;
 
         ItemMeta meta = backPack.getItemMeta();

@@ -1,6 +1,6 @@
 /*
  *     File: ChatUtil.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/12/20, 1:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -71,4 +71,6 @@ public class ChatUtil {
         });
         return formattedLore;
     }
+
+
 }

@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/12/20, 2:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -53,22 +53,16 @@ public class BackPackUseListener implements Listener {
         final int slot = player.getInventory().getHeldItemSlot();
         ItemStack item = e.getItem();
 
-        if(item.getType() == Material.AIR || !item.hasItemMeta())
+        if(item.getType() == Material.AIR || !item.hasItemMeta() || item.getAmount() != 1)
             return;
 
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         NamespacedKey nameKey = new NamespacedKey(plugin, "name");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
-                || !data.has(nameKey, PersistentDataType.STRING))
+                || !data.has(nameKey, PersistentDataType.STRING)
+                )
             return;
-
-        if(item.getAmount() > 1) {
-            ItemStack copy = item;
-            item.setAmount(item.getAmount() - 1);
-            copy.setAmount(1);
-            item = copy;
-        }
 
         final String contents = data.get(contentKey, PersistentDataType.STRING);
         final String backPackName = data.get(nameKey, PersistentDataType.STRING);
