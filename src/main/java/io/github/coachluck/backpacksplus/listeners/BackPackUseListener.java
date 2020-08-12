@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/12/20, 3:06 PM
+ *     Last Modified: 8/12/20, 5:05 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -107,20 +107,18 @@ public class BackPackUseListener implements Listener {
         ClickType type = e.getClick();
         int slot = plugin.viewingBackPack.get(player);
 
-        // If clicking in top inventory
-        if (e.getClickedInventory() == e.getInventory())
-            if (type.isKeyboardClick()) {
-                if(e.getHotbarButton() == slot) {
+        // If using hotbar buttons
+        if (e.getClickedInventory() == e.getInventory()
+                && type.isKeyboardClick() && e.getHotbarButton() == slot) {
                     e.setCancelled(true);
-            }
-            return;
+                    return;
         }
 
-        if(e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) {
-            if(slot == e.getHotbarButton()) {
+        if((e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD)
+                && slot == e.getHotbarButton()) {
+
                 e.setCancelled(true);
                 return;
-            }
         }
 
         int clickedSLot = e.getSlot();
