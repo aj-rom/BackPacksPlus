@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/12/20, 5:05 PM
+ *     Last Modified: 8/13/20, 4:43 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -122,7 +122,8 @@ public class BackPackUseListener implements Listener {
         }
 
         int clickedSLot = e.getSlot();
-        if(slot == clickedSLot)
+        if(slot == clickedSLot
+                && e.getClickedInventory() == player.getOpenInventory().getBottomInventory())
             e.setCancelled(true);
     }
 
