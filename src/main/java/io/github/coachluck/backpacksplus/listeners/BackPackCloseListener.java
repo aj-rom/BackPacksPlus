@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 8/12/20, 2:58 PM
+ *     Last Modified: 8/14/20, 2:10 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -59,10 +60,25 @@ public class BackPackCloseListener implements Listener {
         if(data.isEmpty())
             return;
 
-        final String newContents = InventorySerializerUtil.toBase64(viewingInv.getTopInventory());
+        String newContents = InventorySerializerUtil.toBase64(viewingInv.getTopInventory());
         data.set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, newContents);
-        data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
+
+        final NamespacedKey uuidKey = new NamespacedKey(plugin, "uuid");
+        String uuid = "";
+        Inventory inv = viewingInv.getTopInventory();
+        boolean empty = true;
+        for(ItemStack item : inv.getStorageContents()) {
+            if (item != null) {
+                empty = false;
+                break;
+            }
+        }
+        if(!empty) {
+            uuid = UUID.randomUUID().toString();
+        }
+        data.set(uuidKey, PersistentDataType.STRING, uuid);
         backPack.setItemMeta(meta);
+        player.getInventory().setItem(backPackSlot, backPack);
         plugin.viewingBackPack.remove(player);
     }
 }

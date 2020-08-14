@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/13/20, 4:43 PM
+ *     Last Modified: 8/14/20, 2:13 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -36,6 +36,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -57,7 +58,8 @@ public class BackPackUseListener implements Listener {
         if(item.getType() == Material.AIR || !item.hasItemMeta())
             return;
 
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer data = meta.getPersistentDataContainer();
         NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         NamespacedKey nameKey = new NamespacedKey(plugin, "name");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
@@ -68,6 +70,10 @@ public class BackPackUseListener implements Listener {
             e.setCancelled(true);
             return;
         }
+        player.getInventory().remove(item);
+        data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "1");
+        item.setItemMeta(meta);
+        player.getInventory().setItem(slot, item);
 
         final String contents = data.get(contentKey, PersistentDataType.STRING);
         final String backPackName = data.get(nameKey, PersistentDataType.STRING);
@@ -104,7 +110,7 @@ public class BackPackUseListener implements Listener {
         if (!plugin.viewingBackPack.containsKey(player))
             return;
 
-        ClickType type = e.getClick();
+        final ClickType type = e.getClick();
         int slot = plugin.viewingBackPack.get(player);
 
         // If using hotbar buttons
