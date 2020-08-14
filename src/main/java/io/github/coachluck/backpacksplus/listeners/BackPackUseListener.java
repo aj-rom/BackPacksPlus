@@ -60,8 +60,8 @@ public class BackPackUseListener implements Listener {
 
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        NamespacedKey contentKey = new NamespacedKey(plugin, "content");
-        NamespacedKey nameKey = new NamespacedKey(plugin, "name");
+        final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
+        final NamespacedKey nameKey = new NamespacedKey(plugin, "name");
         if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
                 || !data.has(nameKey, PersistentDataType.STRING))
             return;
@@ -70,7 +70,7 @@ public class BackPackUseListener implements Listener {
             e.setCancelled(true);
             return;
         }
-        player.getInventory().remove(item);
+        player.getInventory().setItem(slot, null);
         data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "1");
         item.setItemMeta(meta);
         player.getInventory().setItem(slot, item);
