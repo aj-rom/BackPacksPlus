@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/12/20, 5:10 PM
+ *     Last Modified: 8/14/20, 1:24 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -79,6 +79,7 @@ public class Backend {
         int amt = amount;
         if(amt < 1) amt = 1;
         if(amt > 64) amt = 64;
+
         itemToGive.setAmount(amt);
         targetToReceive.getInventory().addItem(itemToGive);
 
