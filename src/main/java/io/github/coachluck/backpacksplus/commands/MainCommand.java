@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/12/20, 2:33 PM
+ *     Last Modified: 8/14/20, 2:17 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -154,7 +154,8 @@ public class MainCommand implements CommandExecutor {
         final String giveMsg = getMsg("OnGive", sender, amt, backPackToGive.getDisplayName());
 
         ChatUtil.msg(targetToReceive, recMsg);
-        ChatUtil.msg(sender, giveMsg);
+        if(sender != targetToReceive)
+            ChatUtil.msg(sender, giveMsg);
     }
 
     /**
