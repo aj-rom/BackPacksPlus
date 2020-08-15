@@ -29,4 +29,4 @@ Next insert the desired textures link.
 ```
 
 ### Translations
-A guide to using languages other than English can be found in the ![Wiki](https://github.com/CoachLuck/BackPacksPlus/wiki/Translations).
+A guide to using languages other than English can be found in the [Wiki](https://github.com/CoachLuck/BackPacksPlus/wiki/Translations).
