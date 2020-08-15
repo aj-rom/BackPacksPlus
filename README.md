@@ -1,8 +1,8 @@
-# ![BackPacks+](https://i.imgur.com/Yj53vbn.png)
+![](https://i.imgur.com/fyxcbka.png)
 
 ***
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c5cc669592e64634a1e070ac2ba6a200)](https://www.codacy.com/manual/CoachLuck/BackPacksPlus?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CoachLuck/BackPacksPlus&amp;utm_campaign=Badge_Grade)
+[![](https://img.shields.io/github/v/release/CoachLuck/BackPacksPlus?style=for-the-badge)](https://github.com/CoachLuck/BackPacksPlus "![](https://img.shields.io/github/v/release/CoachLuck/BackPacksPlus?style=for-the-badge)") [![](https://img.shields.io/spiget/downloads/82612?style=for-the-badge)](https://www.spigotmc.org/resources/a.82612/)  [![](https://img.shields.io/codacy/grade/c5cc669592e64634a1e070ac2ba6a200?style=for-the-badge)](http://app.codacy.com/manual/CoachLuck/BackPacksPlus/dashboard?bid=19650936 "![](https://img.shields.io/codacy/grade/c5cc669592e64634a1e070ac2ba6a200?style=for-the-badge)") ![](https://img.shields.io/github/issues/CoachLuck/BackPacksPlus?style=for-the-badge)
 
 ### Commands
 | Command | Permission | Description |
