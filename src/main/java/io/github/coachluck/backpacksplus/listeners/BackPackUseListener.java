@@ -70,6 +70,7 @@ public class BackPackUseListener implements Listener {
             e.setCancelled(true);
             return;
         }
+
         player.getInventory().setItem(slot, null);
         data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "1");
         item.setItemMeta(meta);
