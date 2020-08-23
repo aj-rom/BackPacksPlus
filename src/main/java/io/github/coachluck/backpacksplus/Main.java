@@ -34,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public final class Main extends JavaPlugin {
 
@@ -45,6 +46,7 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private Backend backend;
+    public HashMap<UUID, Integer> playerStackLimit;
     public List<BackPack> backPacks;
 
     @Override
@@ -52,6 +54,7 @@ public final class Main extends JavaPlugin {
         setUpConfig();
         backend = new Backend(this);
         backPacks = new ArrayList<>();
+        playerStackLimit = new HashMap<>();
         viewingBackPack = new HashMap<>();
         isLegacy = Integer.parseInt(Bukkit.getBukkitVersion()
                         .substring(0, 4)

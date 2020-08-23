@@ -75,7 +75,7 @@ public class DisplayItemHelper {
                 new TextComponent(itemJson)
         };
 
-        HoverEvent event = new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents);
+        final HoverEvent event = new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents);
 
         TextComponent component = new TextComponent(message);
         component.setHoverEvent(event);
