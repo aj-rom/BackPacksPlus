@@ -49,9 +49,9 @@ public class ChatUtil {
      * **/
     public static String format(String format) {
         String formatted = format;
-        if(formatted.contains("&#")) {
+        if(formatted.contains("&#"))
             formatted = translateHexColorCodes(formatted);
-        }
+
         return ChatColor.translateAlternateColorCodes('&', formatted);
     }
 
