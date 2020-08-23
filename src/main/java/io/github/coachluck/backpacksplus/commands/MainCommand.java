@@ -132,6 +132,7 @@ public class MainCommand implements CommandExecutor {
                 ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
                 return true;
         }
+
     }
 
     /**
@@ -160,6 +161,7 @@ public class MainCommand implements CommandExecutor {
         final String giveMsg = getMsg("OnGive", sender, amt, backPackToGive.getDisplayName());
 
         ChatUtil.msg(targetToReceive, recMsg);
+
         if(sender != targetToReceive)
             ChatUtil.msg(sender, giveMsg);
     }
@@ -174,7 +176,9 @@ public class MainCommand implements CommandExecutor {
      */
     private String getMsg(String path, CommandSender sender, Integer amount, String displayName) {
         String msg = plugin.getMessages().getString("BackPack." + path);
+
         if(msg == null) return "Error";
+
         msg = msg
                 .replaceAll("%player%", sender.getName())
                 .replaceAll("%amt%", Integer.toString(amount))
