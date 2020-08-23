@@ -70,8 +70,7 @@ public class DisplayItemHelper {
      * @param item the item to show the name name and lore of
      */
     public static void sendItemTooltipMessage(Player player, String message, ItemStack item) {
-        String itemJson = convertItemStackToJson(item);
-
+        final String itemJson = convertItemStackToJson(item);
         BaseComponent[] hoverEventComponents = new BaseComponent[]{
                 new TextComponent(itemJson)
         };

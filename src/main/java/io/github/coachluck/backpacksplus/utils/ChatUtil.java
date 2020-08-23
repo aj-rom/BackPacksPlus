@@ -27,8 +27,13 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatUtil {
+
+    public static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
+    public static final char COLOR_CHAR = '\u00A7';
 
     public static void msg(Player player, String message) {
         player.sendMessage(format(message));
@@ -43,7 +48,11 @@ public class ChatUtil {
      * @param format the string to translate color codes
      * **/
     public static String format(String format) {
-        return ChatColor.translateAlternateColorCodes('&', format);
+        String formatted = format;
+        if(formatted.contains("&#")) {
+            formatted = translateHexColorCodes(formatted);
+        }
+        return ChatColor.translateAlternateColorCodes('&', formatted);
     }
 
     /**
@@ -72,5 +81,24 @@ public class ChatUtil {
         return formattedLore;
     }
 
+    /**
+     * Adds the HEX color to the string
+     * @param message the string to colorize
+     * @return the colored string
+     */
+    public static String translateHexColorCodes(String message) {
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
+
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            matcher.appendReplacement(buffer, COLOR_CHAR + "x"
+                    + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1)
+                    + COLOR_CHAR + group.charAt(2) + COLOR_CHAR + group.charAt(3)
+                    + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
+            );
+        }
+        return matcher.appendTail(buffer).toString();
+    }
 
 }

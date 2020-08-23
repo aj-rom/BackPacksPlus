@@ -53,21 +53,22 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
 
-            plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
-                    .forEach(s -> ChatUtil.msg(player, s));
-
-            int i = 1;
-            for(BackPack backPack : plugin.backPacks) {
-                if(player.hasPermission(backPack.getPermission())) {
-                    DisplayItemHelper.sendItemTooltipMessage(player,
-                            ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
-                                    .replaceAll("%backpack%", backPack.getDisplayName())
-                                    .replaceAll("%num%", Integer.toString(i))),
-                            backPack.getDisplayItem());
+            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
+                        .forEach(s -> ChatUtil.msg(player, s));
+                int i = 1;
+                for(BackPack backPack : plugin.backPacks) {
+                    if(player.hasPermission(backPack.getPermission())) {
+                        DisplayItemHelper.sendItemTooltipMessage(player,
+                                ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
+                                        .replaceAll("%backpack%", backPack.getDisplayName())
+                                        .replaceAll("%num%", Integer.toString(i))),
+                                backPack.getBackPackItem());
+                    }
                 }
-            }
+                plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
+            });
 
-            plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
             return true;
         }
 
@@ -79,11 +80,13 @@ public class MainCommand implements CommandExecutor {
                     sendPerm(sender);
                     return true;
                 }
-                plugin.reloadConfig();
-                plugin.reloadMessages();
-                plugin.loadBackPacks();
+                Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                    plugin.reloadConfig();
+                    plugin.reloadMessages();
+                    plugin.loadBackPacks();
 
-                ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
+                    ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
+                });
                 return true;
             case "h":
                 if(!sender.hasPermission("backpacksplus.help")) {
@@ -113,14 +116,17 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                String amount = "";
-                if(args[3] == null || args[3].isEmpty() || Integer.parseInt(args[3]) <= 0) {
+                String amount;
+                if(args.length != 4  || args[3] == null || Integer.parseInt(args[3]) <= 0) {
                     amount = "1";
                 } else {
                     amount = args[3];
                 }
 
-                sendBackPack(sender, targetToReceive, amount, backPackToGive);
+                final String finalAmount = amount;
+                Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                    sendBackPack(sender, targetToReceive, finalAmount, backPackToGive);
+                });
                 return true;
             default:
                 ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
@@ -146,7 +152,7 @@ public class MainCommand implements CommandExecutor {
      */
     private void sendBackPack(CommandSender sender, Player targetToReceive, String amount, BackPack backPackToGive) {
         int amt = Integer.parseInt(amount);
-        ItemStack itemToGive = backPackToGive.getBackPackItem();
+        final ItemStack itemToGive = backPackToGive.getBackPackItem();
 
         amt = plugin.getBackend().sendBackPackItems(targetToReceive, itemToGive, amt);
 
