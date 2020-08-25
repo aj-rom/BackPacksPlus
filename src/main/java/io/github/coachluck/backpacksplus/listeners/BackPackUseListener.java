@@ -66,8 +66,9 @@ public class BackPackUseListener implements Listener {
                 || !data.has(nameKey, PersistentDataType.STRING))
             return;
 
+        e.setCancelled(true);
+
         if(item.getAmount() != 1) {
-            e.setCancelled(true);
             return;
         }
 

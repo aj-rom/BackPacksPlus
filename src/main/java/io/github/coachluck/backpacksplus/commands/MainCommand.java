@@ -83,10 +83,9 @@ public class MainCommand implements CommandExecutor {
                 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                     plugin.reloadConfig();
                     plugin.reloadMessages();
-                    plugin.loadBackPacks();
-
-                    ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
                 });
+                plugin.loadBackPacks();
+                ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
                 return true;
             case "h":
                 if(!sender.hasPermission("backpacksplus.help")) {
@@ -158,11 +157,11 @@ public class MainCommand implements CommandExecutor {
         amt = plugin.getBackend().sendBackPackItems(targetToReceive, itemToGive, amt);
 
         final String recMsg = getMsg("OnReceive", targetToReceive, amt, backPackToGive.getDisplayName());
-        final String giveMsg = getMsg("OnGive", sender, amt, backPackToGive.getDisplayName());
+        final String giveMsg = getMsg("OnGive", targetToReceive, amt, backPackToGive.getDisplayName());
 
         ChatUtil.msg(targetToReceive, recMsg);
 
-        if(sender != targetToReceive)
+        if(!sender.equals(targetToReceive))
             ChatUtil.msg(sender, giveMsg);
     }
 
