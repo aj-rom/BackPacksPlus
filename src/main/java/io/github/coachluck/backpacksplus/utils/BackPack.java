@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 8/12/20, 2:26 PM
+ *     Last Modified: 8/25/20, 1:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -73,7 +73,7 @@ public class BackPack {
      * The ItemStack of this backpack
      */
     @Getter
-    private ItemStack backPackItem;
+    private final ItemStack backPackHoldItem;
 
     /**
      * The lore of this backpack
@@ -155,43 +155,50 @@ public class BackPack {
 
         this.size = plugin.getConfig().getInt(this.key + ".Size");
 
-        createBackPackItem();
+        backPackHoldItem = getBackPackItem();
         registerRecipe();
     }
 
     /**
      * Creates the backpack item
      */
-    private void createBackPackItem() {
+    public ItemStack getBackPackItem() {
         Material material = this.material;
-        backPackItem = new ItemStack(material);
+        ItemStack bpItem = new ItemStack(material);
+
         if(!textureUrl.isEmpty() &&
                 (material.toString().equalsIgnoreCase("SKULL")
                         || material.toString().equalsIgnoreCase("PLAYER_HEAD")))
         {
-                backPackItem = SkullHelper.getCustomSkull(textureUrl);
+            bpItem = SkullHelper.getCustomSkull(textureUrl);
         }
 
-        ItemMeta itemMeta = backPackItem.getItemMeta();
+        ItemMeta itemMeta = bpItem.getItemMeta();
         itemMeta.setDisplayName(ChatUtil.format(displayName));
         itemMeta.setLore(lore);
+
         Inventory inv = Bukkit.createInventory(null, size, this.title);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, InventorySerializerUtil.toBase64(inv));
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, name);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "");
+
         if(customModelData != -1) {
             itemMeta.setCustomModelData(customModelData);
         }
         if(enchanted) {
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
         }
+
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         itemMeta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
         itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-        backPackItem.setItemMeta(itemMeta);
+
+        bpItem.setItemMeta(itemMeta);
+
+        return bpItem;
     }
 
     /**
@@ -206,7 +213,7 @@ public class BackPack {
      * Get's the namespaced
      */
     private ShapedRecipe getShapedRecipe() {
-        ShapedRecipe recipe = new ShapedRecipe(nameSpacedKey, backPackItem);
+        ShapedRecipe recipe = new ShapedRecipe(nameSpacedKey, backPackHoldItem);
 
         recipe.shape(recipeShapeList.get(0), recipeShapeList.get(1), recipeShapeList.get(2));
 
@@ -226,19 +233,19 @@ public class BackPack {
      */
     public ItemStack getDisplayItem() {
         final String path = "BackPacks." + name + ".Recipe.";
-        final List<String> lore = plugin.getConfig().getStringList(
+        final List<String> shape = plugin.getConfig().getStringList(
                 path + "Shape");
 
-        ItemStack item = backPackItem;
+        ItemStack item = getBackPackItem();
         ItemMeta meta = item.getItemMeta();
         List<String> newLore = new ArrayList<>();
 
         newLore.add(ChatUtil.format("&8--------"));
         for(int i = 0; i < 3; i++) {
             newLore.add(ChatUtil.format("&8| &e"
-                    + lore.get(i).substring(0, 1) + " &8| &e"
-                    + lore.get(i).substring(1, 2) + " &8| &e"
-                    + lore.get(i).substring(2, 3) + " &8|"));
+                    + shape.get(i).substring(0, 1) + " &8| &e"
+                    + shape.get(i).substring(1, 2) + " &8| &e"
+                    + shape.get(i).substring(2, 3) + " &8|"));
             newLore.add(ChatUtil.format("&8--------"));
         }
 

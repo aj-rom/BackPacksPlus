@@ -1,6 +1,6 @@
 /*
  *     File: DisplayItemHelper.java
- *     Last Modified: 8/11/20, 2:19 PM
+ *     Last Modified: 8/25/20, 1:06 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -67,9 +67,10 @@ public class DisplayItemHelper {
      * Sends the item as a tooltip to the message
      * @param player the player to send the message too
      * @param message the message to add the hover element too.
-     * @param item the item to show the name name and lore of
+     * @param backPack to show the recipe of
      */
-    public static void sendItemTooltipMessage(Player player, String message, ItemStack item) {
+    public static void sendItemTooltipMessage(Player player, String message, BackPack backPack) {
+        final ItemStack item = backPack.getDisplayItem();
         final String itemJson = convertItemStackToJson(item);
         BaseComponent[] hoverEventComponents = new BaseComponent[]{
                 new TextComponent(itemJson)
