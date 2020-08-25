@@ -1,6 +1,6 @@
 /*
  *     File: Main.java
- *     Last Modified: 8/11/20, 2:47 PM
+ *     Last Modified: 8/25/20, 1:19 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -34,7 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public final class Main extends JavaPlugin {
 
@@ -46,15 +45,15 @@ public final class Main extends JavaPlugin {
 
     @Getter
     private Backend backend;
-//    public HashMap<UUID, Integer> playerStackLimit;
-    public List<BackPack> backPacks;
+
+    @Getter
+    private List<BackPack> backPacks;
 
     @Override
     public void onLoad() {
         setUpConfig();
         backend = new Backend(this);
         backPacks = new ArrayList<>();
-//        playerStackLimit = new HashMap<>();
         viewingBackPack = new HashMap<>();
         isLegacy = Integer.parseInt(Bukkit.getBukkitVersion()
                         .substring(0, 4)
