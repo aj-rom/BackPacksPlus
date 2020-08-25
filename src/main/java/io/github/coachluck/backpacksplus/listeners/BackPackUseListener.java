@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/14/20, 2:13 PM
+ *     Last Modified: 8/25/20, 1:42 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -48,29 +48,26 @@ public class BackPackUseListener implements Listener {
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent e) {
-        if(e.getItem() == null || (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK))
+        if(e.getItem() == null ||
+                (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK))
             return;
 
         final Player player = e.getPlayer();
         final int slot = player.getInventory().getHeldItemSlot();
         ItemStack item = e.getItem();
 
-        if(item.getType() == Material.AIR || !item.hasItemMeta())
+        if(item.getType() == Material.AIR || !item.hasItemMeta()
+                || item.getAmount() != 1 || item.getItemMeta() == null)
             return;
 
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
         final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         final NamespacedKey nameKey = new NamespacedKey(plugin, "name");
-        if(data.isEmpty() || !data.has(contentKey, PersistentDataType.STRING)
-                || !data.has(nameKey, PersistentDataType.STRING))
+        if(!hasData(meta, data, contentKey, nameKey))
             return;
 
         e.setCancelled(true);
-
-        if(item.getAmount() != 1) {
-            return;
-        }
 
         player.getInventory().setItem(slot, null);
         data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "1");
@@ -133,6 +130,12 @@ public class BackPackUseListener implements Listener {
         if(slot == clickedSLot
                 && e.getClickedInventory() == player.getOpenInventory().getBottomInventory())
             e.setCancelled(true);
+    }
+
+    private boolean hasData(ItemMeta meta, PersistentDataContainer data, NamespacedKey contentKey, NamespacedKey nameKey) {
+
+        return !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
+                && data.has(nameKey, PersistentDataType.STRING);
     }
 
 }
