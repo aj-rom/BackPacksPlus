@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/14/20, 2:17 PM
+ *     Last Modified: 8/25/20, 1:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -31,6 +31,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class MainCommand implements CommandExecutor {
 
     private final Main plugin;
@@ -53,22 +55,23 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
 
-            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+//            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                 plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
                         .forEach(s -> ChatUtil.msg(player, s));
                 int i = 1;
-                for(BackPack backPack : plugin.backPacks) {
+                List<BackPack> backPacks = plugin.getBackPacks();
+                for(BackPack backPack : backPacks) {
                     if(player.hasPermission(backPack.getPermission())) {
                         DisplayItemHelper.sendItemTooltipMessage(player,
                                 ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
                                         .replaceAll("%backpack%", backPack.getDisplayName())
                                         .replaceAll("%num%", Integer.toString(i))),
-                                backPack.getBackPackItem());
+                                backPack);
                     }
                 }
                 plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
-            });
-
+//            });
+            plugin.loadBackPacks();
             return true;
         }
 
@@ -124,7 +127,8 @@ public class MainCommand implements CommandExecutor {
 
                 final String finalAmount = amount;
                 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    sendBackPack(sender, targetToReceive, finalAmount, backPackToGive);
+                    int amt = plugin.getBackend().sendBackPackItems(targetToReceive, backPackToGive.getBackPackHoldItem(), Integer.parseInt(finalAmount));
+                    sendBackPack(sender, targetToReceive, amt, backPackToGive);
                 });
                 return true;
             default:
@@ -147,14 +151,11 @@ public class MainCommand implements CommandExecutor {
      * Gives the target the desired backpack and amount
      * @param sender the person giving the backpack
      * @param targetToReceive the person receiving the backpack
-     * @param amount the third argument (should be a string of an integer)
+     * @param amt the amount of backpacks to give
      * @param backPackToGive the backpack to give the target
      */
-    private void sendBackPack(CommandSender sender, Player targetToReceive, String amount, BackPack backPackToGive) {
-        int amt = Integer.parseInt(amount);
-        final ItemStack itemToGive = backPackToGive.getBackPackItem();
-
-        amt = plugin.getBackend().sendBackPackItems(targetToReceive, itemToGive, amt);
+    private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive) {
+        final ItemStack itemToGive = backPackToGive.getBackPackHoldItem();
 
         final String recMsg = getMsg("OnReceive", targetToReceive, amt, backPackToGive.getDisplayName());
         final String giveMsg = getMsg("OnGive", targetToReceive, amt, backPackToGive.getDisplayName());

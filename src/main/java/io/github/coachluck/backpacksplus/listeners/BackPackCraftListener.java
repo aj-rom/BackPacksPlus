@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 8/12/20, 2:26 PM
+ *     Last Modified: 8/25/20, 1:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -40,8 +40,8 @@ public class BackPackCraftListener implements Listener {
         final Player player = (Player) e.getWhoClicked();
         final ItemStack craftedItem = e.getCurrentItem();
 
-        for(BackPack backPack : plugin.backPacks) {
-            ItemMeta loadedBackPackItem = backPack.getBackPackItem().getItemMeta();
+        for(BackPack backPack : plugin.getBackPacks()) {
+            ItemMeta loadedBackPackItem = backPack.getBackPackHoldItem().getItemMeta();
             ItemMeta craftedItemMeta = craftedItem.getItemMeta();
 
             if(loadedBackPackItem.getDisplayName().equals(craftedItemMeta.getDisplayName())
