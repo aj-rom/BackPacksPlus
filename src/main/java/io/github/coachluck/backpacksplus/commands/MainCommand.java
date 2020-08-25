@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/25/20, 1:30 PM
+ *     Last Modified: 8/25/20, 1:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -29,7 +29,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
 
-//            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                 plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
                         .forEach(s -> ChatUtil.msg(player, s));
                 int i = 1;
@@ -70,7 +69,7 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
-//            });
+            });
             plugin.loadBackPacks();
             return true;
         }
@@ -101,6 +100,12 @@ public class MainCommand implements CommandExecutor {
             case "g":
                 if(!sender.hasPermission("backpacksplus.give")) {
                     sendPerm(sender);
+                    return true;
+                }
+
+                if(args.length < 3) {
+                    ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
+
                     return true;
                 }
 
@@ -155,8 +160,6 @@ public class MainCommand implements CommandExecutor {
      * @param backPackToGive the backpack to give the target
      */
     private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive) {
-        final ItemStack itemToGive = backPackToGive.getBackPackHoldItem();
-
         final String recMsg = getMsg("OnReceive", targetToReceive, amt, backPackToGive.getDisplayName());
         final String giveMsg = getMsg("OnGive", targetToReceive, amt, backPackToGive.getDisplayName());
 
