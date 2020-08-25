@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/25/20, 1:42 PM
+ *     Last Modified: 8/25/20, 1:53 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -64,7 +64,7 @@ public class BackPackUseListener implements Listener {
         PersistentDataContainer data = meta.getPersistentDataContainer();
         final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
         final NamespacedKey nameKey = new NamespacedKey(plugin, "name");
-        if(!hasData(meta, data, contentKey, nameKey))
+        if(!hasData(data, contentKey, nameKey))
             return;
 
         e.setCancelled(true);
@@ -132,7 +132,7 @@ public class BackPackUseListener implements Listener {
             e.setCancelled(true);
     }
 
-    private boolean hasData(ItemMeta meta, PersistentDataContainer data, NamespacedKey contentKey, NamespacedKey nameKey) {
+    private boolean hasData(PersistentDataContainer data, NamespacedKey contentKey, NamespacedKey nameKey) {
 
         return !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
                 && data.has(nameKey, PersistentDataType.STRING);
