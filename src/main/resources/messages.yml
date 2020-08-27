@@ -9,6 +9,7 @@ General:
   BadArgs: "&cIncorrect arguments! &eType &7/bpp help &efor help."
   Console: "&8[&cBack&ePacks&b+&8] &cYou must be a player to use this command!"
   NotFound: "&e%backpack% &cdoes not exist."
+  OverLimit: "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once."
 BackPack:
   OnCraft:
     - "&8[&a+&8] &aYou have crafted a %backpack%"

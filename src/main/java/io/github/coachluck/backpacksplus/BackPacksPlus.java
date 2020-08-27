@@ -23,6 +23,7 @@ package io.github.coachluck.backpacksplus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.Backend;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.InventoryWatcher;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,30 +32,61 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
-public final class Main extends JavaPlugin {
+public final class BackPacksPlus extends JavaPlugin {
 
+    /**
+     * Whether or not to display an update message
+     */
+    public boolean updateMsg;
+
+    /**
+     * Whether or not the plugin is versioned less than 1.13
+     */
+    public boolean isLegacy;
+
+    /**
+     * Holds messages.yml as a YamlConfiguration object
+     */
     @Getter
     private YamlConfiguration messages;
-    public boolean updateMsg;
-    public boolean isLegacy;
-    public HashMap<Player, Integer> viewingBackPack;
 
+    /**
+     * The Backend for this plugin
+     */
     @Getter
     private Backend backend;
 
+    /**
+     * The loaded list of all backpacks defined in config.yml
+     */
     @Getter
     private List<BackPack> backPacks;
 
+    /**
+     * Holds all players that are currently in a backpack
+     * Also holds the slot that the opened backpack is in
+     */
+    public HashMap<Player, Integer> viewingBackPack;
+
+    /**
+     * Holds the UUID and InventoryWatcher for each player
+     * (For removing backpacks over permissible limit)
+     */
+    public HashMap<UUID, InventoryWatcher> playerStackLimit;
+
     @Override
     public void onLoad() {
-        setUpConfig();
         backend = new Backend(this);
+        setUpConfig();
         backPacks = new ArrayList<>();
         viewingBackPack = new HashMap<>();
+        playerStackLimit = new HashMap<>();
         isLegacy = Integer.parseInt(Bukkit.getBukkitVersion()
                         .substring(0, 4)
                         .replaceAll("\\.", "")) < 113;
@@ -80,7 +112,7 @@ public final class Main extends JavaPlugin {
         messages = YamlConfiguration.loadConfiguration(messageFile);
 
         final int CONFIG_VERSION = getConfig().getInt("Config-Version");
-        Backend.checkConfigVersion(CONFIG_VERSION);
+        backend.checkConfigVersion(CONFIG_VERSION);
     }
 
 
@@ -145,5 +177,14 @@ public final class Main extends JavaPlugin {
         }
 
         return null;
+    }
+
+    public void saveMessages() {
+        try {
+            messages.save(new File(getDataFolder(), "messages.yml"));
+        } catch (IOException e) {
+            ChatUtil.error("Error saving &emessages.yml&c!");
+            e.printStackTrace();
+        }
     }
 }

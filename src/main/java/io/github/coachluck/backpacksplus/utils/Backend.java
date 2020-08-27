@@ -20,19 +20,20 @@
 
 package io.github.coachluck.backpacksplus.utils;
 
-import io.github.coachluck.backpacksplus.Main;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.commands.MainCommand;
 import io.github.coachluck.backpacksplus.listeners.BackPackCloseListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackCraftListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackUseListener;
+import io.github.coachluck.backpacksplus.listeners.InventoryWatcherListener;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 public class Backend {
-    private final Main plugin;
+    private final BackPacksPlus plugin;
 
-    public Backend(Main plugin) {
+    public Backend(BackPacksPlus plugin) {
         this.plugin = plugin;
     }
 
@@ -40,12 +41,27 @@ public class Backend {
      * Ensures that the configuration is updated to the newest version
      * @param version the config version
      */
-    public static void checkConfigVersion(int version) {
-        final int CONFIGURATION_VERSION = 0;
+    public void checkConfigVersion(int version) {
+        final int CONFIGURATION_VERSION = 1;
         if(version >= CONFIGURATION_VERSION)
             return;
 
-        // Add new defaults
+        if(version == 0) {
+            plugin.getConfig().set("Config-Version", 1);
+            plugin.getConfig().createSection("StackLimiter");
+            plugin.getConfig().set("StackLimiter.Enabled", false);
+            plugin.getConfig().set("StackLimiter.Repeat", 20);
+
+            plugin.getMessages().set("General.OverLimit", "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once.");
+            plugin.getMessages().set("Version", 1);
+
+        }
+
+        plugin.saveConfig();
+        plugin.saveMessages();
+
+        plugin.reloadMessages();
+        plugin.reloadConfig();
     }
     /**
      * Checks for plugin updates
@@ -71,6 +87,10 @@ public class Backend {
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
+
+        if(plugin.getConfig().getBoolean("StackLimiter.Enabled")) {
+            pm.registerEvents(new InventoryWatcherListener(), plugin);
+        }
         plugin.getCommand("bpp").setExecutor(new MainCommand(plugin));
         plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessages().getString("General.Permission")));
     }
@@ -85,4 +105,5 @@ public class Backend {
 
         return amt;
     }
+
 }
