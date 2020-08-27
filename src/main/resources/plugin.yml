@@ -1,6 +1,6 @@
 name: BackPacksPlus
 version: ${project.version}
-main: io.github.coachluck.backpacksplus.Main
+main: io.github.coachluck.backpacksplus.BackPacksPlus
 api-version: 1.13
 prefix: BackPacksPlus
 authors: [CoachLuck]

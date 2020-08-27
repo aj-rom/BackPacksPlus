@@ -20,7 +20,7 @@
 
 package io.github.coachluck.backpacksplus.listeners;
 
-import io.github.coachluck.backpacksplus.Main;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class BackPackCraftListener implements Listener {
 
-    private final Main plugin = Main.getPlugin(Main.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
 
     @EventHandler
     public void onCraft(CraftItemEvent e) {
