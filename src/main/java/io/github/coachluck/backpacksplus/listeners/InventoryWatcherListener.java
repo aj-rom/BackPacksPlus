@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcherListener.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/27/20, 5:15 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -35,7 +35,7 @@ public class InventoryWatcherListener implements Listener {
     private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
 
     @EventHandler
-    private void onJoin(PlayerJoinEvent e) {
+    public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
         plugin.playerStackLimit.put(player.getUniqueId(), new InventoryWatcher(player));
     }
