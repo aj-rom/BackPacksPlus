@@ -21,7 +21,8 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import graywolf336.InventorySerializerUtil;
-import io.github.coachluck.backpacksplus.Main;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -44,7 +45,7 @@ import java.io.IOException;
 
 public class BackPackUseListener implements Listener {
 
-    private final Main plugin = Main.getPlugin(Main.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent e) {
@@ -62,15 +63,16 @@ public class BackPackUseListener implements Listener {
 
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
-        final NamespacedKey nameKey = new NamespacedKey(plugin, "name");
-        if(!hasData(data, contentKey, nameKey))
+        if(!BackPackUtil.isBackPack(data))
             return;
+
+        final NamespacedKey contentKey = BackPackUtil.getContentKey();
+        final NamespacedKey nameKey = BackPackUtil.getNameKey();
 
         e.setCancelled(true);
 
         player.getInventory().setItem(slot, null);
-        data.set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "1");
+        data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, "1");
         item.setItemMeta(meta);
         player.getInventory().setItem(slot, item);
 
@@ -130,12 +132,6 @@ public class BackPackUseListener implements Listener {
         if(slot == clickedSLot
                 && e.getClickedInventory() == player.getOpenInventory().getBottomInventory())
             e.setCancelled(true);
-    }
-
-    private boolean hasData(PersistentDataContainer data, NamespacedKey contentKey, NamespacedKey nameKey) {
-
-        return !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
-                && data.has(nameKey, PersistentDataType.STRING);
     }
 
 }

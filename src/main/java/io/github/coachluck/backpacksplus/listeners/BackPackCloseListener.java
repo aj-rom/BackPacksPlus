@@ -21,8 +21,8 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import graywolf336.InventorySerializerUtil;
-import io.github.coachluck.backpacksplus.Main;
-import org.bukkit.NamespacedKey;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,7 +39,7 @@ import java.util.UUID;
 
 public class BackPackCloseListener implements Listener {
 
-    private final Main plugin = Main.getPlugin(Main.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
@@ -61,9 +61,8 @@ public class BackPackCloseListener implements Listener {
             return;
 
         String newContents = InventorySerializerUtil.toBase64(viewingInv.getTopInventory());
-        data.set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, newContents);
+        data.set(BackPackUtil.getContentKey(), PersistentDataType.STRING, newContents);
 
-        final NamespacedKey uuidKey = new NamespacedKey(plugin, "uuid");
         String uuid = "";
         Inventory inv = viewingInv.getTopInventory();
         boolean empty = true;
@@ -76,7 +75,8 @@ public class BackPackCloseListener implements Listener {
         if(!empty) {
             uuid = UUID.randomUUID().toString();
         }
-        data.set(uuidKey, PersistentDataType.STRING, uuid);
+
+        data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, uuid);
         backPack.setItemMeta(meta);
         player.getInventory().setItem(backPackSlot, backPack);
         plugin.viewingBackPack.remove(player);
