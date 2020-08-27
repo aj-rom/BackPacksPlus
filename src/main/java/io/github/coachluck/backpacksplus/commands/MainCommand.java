@@ -20,7 +20,7 @@
 
 package io.github.coachluck.backpacksplus.commands;
 
-import io.github.coachluck.backpacksplus.Main;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.DisplayItemHelper;
@@ -34,9 +34,9 @@ import java.util.List;
 
 public class MainCommand implements CommandExecutor {
 
-    private final Main plugin;
+    private final BackPacksPlus plugin;
 
-    public MainCommand(Main plugin) {
+    public MainCommand(BackPacksPlus plugin) {
         this.plugin = plugin;
     }
 
@@ -124,15 +124,18 @@ public class MainCommand implements CommandExecutor {
                 }
 
                 String amount;
-                if(args.length != 4  || args[3] == null || Integer.parseInt(args[3]) <= 0) {
+                if(args.length != 4  || args[3] == null) {
                     amount = "1";
                 } else {
-                    amount = args[3];
+                    amount = args[3].replaceAll("[^0-9]","");
+                    if(Integer.parseInt(amount) <= 0) {
+                        amount = "1";
+                    }
                 }
 
-                final String finalAmount = amount;
+                final int finalAmount = Integer.parseInt(amount);
                 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    int amt = plugin.getBackend().sendBackPackItems(targetToReceive, backPackToGive.getBackPackHoldItem(), Integer.parseInt(finalAmount));
+                    int amt = plugin.getBackend().sendBackPackItems(targetToReceive, backPackToGive.getBackPackHoldItem(), finalAmount);
                     sendBackPack(sender, targetToReceive, amt, backPackToGive);
                 });
                 return true;
