@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 8/25/20, 1:30 PM
+ *     Last Modified: 8/27/20, 4:58 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,7 +21,7 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import graywolf336.InventorySerializerUtil;
-import io.github.coachluck.backpacksplus.Main;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -113,7 +113,7 @@ public class BackPack {
     private final String textureUrl;
 
 
-    private final Main plugin;
+    private final BackPacksPlus plugin;
 
     /**
      * Create a backpack
@@ -127,7 +127,7 @@ public class BackPack {
      * @param enchanted whether or not the backpack should be enchanted
      */
     public BackPack(String key, Material material, String displayName, List<String> lore, List<String> recipeShapeList, String title, String permission, boolean enchanted) {
-        plugin = Main.getPlugin(Main.class);
+        plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.name = key;
         this.key = "BackPacks." + key;
         this.title = ChatUtil.format(title);
