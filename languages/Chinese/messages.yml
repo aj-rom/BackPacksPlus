@@ -9,6 +9,8 @@ General:
   BadArgs: "&c错误参数！ &e输入 &7/bpp help &e以获得帮助。"
   Console: "&8[&c背&e包&b+&8] &c只有玩家可以使用此命令。"
   NotFound: "&e%backpack% &c不存在。"
+  OverLimit: "&7刪除了 &c％removed％ &7個背包，因為只允許攜帶
+    一次 &e％limit％"
 BackPack:
   OnCraft:
     - "&8[&a+&8] &a你合成了一个 %backpack%"
