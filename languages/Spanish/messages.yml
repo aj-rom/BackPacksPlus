@@ -1,6 +1,6 @@
 ---
 #Message File
-Version: 0
+Version: 1
 General:
   Permission: "&cNo tienes permiso para usar este comando!"
   CraftPerm: "& c¡No tienes permiso para crear esta mochila!"
@@ -10,6 +10,8 @@ General:
   BadArgs: "&cArgumentos incorrectos! &eEscribe &7/bpp help &epara ayuda."
   Console: "&8[&cMochilas&8] &cDebes ser un jugador para usar este comando!"
   NotFound: "&e%backpack% &cno existe."
+  OverLimit: "&7Se removieron &c%removed% mochilas de tu inventario &7porque solo tienes permitido llevar
+    &e%limit% &7al mismo tiempo."
 BackPack:
   OnCraft:
     - "&8[&a+&8] &aHas creado un %backpack%"
