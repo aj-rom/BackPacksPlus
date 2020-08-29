@@ -8,11 +8,12 @@ website: github.com/CoachLuck/BackPacksPlus
 commands:
   bpp:
     description: Main command
-    usage: /backpack
+    usage: /bpp
     permission: backpacksplus.use
     aliases:
       - backpacksplus
       - backpack
+      - bp
 
 permissions:
   backpacksplus.*:
