@@ -12,8 +12,13 @@
 #    NewName:
 #      Name: "Some Name"
 #      <rest of data>
-Config-Version: 0
+Config-Version: 1
 Check-For-Update: true
+General:
+  NestableBackPack: true
+  BackPackLimiter:
+    Enabled: false
+    Repeat: 20
 BackPacks:
   Basic:
     Name: "&c&lBackPack+"
