@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/29/20, 1:18 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -20,13 +20,11 @@
 
 package io.github.coachluck.backpacksplus.listeners;
 
-import graywolf336.InventorySerializerUtil;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,8 +38,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.io.IOException;
 
 public class BackPackUseListener implements Listener {
 
@@ -66,9 +62,6 @@ public class BackPackUseListener implements Listener {
         if(!BackPackUtil.isBackPack(data))
             return;
 
-        final NamespacedKey contentKey = BackPackUtil.getContentKey();
-        final NamespacedKey nameKey = BackPackUtil.getNameKey();
-
         e.setCancelled(true);
 
         player.getInventory().setItem(slot, null);
@@ -76,31 +69,20 @@ public class BackPackUseListener implements Listener {
         item.setItemMeta(meta);
         player.getInventory().setItem(slot, item);
 
-        final String contents = data.get(contentKey, PersistentDataType.STRING);
-        final String backPackName = data.get(nameKey, PersistentDataType.STRING);
+        final String backPackName = data.get(BackPackUtil.getNameKey(), PersistentDataType.STRING);
 
         if(!player.hasPermission("backpack.use." + backPackName.toLowerCase())) {
             ChatUtil.msg(player, plugin.getMessages().getString("General.Use"));
             return;
         }
 
-        e.setCancelled(true);
-        Inventory inv;
-        try {
-            inv = InventorySerializerUtil.fromBase64(contents);
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            ChatUtil.error("&cError loading backpack contents for " + player.getName());
-            return;
-        }
-
-        int size = plugin.getConfig().getInt("BackPacks." + backPackName + ".Size");
-
+        final String contents = data.get(BackPackUtil.getContentKey(), PersistentDataType.STRING);
+        final Inventory prevInventory = BackPackUtil.getSavedContent(player, contents);
+        final int size = plugin.getConfig().getInt("BackPacks." + backPackName + ".Size");
         final String title = ChatUtil.format(plugin.getConfig().getString("BackPacks." + backPackName + ".Title"));
         Inventory finalInv = Bukkit.createInventory(null, size, title);
 
-        finalInv.setContents(inv.getContents());
+        finalInv.setContents(prevInventory.getContents());
         player.openInventory(finalInv);
         plugin.viewingBackPack.put(player, slot);
     }
@@ -108,30 +90,45 @@ public class BackPackUseListener implements Listener {
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
         final Player player = (Player) e.getWhoClicked();
-        if (!plugin.viewingBackPack.containsKey(player))
+        if (e.isCancelled() || !plugin.viewingBackPack.containsKey(player))
             return;
 
         final ClickType type = e.getClick();
         int slot = plugin.viewingBackPack.get(player);
-
-        // If using hotbar buttons
-        if (e.getClickedInventory() == e.getInventory()
+        final Inventory clickedInventory = e.getClickedInventory();
+        if (clickedInventory == e.getInventory()
                 && type.isKeyboardClick() && e.getHotbarButton() == slot) {
                     e.setCancelled(true);
                     return;
         }
 
-        if((e.getAction() == InventoryAction.HOTBAR_SWAP || e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD)
+        final InventoryAction action = e.getAction();
+        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
                 && slot == e.getHotbarButton()) {
 
                 e.setCancelled(true);
                 return;
         }
 
-        int clickedSLot = e.getSlot();
+        final int clickedSLot = e.getSlot();
+        final boolean isBottomInventory = player.getOpenInventory().getBottomInventory() == clickedInventory;
         if(slot == clickedSLot
-                && e.getClickedInventory() == player.getOpenInventory().getBottomInventory())
+                && isBottomInventory) {
             e.setCancelled(true);
-    }
+            return;
+        }
 
+        if(!plugin.getConfig().getBoolean("General.NestableBackPack") && isBottomInventory) {
+            final ItemStack clickedItem = e.getCurrentItem();
+            if(clickedItem == null)
+                return;
+
+            final ItemMeta clickedItemMeta = clickedItem.getItemMeta();
+            if(clickedItemMeta == null)
+                return;
+
+            if(BackPackUtil.isBackPack(clickedItemMeta.getPersistentDataContainer()))
+                e.setCancelled(true);
+        }
+    }
 }

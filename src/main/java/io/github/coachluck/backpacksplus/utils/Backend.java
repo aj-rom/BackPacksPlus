@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/29/20, 1:24 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -48,13 +48,14 @@ public class Backend {
 
         if(version == 0) {
             plugin.getConfig().set("Config-Version", 1);
-            plugin.getConfig().createSection("StackLimiter");
-            plugin.getConfig().set("StackLimiter.Enabled", false);
-            plugin.getConfig().set("StackLimiter.Repeat", 20);
+            plugin.getConfig().createSection("General");
+            plugin.getConfig().set("General.NestableBackPack", true);
+            plugin.getConfig().set("General.BackPackLimiter.Enabled", false);
+            plugin.getConfig().set("General.BackPackLimiter.Repeat", 20);
 
-            plugin.getMessages().set("General.OverLimit", "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once.");
             plugin.getMessages().set("Version", 1);
-
+            plugin.getMessages().set("General.OverLimit",
+                    "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once.");
         }
 
         plugin.saveConfig();
@@ -82,19 +83,30 @@ public class Backend {
         });
     }
 
+    /**
+     * Registers all listeners for the plugin
+     */
     public void registerListeners() {
         PluginManager pm = plugin.getServer().getPluginManager();
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
 
-        if(plugin.getConfig().getBoolean("StackLimiter.Enabled")) {
+        if(plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
             pm.registerEvents(new InventoryWatcherListener(), plugin);
         }
+
         plugin.getCommand("bpp").setExecutor(new MainCommand(plugin));
         plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessages().getString("General.Permission")));
     }
 
+    /**
+     * Sends a backpack to the desired player
+     * @param targetToReceive the player to receive the backpack
+     * @param itemToGive the backpack item to give
+     * @param amount the amount of backpacks to give
+     * @return the amount of backpacks added to their inventory
+     */
     public Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amount) {
         int amt = amount;
         if(amt < 1) amt = 1;
