@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/29/20, 1:01 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -20,11 +20,16 @@
 
 package io.github.coachluck.backpacksplus.utils;
 
+import graywolf336.InventorySerializerUtil;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import lombok.Getter;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.io.IOException;
 
 public class BackPackUtil {
 
@@ -40,8 +45,21 @@ public class BackPackUtil {
     public static final NamespacedKey uuidKey = new NamespacedKey(plugin, "uuid");
 
     public static boolean isBackPack(PersistentDataContainer data) {
-        return !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
+        return data != null && !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
                 && data.has(nameKey, PersistentDataType.STRING);
+    }
+
+    public static Inventory getSavedContent(Player player, String contents) {
+        Inventory inv = null;
+        try {
+            inv = InventorySerializerUtil.fromBase64(contents);
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            ChatUtil.error("&cError loading backpack contents for " + player.getName());
+        }
+
+        return inv;
     }
 
     public static String getContent(PersistentDataContainer data) {
