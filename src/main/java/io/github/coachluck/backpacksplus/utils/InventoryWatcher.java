@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/29/20, 1:01 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -85,10 +85,7 @@ public class InventoryWatcher {
             int timer = 0;
             @Override
             public void run() {
-                if (done) {
-                    player.sendMessage("Cancelling your backpack limit checker");
-                    Bukkit.getServer().getScheduler().cancelTask(taskID);
-                }
+                if (done) Bukkit.getServer().getScheduler().cancelTask(taskID);
 
                 if(timer % 60 == 0) {
                     limit = getLimit(player);
@@ -142,7 +139,7 @@ public class InventoryWatcher {
      */
     private void run() {
         taskID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin,
-                task, 0L, plugin.getConfig().getInt("StackLimiter.Repeat"));
+                task, 0L, plugin.getConfig().getInt("General.BackPackLimiter.Repeat"));
     }
 
     /**
