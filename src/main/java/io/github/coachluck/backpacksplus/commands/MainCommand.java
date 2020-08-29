@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/29/20, 1:35 AM
+ *     Last Modified: 8/29/20, 1:39 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -54,24 +54,7 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
 
-            Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
-                        .forEach(s -> ChatUtil.msg(player, s));
-                int i = 1;
-                List<BackPack> backPacks = plugin.getBackPacks();
-                for(BackPack backPack : backPacks) {
-                    if(player.hasPermission(backPack.getPermission())) {
-                        DisplayItemHelper.sendItemTooltipMessage(player,
-                                ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
-                                        .replaceAll("%backpack%", backPack.getDisplayName())
-                                        .replaceAll("%num%", Integer.toString(i))),
-                                backPack);
-                    }
-                }
-
-                plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
-            });
-
+            sendBackPackList(player);
             return true;
         }
 
@@ -84,13 +67,7 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
 
-                Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    plugin.reloadConfig();
-                    plugin.reloadMessages();
-                });
-
-                plugin.loadBackPacks();
-                ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
+                reloadPlugin(sender);
                 return true;
             case "h":
                 if(!sender.hasPermission("backpacksplus.help")) {
@@ -108,7 +85,6 @@ public class MainCommand implements CommandExecutor {
 
                 if(args.length < 3) {
                     ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
-
                     return true;
                 }
 
@@ -194,5 +170,43 @@ public class MainCommand implements CommandExecutor {
                 .replaceAll("%backpack%", displayName);
 
         return msg;
+    }
+
+    /**
+     * Sends the list of backpacks with recipes to the player
+     * @param player the player to send the list too
+     */
+    private void sendBackPackList(Player player) {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
+                    .forEach(s -> ChatUtil.msg(player, s));
+            int i = 1;
+            List<BackPack> backPacks = plugin.getBackPacks();
+            for(BackPack backPack : backPacks) {
+                if(player.hasPermission(backPack.getPermission())) {
+                    DisplayItemHelper.sendItemTooltipMessage(player,
+                            ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
+                                    .replaceAll("%backpack%", backPack.getDisplayName())
+                                    .replaceAll("%num%", Integer.toString(i))),
+                            backPack);
+                }
+            }
+
+            plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
+        });
+    }
+
+    /**
+     * Reloads the plugin
+     * @param sender who is reloading the plugin
+     */
+    private void reloadPlugin(CommandSender sender) {
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+            plugin.reloadConfig();
+            plugin.reloadMessages();
+        });
+
+        plugin.loadBackPacks();
+        ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
     }
 }
