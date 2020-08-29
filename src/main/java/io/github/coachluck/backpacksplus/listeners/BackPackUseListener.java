@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/29/20, 1:18 AM
+ *     Last Modified: 8/29/20, 1:48 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -96,8 +96,7 @@ public class BackPackUseListener implements Listener {
         final ClickType type = e.getClick();
         int slot = plugin.viewingBackPack.get(player);
         final Inventory clickedInventory = e.getClickedInventory();
-        if (clickedInventory == e.getInventory()
-                && type.isKeyboardClick() && e.getHotbarButton() == slot) {
+        if (clickedInventory == e.getInventory() && type.isKeyboardClick() && e.getHotbarButton() == slot) {
                     e.setCancelled(true);
                     return;
         }
@@ -120,13 +119,10 @@ public class BackPackUseListener implements Listener {
 
         if(!plugin.getConfig().getBoolean("General.NestableBackPack") && isBottomInventory) {
             final ItemStack clickedItem = e.getCurrentItem();
-            if(clickedItem == null)
+            if(clickedItem == null || clickedItem.getItemMeta() == null)
                 return;
 
             final ItemMeta clickedItemMeta = clickedItem.getItemMeta();
-            if(clickedItemMeta == null)
-                return;
-
             if(BackPackUtil.isBackPack(clickedItemMeta.getPersistentDataContainer()))
                 e.setCancelled(true);
         }
