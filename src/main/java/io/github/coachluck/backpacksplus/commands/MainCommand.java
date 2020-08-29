@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 8/29/20, 1:35 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -68,9 +68,10 @@ public class MainCommand implements CommandExecutor {
                                 backPack);
                     }
                 }
+
                 plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
             });
-            plugin.loadBackPacks();
+
             return true;
         }
 
@@ -82,10 +83,12 @@ public class MainCommand implements CommandExecutor {
                     sendPerm(sender);
                     return true;
                 }
+
                 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
                     plugin.reloadConfig();
                     plugin.reloadMessages();
                 });
+
                 plugin.loadBackPacks();
                 ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
                 return true;
