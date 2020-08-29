@@ -16,6 +16,7 @@
 - In order for a player to **use** a backpack they must have the permission as follows: `backpack.use.<BackPack>`
 - In order for a player to **craft** a backpack they must have the permission as definied in the config.
 
+More information on permissions can be found [here](https://github.com/CoachLuck/BackPacksPlus/wiki/Permissions).
 ### Custom Textures
 In order to use custom textures you must first find a head skin from [MineCraftHeads.com](https://minecraft-heads.com/custom-heads/search?searchword=backpack) and scroll down and copy the Minecraft URL section.
 
