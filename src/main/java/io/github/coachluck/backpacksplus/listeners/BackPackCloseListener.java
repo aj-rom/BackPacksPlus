@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 8/30/20, 11:06 AM
+ *     Last Modified: 8/30/20, 11:12 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -49,12 +49,8 @@ public class BackPackCloseListener implements Listener {
             return;
 
         int backPackSlot = plugin.viewingBackPack.get(player);
-        ItemStack backPack;
-        if(backPackSlot != 45) {
-            backPack = player.getInventory().getItem(backPackSlot);
-        } else {
-            backPack = player.getInventory().getItemInOffHand();
-        }
+        ItemStack backPack = backPackSlot != 45
+                ? player.getInventory().getItem(backPackSlot) : player.getInventory().getItemInOffHand();
 
         if(backPack == null || !backPack.hasItemMeta())
             return;
