@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/29/20, 1:48 AM
+ *     Last Modified: 8/30/20, 10:40 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -33,6 +33,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,12 +46,14 @@ public class BackPackUseListener implements Listener {
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent e) {
-        if(e.getItem() == null ||
+        if(e.getItem() == null || e.getHand() == null ||
                 (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK))
             return;
 
         final Player player = e.getPlayer();
-        final int slot = player.getInventory().getHeldItemSlot();
+        int slot = (e.getHand() == EquipmentSlot.OFF_HAND) ? 45 : player.getInventory().getHeldItemSlot();
+
+        final EquipmentSlot heldBackPackSlot = e.getHand();
         ItemStack item = e.getItem();
 
         if(item.getType() == Material.AIR || !item.hasItemMeta()
@@ -64,10 +67,10 @@ public class BackPackUseListener implements Listener {
 
         e.setCancelled(true);
 
-        player.getInventory().setItem(slot, null);
+        player.getInventory().setItem(heldBackPackSlot, null);
         data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, "1");
         item.setItemMeta(meta);
-        player.getInventory().setItem(slot, item);
+        player.getInventory().setItem(heldBackPackSlot, item);
 
         final String backPackName = data.get(BackPackUtil.getNameKey(), PersistentDataType.STRING);
 
