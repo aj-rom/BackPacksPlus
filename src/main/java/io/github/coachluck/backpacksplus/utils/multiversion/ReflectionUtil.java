@@ -1,6 +1,6 @@
 /*
  *     File: ReflectionUtil.java
- *     Last Modified: 9/4/20, 4:41 PM
+ *     Last Modified: 8/11/20, 12:03 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -20,6 +20,7 @@
 
 package io.github.coachluck.backpacksplus.utils.multiversion;
 
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -179,7 +180,9 @@ public class ReflectionUtil {
                         try {
                             return (T) field.get(target);
                         } catch (IllegalAccessException e) {
-                            throw new RuntimeException("Cannot access reflection.", e);
+                            ChatUtil.logMsg("Cannot access reflection.");
+                            e.printStackTrace();
+                            return null;
                         }
                     }
 
@@ -188,7 +191,8 @@ public class ReflectionUtil {
                         try {
                             field.set(target, value);
                         } catch (IllegalAccessException e) {
-                            throw new RuntimeException("Cannot access reflection.", e);
+                            ChatUtil.logMsg("Cannot access reflection.");
+                            e.printStackTrace();
                         }
                     }
 
