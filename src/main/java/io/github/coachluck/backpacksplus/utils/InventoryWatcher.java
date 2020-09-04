@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 8/29/20, 1:01 AM
+ *     Last Modified: 9/4/20, 4:44 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,6 +21,7 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

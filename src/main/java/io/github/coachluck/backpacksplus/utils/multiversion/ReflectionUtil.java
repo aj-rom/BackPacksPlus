@@ -1,6 +1,6 @@
 /*
- *     File: ReflectionsUtil.java
- *     Last Modified: 8/11/20, 2:46 PM
+ *     File: ReflectionUtil.java
+ *     Last Modified: 9/4/20, 4:41 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,19 +18,133 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package zombiestriker;
+package io.github.coachluck.backpacksplus.utils.multiversion;
 
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ReflectionsUtil {
+public class ReflectionUtil {
 
-    private static Material skull;
+    /*
+     * The server version string to location NMS & OBC classes
+     */
+    private static String versionString;
 
-    private ReflectionsUtil() {
+    /*
+     * Cache of NMS classes that we've searched for
+     */
+    private static Map<String, Class<?>> loadedNMSClasses = new HashMap<>();
+
+    /*
+     * Cache of OBS classes that we've searched for
+     */
+    private static Map<String, Class<?>> loadedOBCClasses = new HashMap<>();
+
+    /*
+     * Cache of methods that we've found in particular classes
+     */
+    private static Map<Class<?>, Map<String, Method>> loadedMethods = new HashMap<>();
+
+
+    /**
+     * Gets the version string for NMS & OBC class paths
+     *
+     * @return The version string of OBC and NMS packages
+     */
+    public static String getVersion() {
+        if (versionString == null) {
+            String name = Bukkit.getServer().getClass().getPackage().getName();
+            versionString = name.substring(name.lastIndexOf('.') + 1) + ".";
+        }
+
+        return versionString;
+    }
+
+    /**
+     * Get an NMS Class
+     *
+     * @param nmsClassName The name of the class
+     * @return The class
+     */
+    public static Class<?> getNMSClass(String nmsClassName) {
+        if (loadedNMSClasses.containsKey(nmsClassName)) {
+            return loadedNMSClasses.get(nmsClassName);
+        }
+
+        String clazzName = "net.minecraft.server." + getVersion() + nmsClassName;
+        Class<?> clazz;
+
+        try {
+            clazz = Class.forName(clazzName);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return loadedNMSClasses.put(nmsClassName, null);
+        }
+
+        loadedNMSClasses.put(nmsClassName, clazz);
+        return clazz;
+    }
+
+    /**
+     * Get a class from the org.bukkit.craftbukkit package
+     *
+     * @param obcClassName the path to the class
+     * @return the found class at the specified path
+     */
+    public synchronized static Class<?> getOBCClass(String obcClassName) {
+        if (loadedOBCClasses.containsKey(obcClassName)) {
+            return loadedOBCClasses.get(obcClassName);
+        }
+
+        String clazzName = "org.bukkit.craftbukkit." + getVersion() + obcClassName;
+        Class<?> clazz;
+
+        try {
+            clazz = Class.forName(clazzName);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            loadedOBCClasses.put(obcClassName, null);
+            return null;
+        }
+
+        loadedOBCClasses.put(obcClassName, clazz);
+        return clazz;
+    }
+
+    /**
+     * Get a method from a class that has the specific paramaters
+     *
+     * @param clazz      The class we are searching
+     * @param methodName The name of the method
+     * @param params     Any parameters that the method has
+     * @return The method with appropriate paramaters
+     */
+    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params) {
+        if (!loadedMethods.containsKey(clazz)) {
+            loadedMethods.put(clazz, new HashMap<>());
+        }
+
+        Map<String, Method> methods = loadedMethods.get(clazz);
+
+        if (methods.containsKey(methodName)) {
+            return methods.get(methodName);
+        }
+
+        try {
+            Method method = clazz.getMethod(methodName, params);
+            methods.put(methodName, method);
+            loadedMethods.put(clazz, methods);
+            return method;
+        } catch (Exception e) {
+            e.printStackTrace();
+            methods.put(methodName, null);
+            loadedMethods.put(clazz, methods);
+            return null;
+        }
     }
 
     /**
@@ -83,93 +197,15 @@ public class ReflectionsUtil {
                         // target instanceof DeclaringClass
                         return field.getDeclaringClass().isAssignableFrom(target.getClass());
                     }
+
                 };
+
             }
         }
-
         // Search in parent classes
         if (target.getSuperclass() != null)
             return getField(target.getSuperclass(), name, fieldType, index);
         throw new IllegalArgumentException("Cannot find field with type " + fieldType);
-    }
-
-
-    /**
-     * Search for the first publicly and privately defined method of the given name
-     * and parameter count.
-     *
-     * @param clazz
-     *            a class to start with
-     * @param methodName
-     *            the method name, or NULL to skip
-     * @param params
-     *            the expected parameters
-     * @return an object that invokes this specific method
-     * @throws IllegalStateException
-     *             If we cannot find this method
-     */
-    public static MethodInvoker getMethod(Class<?> clazz, String methodName, Class<?>... params) {
-        return getTypedMethod(clazz, methodName, null, params);
-    }
-
-
-    /**
-     * Search for the first publicly and privately defined method of the given name
-     * and parameter count.
-     *
-     * @param clazz
-     *            a class to start with
-     * @param methodName
-     *            the method name, or NULL to skip
-     * @param returnType
-     *            the expected return type, or NULL to ignore
-     * @param params
-     *            the expected parameters
-     * @return an object that invokes this specific method
-     * @throws IllegalStateException
-     *             If we cannot find this method
-     */
-    public static MethodInvoker getTypedMethod(Class<?> clazz, String methodName, Class<?> returnType,
-                                               Class<?>... params) {
-        for (final Method method : clazz.getDeclaredMethods()) {
-            if ((methodName == null || method.getName().equals(methodName)) && (returnType == null)
-                    || method.getReturnType().equals(returnType) && Arrays.equals(method.getParameterTypes(), params)) {
-
-                method.setAccessible(true);
-                return new MethodInvoker() {
-                    @Override
-                    public Object invoke(Object target, Object... arguments) {
-                        try {
-                            return method.invoke(target, arguments);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Cannot invoke method " + method, e);
-                        }
-                    }
-                };
-            }
-        }
-        // Search in every superclass
-        if (clazz.getSuperclass() != null)
-            return getMethod(clazz.getSuperclass(), methodName, params);
-        throw new IllegalStateException(
-                String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
-    }
-
-
-    /**
-     * An interface for invoking a specific method.
-     */
-    public interface MethodInvoker {
-        /**
-         * Invoke a method on a specific target object.
-         *
-         * @param target
-         *            the target object, or NULL for a static method.
-         * @param arguments
-         *            the arguments to pass to the method.
-         * @return the return value, or NULL if is void.
-         */
-        public Object invoke(Object target, Object... arguments);
     }
 
     /**
@@ -208,15 +244,4 @@ public class ReflectionsUtil {
         public boolean hasField(Object target);
     }
 
-    public static Material getSkull() {
-        if (skull == null) {
-            try {
-                skull = Material.matchMaterial("SKULL_ITEM");
-            } catch (Error | Exception ignored) {
-            }
-            if (skull == null)
-                skull = Material.PLAYER_HEAD;
-        }
-        return skull;
-    }
 }

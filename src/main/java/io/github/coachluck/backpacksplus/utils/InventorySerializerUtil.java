@@ -1,4 +1,24 @@
-package graywolf336;
+/*
+ *     File: InventorySerializerUtil.java
+ *     Last Modified: 9/4/20, 4:44 PM
+ *     Project: BackPacksPlus
+ *     Copyright (C) 2020 CoachL_ck
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package io.github.coachluck.backpacksplus.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -13,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class InventorySerializerUtil {
+
     /**
      * Converts the player inventory to a String array of Base64 strings. First string is the content and second string is the armor.
      *
@@ -97,6 +118,5 @@ public class InventorySerializerUtil {
             throw new IOException("Unable to decode class type.", e);
         }
     }
-
 
 }

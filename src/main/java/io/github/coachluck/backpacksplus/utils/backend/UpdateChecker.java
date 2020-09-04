@@ -1,6 +1,6 @@
 /*
  *     File: UpdateChecker.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 9/4/20, 4:44 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,7 +18,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.utils.backend;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;

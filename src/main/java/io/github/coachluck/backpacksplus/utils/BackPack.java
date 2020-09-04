@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 9/4/20, 1:43 AM
+ *     Last Modified: 9/4/20, 4:44 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -20,8 +20,8 @@
 
 package io.github.coachluck.backpacksplus.utils;
 
-import graywolf336.InventorySerializerUtil;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

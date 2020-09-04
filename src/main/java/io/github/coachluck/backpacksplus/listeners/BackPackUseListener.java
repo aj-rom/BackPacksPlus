@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 9/4/20, 1:50 AM
+ *     Last Modified: 9/4/20, 4:44 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -22,7 +22,7 @@ package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPackUtil;
-import io.github.coachluck.backpacksplus.utils.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/29/20, 1:24 AM
+ *     Last Modified: 9/4/20, 4:44 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,7 +18,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.utils.backend;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.commands.MainCommand;

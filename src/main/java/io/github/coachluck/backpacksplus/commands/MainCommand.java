@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 9/4/20, 12:22 PM
+ *     Last Modified: 9/4/20, 4:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -22,8 +22,8 @@ package io.github.coachluck.backpacksplus.commands;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
-import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.DisplayItemHelper;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

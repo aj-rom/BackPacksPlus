@@ -1,6 +1,6 @@
 /*
  *     File: SkullHelper.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 9/4/20, 4:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -23,14 +23,17 @@ package io.github.coachluck.backpacksplus.utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+import io.github.coachluck.backpacksplus.utils.multiversion.ReflectionUtil;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import zombiestriker.ReflectionsUtil;
 
 import java.util.Base64;
 import java.util.UUID;
 
 public class SkullHelper {
+
+    private static Material skull;
 
     /**
      * Return a skull that has a custom texture specified by url.
@@ -57,13 +60,31 @@ public class SkullHelper {
         if (propertyMap == null) {
             throw new IllegalStateException("Profile doesn't contain a property map");
         }
+
         String encodedData = new String(url64);
         propertyMap.put("textures", new Property("textures", encodedData));
-        ItemStack head = new ItemStack(ReflectionsUtil.getSkull(), 1, (short) 3);
+
+        ItemStack head = new ItemStack(getSkull(), 1, (short) 3);
         ItemMeta headMeta = head.getItemMeta();
         Class<?> headMetaClass = headMeta.getClass();
-        ReflectionsUtil.getField(headMetaClass, "profile", GameProfile.class).set(headMeta, profile);
+
+        ReflectionUtil.getField(headMetaClass, "profile", GameProfile.class).set(headMeta, profile);
         head.setItemMeta(headMeta);
         return head;
     }
+
+    public static Material getSkull() {
+        if (skull == null) {
+            try {
+                skull = Material.matchMaterial("SKULL_ITEM");
+            } catch (Error | Exception ignored) {
+            }
+            if (skull == null)
+                skull = Material.PLAYER_HEAD;
+        }
+
+        return skull;
+    }
+
+
 }

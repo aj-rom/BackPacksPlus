@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 9/4/20, 2:10 AM
+ *     Last Modified: 9/4/20, 4:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,9 +21,9 @@
 package io.github.coachluck.backpacksplus;
 
 import io.github.coachluck.backpacksplus.utils.BackPack;
-import io.github.coachluck.backpacksplus.utils.Backend;
-import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.InventoryWatcher;
+import io.github.coachluck.backpacksplus.utils.backend.Backend;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.MultiVersionUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.Reflector;
 import lombok.Getter;
