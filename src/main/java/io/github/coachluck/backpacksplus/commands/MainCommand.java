@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 8/29/20, 1:39 AM
+ *     Last Modified: 9/4/20, 12:22 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -28,11 +28,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class MainCommand implements CommandExecutor {
+public class MainCommand implements CommandExecutor, TabCompleter {
 
     private final BackPacksPlus plugin;
 
@@ -125,6 +129,75 @@ public class MainCommand implements CommandExecutor {
 
     }
 
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
+        final String pre = "backpacksplus.";
+
+
+        if(args.length == 1) {
+            List<String> cmds = new ArrayList<>();
+            if(!sender.hasPermission(pre + "use"))
+                return cmds;
+
+            if(sender.hasPermission(pre + "give"))
+                cmds.add("Give");
+
+            if(sender.hasPermission(pre + "help"))
+                cmds.add("Help");
+
+            if(sender.hasPermission(pre + "reload"))
+                cmds.add("Reload");
+
+            return cmds;
+        }
+
+        if(args.length > 1 && args[0].toLowerCase().startsWith("g") && sender.hasPermission(pre + "give")) {
+            switch(args.length) {
+                case 2:
+                    List<String> backpacks = new ArrayList<>();
+
+                    for (BackPack backPack : plugin.getBackPacks()) {
+                        backpacks.add(backPack.getName());
+                    }
+
+                    List<String> completions = new ArrayList<>();
+                    StringUtil.copyPartialMatches(args[1], backpacks, completions);
+                    Collections.sort(completions);
+
+                    return completions;
+                case 3:
+                    List<String> playerNames = new ArrayList<>();
+                    final Player[] players = new Player[Bukkit.getServer().getOnlinePlayers().size()];
+                    Bukkit.getServer().getOnlinePlayers().toArray(players);
+
+                    for (Player player : players) {
+                        playerNames.add(player.getName());
+                    }
+
+                    List<String> playerCompletions = new ArrayList<>();
+                    StringUtil.copyPartialMatches(args[2], playerNames, playerCompletions);
+                    Collections.sort(playerCompletions);
+
+                    return playerCompletions;
+                case 4:
+                    List<String> numbers = new ArrayList<>();
+                    for(int i = 1; i <= 64; i++) {
+                        numbers.add(Integer.toString(i));
+                    }
+                    List<String> numCompletions = new ArrayList<>();
+
+                    StringUtil.copyPartialMatches(args[3], numbers, numCompletions);
+                    Collections.sort(numCompletions);
+
+                    return numCompletions;
+                default:
+                    return new ArrayList<>();
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
     /**
      * Sends a permission message to the player.
      * @param sender the person executing the command
@@ -209,4 +282,5 @@ public class MainCommand implements CommandExecutor {
         plugin.loadBackPacks();
         ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
     }
+
 }
