@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 8/30/20, 10:40 AM
+ *     Last Modified: 9/4/20, 1:50 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -67,10 +67,10 @@ public class BackPackUseListener implements Listener {
 
         e.setCancelled(true);
 
-        player.getInventory().setItem(heldBackPackSlot, null);
+        plugin.getMultiVersionUtil().setInventorySlot(player, heldBackPackSlot, null);
         data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, "1");
         item.setItemMeta(meta);
-        player.getInventory().setItem(heldBackPackSlot, item);
+        plugin.getMultiVersionUtil().setInventorySlot(player, heldBackPackSlot, item);
 
         final String backPackName = data.get(BackPackUtil.getNameKey(), PersistentDataType.STRING);
 

@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 9/4/20, 2:10 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -24,8 +24,9 @@ import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.Backend;
 import io.github.coachluck.backpacksplus.utils.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.InventoryWatcher;
+import io.github.coachluck.backpacksplus.utils.multiversion.MultiVersionUtil;
+import io.github.coachluck.backpacksplus.utils.multiversion.Reflector;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -44,11 +45,6 @@ public final class BackPacksPlus extends JavaPlugin {
      * Whether or not to display an update message
      */
     public boolean updateMsg;
-
-    /**
-     * Whether or not the plugin is versioned less than 1.13
-     */
-    public boolean isLegacy;
 
     /**
      * Holds messages.yml as a YamlConfiguration object
@@ -80,6 +76,9 @@ public final class BackPacksPlus extends JavaPlugin {
      */
     public HashMap<UUID, InventoryWatcher> playerStackLimit;
 
+    @Getter
+    public MultiVersionUtil multiVersionUtil;
+
     @Override
     public void onLoad() {
         backend = new Backend(this);
@@ -87,9 +86,7 @@ public final class BackPacksPlus extends JavaPlugin {
         backPacks = new ArrayList<>();
         viewingBackPack = new HashMap<>();
         playerStackLimit = new HashMap<>();
-        isLegacy = Integer.parseInt(Bukkit.getBukkitVersion()
-                        .substring(0, 4)
-                        .replaceAll("\\.", "")) < 113;
+        multiVersionUtil = new Reflector().getMultiVersionUtil();
     }
 
     @Override
@@ -132,19 +129,6 @@ public final class BackPacksPlus extends JavaPlugin {
             Material mat = null;
 
             String material = getConfig().getString(path + "Material");
-            if(isLegacy) {
-                switch(material) {
-                    case "PLAYER_HEAD":
-                        material = "SKULL";
-                        break;
-                    case "CLOCK":
-                        material = "WATCH";
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             try {
                 mat = Material.valueOf(material);
             } catch (IllegalArgumentException | NoClassDefFoundError e) {

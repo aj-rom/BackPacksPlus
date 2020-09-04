@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 9/4/20, 1:43 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -156,7 +156,7 @@ public class BackPack {
         this.size = plugin.getConfig().getInt(this.key + ".Size");
 
         backPackHoldItem = getBackPackItem();
-        registerRecipe();
+        plugin.getMultiVersionUtil().registerRecipe(this.nameSpacedKey, this.getShapedRecipe());
     }
 
     /**
@@ -201,13 +201,6 @@ public class BackPack {
         return bpItem;
     }
 
-    /**
-     * Registers the recipe on the server
-     */
-    private void registerRecipe() {
-        Bukkit.getServer().removeRecipe(this.nameSpacedKey);
-        Bukkit.getServer().addRecipe(this.getShapedRecipe());
-    }
 
     /**
      * Get's the namespaced

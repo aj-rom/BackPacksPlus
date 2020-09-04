@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 8/29/20, 1:01 AM
+ *     Last Modified: 9/4/20, 1:06 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -26,6 +26,8 @@ import lombok.Getter;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -43,6 +45,17 @@ public class BackPackUtil {
 
     @Getter
     public static final NamespacedKey uuidKey = new NamespacedKey(plugin, "uuid");
+
+    public static boolean isBackPack(ItemStack item) {
+        if(item == null)
+            return false;
+
+        final ItemMeta meta = item.getItemMeta();
+        if(meta == null)
+            return false;
+
+        return isBackPack(meta.getPersistentDataContainer());
+    }
 
     public static boolean isBackPack(PersistentDataContainer data) {
         return data != null && !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
