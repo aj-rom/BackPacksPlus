@@ -133,7 +133,6 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         final String pre = "backpacksplus.";
 
-
         if(args.length == 1) {
             List<String> cmds = new ArrayList<>();
             if(!sender.hasPermission(pre + "use"))
