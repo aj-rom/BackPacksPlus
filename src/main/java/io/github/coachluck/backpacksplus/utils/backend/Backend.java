@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 8/29/20, 1:28 AM
+ *     Last Modified: 9/4/20, 10:21 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -42,7 +42,7 @@ public class Backend {
      * @param version the config version
      */
     public void checkConfigVersion(int version) {
-        final int CONFIGURATION_VERSION = 1;
+        final int CONFIGURATION_VERSION = 2;
         if(version >= CONFIGURATION_VERSION)
             return;
 
@@ -56,6 +56,9 @@ public class Backend {
             plugin.getMessages().set("Version", 1);
             plugin.getMessages().set("General.OverLimit",
                     "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once.");
+        }
+        if(version == 1) {
+            plugin.getConfig().set("General.NestableBackPack", null);
         }
 
         plugin.saveConfig();

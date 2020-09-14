@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 9/4/20, 1:50 AM
+ *     Last Modified: 9/4/20, 10:21 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -120,7 +120,7 @@ public class BackPackUseListener implements Listener {
             return;
         }
 
-        if(!plugin.getConfig().getBoolean("General.NestableBackPack") && isBottomInventory) {
+        if(isBottomInventory) {
             final ItemStack clickedItem = e.getCurrentItem();
             if(clickedItem == null || clickedItem.getItemMeta() == null)
                 return;
