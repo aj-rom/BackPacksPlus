@@ -12,10 +12,9 @@
 #    NewName:
 #      Name: "Some Name"
 #      <rest of data>
-Config-Version: 1
+Config-Version: 2
 Check-For-Update: true
 General:
-  NestableBackPack: true
   BackPackLimiter:
     Enabled: false
     Repeat: 20
