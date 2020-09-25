@@ -21,6 +21,9 @@ permissions:
     default: op
     children:
       backpacksplus.use: true
+      backpacksplus.reload: true
+      backpacksplus.help: true
+      backpack.*: true
 
   backpacksplus.use:
     description: Cmd1 permission
@@ -28,8 +31,6 @@ permissions:
   backpacksplus.reload:
     description: Reload BackPacksPlus completley.
     default: op
-  backpacksplus.view:
-    description: View other online players backpacks.
-    children:
-      backpacksplus.use: true
+  backpacksplus.help:
+    description: See the help for BackPacksPlus
     default: op

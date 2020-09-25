@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 9/4/20, 2:10 AM
+ *     Last Modified: 9/24/20, 6:00 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -124,7 +124,6 @@ public final class BackPacksPlus extends JavaPlugin {
             final List<String> lore = getConfig().getStringList(path + "Lore");
             final List<String> recipeShapeList = getConfig().getStringList(path + "Recipe.Shape");
             final boolean enchanted = getConfig().getBoolean(path + "Enchanted");
-            final String permission = getConfig().getString(path + "Permission");
             final String title = getConfig().getString(path + "Title");
             Material mat = null;
 
@@ -138,12 +137,14 @@ public final class BackPacksPlus extends JavaPlugin {
                 continue;
             }
 
-            if(displayName == null || recipeShapeList.size() != 3 || permission == null || title == null) {
-                // TODO : ERROR Handling
+            if(displayName == null || recipeShapeList.size() != 3 || title == null) {
+                ChatUtil.error("Error loading backpack " + backPackName + ", please make sure your configuration is set up properly!");
+                ChatUtil.error("Display Name: " + displayName);
+                ChatUtil.error("Title: " + title);
                 System.out.println(displayName + recipeShapeList);
                 continue;
             }
-            BackPack backPack = new BackPack(backPackName, mat, displayName, lore, recipeShapeList, title, permission, enchanted);
+            BackPack backPack = new BackPack(backPackName, mat, displayName, lore, recipeShapeList, title, enchanted);
             backPacks.add(backPack);
         }
     }
