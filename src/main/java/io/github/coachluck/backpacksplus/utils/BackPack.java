@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 9/4/20, 1:43 AM
+ *     Last Modified: 9/24/20, 5:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -51,11 +51,6 @@ public class BackPack {
     @Getter
     private final String displayName;
 
-    /**
-     * The permission to use this backpack
-     */
-    @Getter
-    private final String permission;
 
     /**
      * The title to display when opening the backpack
@@ -123,15 +118,13 @@ public class BackPack {
      * @param lore the lore for the backpack
      * @param recipeShapeList the recipe in a 3 line list
      * @param title the title of the backpack inventory
-     * @param permission the permission to use the backpack
      * @param enchanted whether or not the backpack should be enchanted
      */
-    public BackPack(String key, Material material, String displayName, List<String> lore, List<String> recipeShapeList, String title, String permission, boolean enchanted) {
+    public BackPack(String key, Material material, String displayName, List<String> lore, List<String> recipeShapeList, String title, boolean enchanted) {
         plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.name = key;
         this.key = "BackPacks." + key;
         this.title = ChatUtil.format(title);
-        this.permission = permission;
         this.displayName = displayName;
         this.lore = ChatUtil.formatLore(lore);
         this.recipeShapeList = recipeShapeList;
