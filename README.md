@@ -14,7 +14,9 @@
 
 ### Per BackPack Permission
 - In order for a player to **use** a backpack they must have the permission as follows: `backpack.use.<BackPack>`
-- In order for a player to **craft** a backpack they must have the permission as definied in the config.
+- In order for a player to **craft** a backpack they must have the permission as follows: `backpack.craft.<Backpack>`
+- To give craft or usage permissions for all backpacks you can do: `backpack.<craft/use>.*`
+- To give craft and usage of all backpacks you can do: `backpack.*`
 
 More information on permissions can be found [here](https://github.com/CoachLuck/BackPacksPlus/wiki/Permissions).
 ### Custom Textures
