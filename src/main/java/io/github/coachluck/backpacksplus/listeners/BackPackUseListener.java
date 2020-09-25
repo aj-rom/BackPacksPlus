@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 9/4/20, 10:21 PM
+ *     Last Modified: 9/24/20, 5:45 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -74,10 +74,17 @@ public class BackPackUseListener implements Listener {
 
         final String backPackName = data.get(BackPackUtil.getNameKey(), PersistentDataType.STRING);
 
-        if(!player.hasPermission("backpack.use." + backPackName.toLowerCase())) {
+        if(!BackPackUtil.hasBackPackPermission(player, backPackName, "use")) {
             ChatUtil.msg(player, plugin.getMessages().getString("General.Use"));
             return;
         }
+
+//        if(!player.hasPermission("backpack.use." + backPackName.toLowerCase())
+//                && !player.hasPermission("backpack.use.*")) {
+//
+//            ChatUtil.msg(player, plugin.getMessages().getString("General.Use"));
+//            return;
+//        }
 
         final String contents = data.get(BackPackUtil.getContentKey(), PersistentDataType.STRING);
         final Inventory prevInventory = BackPackUtil.getSavedContent(player, contents);

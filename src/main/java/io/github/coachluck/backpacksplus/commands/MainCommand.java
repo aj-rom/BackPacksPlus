@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 9/4/20, 12:22 PM
+ *     Last Modified: 9/24/20, 5:49 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -22,6 +22,7 @@ package io.github.coachluck.backpacksplus.commands;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
+import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.DisplayItemHelper;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.Bukkit;
@@ -253,9 +254,10 @@ public class MainCommand implements CommandExecutor, TabCompleter {
             plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
                     .forEach(s -> ChatUtil.msg(player, s));
             int i = 1;
-            List<BackPack> backPacks = plugin.getBackPacks();
+
+            final List<BackPack> backPacks = plugin.getBackPacks();
             for(BackPack backPack : backPacks) {
-                if(player.hasPermission(backPack.getPermission())) {
+                if(BackPackUtil.hasBackPackPermission(player, backPack.getName(), "craft")) {
                     DisplayItemHelper.sendItemTooltipMessage(player,
                             ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
                                     .replaceAll("%backpack%", backPack.getDisplayName())

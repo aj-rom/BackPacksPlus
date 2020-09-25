@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 8/27/20, 5:12 PM
+ *     Last Modified: 9/24/20, 5:56 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -22,6 +22,7 @@ package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPack;
+import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -40,6 +41,7 @@ public class BackPackCraftListener implements Listener {
         final Player player = (Player) e.getWhoClicked();
         final ItemStack craftedItem = e.getCurrentItem();
 
+        if(craftedItem == null || craftedItem.getItemMeta() == null) return;
         for(BackPack backPack : plugin.getBackPacks()) {
             ItemMeta loadedBackPackItem = backPack.getBackPackHoldItem().getItemMeta();
             ItemMeta craftedItemMeta = craftedItem.getItemMeta();
@@ -47,7 +49,7 @@ public class BackPackCraftListener implements Listener {
             if(loadedBackPackItem.getDisplayName().equals(craftedItemMeta.getDisplayName())
                     && loadedBackPackItem.getLore().equals(craftedItemMeta.getLore())) {
 
-                if(!player.hasPermission(backPack.getPermission())) {
+                if(!BackPackUtil.hasBackPackPermission(player, backPack.getName(), "craft")) {
                     e.setCurrentItem(null);
                     e.setResult(Event.Result.DENY);
                     e.setCancelled(true);
