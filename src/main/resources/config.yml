@@ -30,7 +30,6 @@ BackPacks:
       - " &7Click me to open this &dBackPack"
       - "&8&m                                      "
     Enchanted: true
-    Permission: "backpack.basic"
     Size: 18
     Recipe:
       Shape:
@@ -53,7 +52,6 @@ BackPacks:
       - " &7Click me to open this &dBackPack"
       - "&8&m                                      "
     Enchanted: true
-    Permission: "backpack.advanced"
     Size: 27
     Recipe:
       Shape:
@@ -76,7 +74,6 @@ BackPacks:
       - " &7Click me to open this &dBackPack"
       - "&8&m                                      "
     Enchanted: true
-    Permission: "backpack.mega"
     Size: 45
     Recipe:
       Shape:
