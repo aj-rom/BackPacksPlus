@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 9/4/20, 1:06 AM
+ *     Last Modified: 9/24/20, 5:45 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -73,6 +73,14 @@ public class BackPackUtil {
         }
 
         return inv;
+    }
+
+    public static boolean hasBackPackPermission(Player player, String backPackName, String type) {
+        final String selector = type.toLowerCase();
+        if(player.hasPermission("backpack.*") || player.hasPermission("backpack." + selector + ".*")) {
+            return true;
+        }
+        return player.hasPermission("backpack." + selector + "." + backPackName.toLowerCase());
     }
 
     public static String getContent(PersistentDataContainer data) {
