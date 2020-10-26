@@ -18,6 +18,8 @@ General:
   BackPackLimiter:
     Enabled: false
     Repeat: 20
+  BackPackFreeRename:
+    Enabled: false
 BackPacks:
   Basic:
     Name: "&c&lBackPack+"

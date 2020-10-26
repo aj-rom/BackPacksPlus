@@ -3,6 +3,7 @@ Version: 1
 General:
   Permission: "&cYou do not have permission to use this command!"
   CraftPerm: "&cYou do not have permission to craft this backpack!"
+  NoRenamePerm: "&cYou are not allowed to rename backpacks!"
   Use: "&cYou do not have permission to use this backpack!"
   Offline-Player: "&e%player% &ccould not be found!!"
   Reload: "&8[&cBack&ePacks&b+&8] &aYou have reloaded the plugin!"
