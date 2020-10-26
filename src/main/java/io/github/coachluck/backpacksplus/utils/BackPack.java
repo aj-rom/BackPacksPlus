@@ -258,7 +258,14 @@ public class BackPack {
 	public ItemStack getBackPackHoldItem() {
 		// TODO Auto-generated method stub
 		ItemStack item = backPackHoldItem;
-		
+		ItemMeta itemmeta = backPackHoldItem.getItemMeta();
+        ArrayList<String> lore = new ArrayList<String>();
+        
+        String lorestr = BackPackUtil.invisablestring(BackPackUtil.getRandomUUIDString());
+        lore.addAll(itemmeta.getLore());
+        lore.add(lorestr);
+        itemmeta.setLore(lore);
+        item.setItemMeta(itemmeta);
 		return item;
 	}
 
