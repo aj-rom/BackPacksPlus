@@ -94,4 +94,18 @@ public class BackPackUtil {
     public static String getUUID(PersistentDataContainer data) {
         return data.get(uuidKey, PersistentDataType.STRING);
     }
+    
+	public static NamespacedKey getContentKey() {
+		return contentKey;
+	}
+
+	public static NamespacedKey getUuidKey() {
+		// TODO Auto-generated method stub
+		return uuidKey;
+	}
+
+	public static NamespacedKey getNameKey() {
+		// TODO Auto-generated method stub
+		return nameKey;
+	}
 }

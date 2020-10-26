@@ -245,6 +245,23 @@ public class BackPack {
         return item;
     }
 
+	public String getName() {
+		// TODO Auto-generated method stub
+		return name;
+	}
+    
+	public String getDisplayName() {
+		// TODO Auto-generated method stub
+		return displayName;
+	}
+
+	public ItemStack getBackPackHoldItem() {
+		// TODO Auto-generated method stub
+		ItemStack item = backPackHoldItem;
+		
+		return item;
+	}
+
 
 
 }

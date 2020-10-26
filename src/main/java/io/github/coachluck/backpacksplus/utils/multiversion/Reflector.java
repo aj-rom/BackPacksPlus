@@ -38,4 +38,9 @@ public class Reflector {
         else
             multiVersionUtil = new MultiVersionUtil_1_15();
     }
+
+	public MultiVersionUtil getMultiVersionUtil() {
+		// TODO Auto-generated method stub
+		return multiVersionUtil;
+	}
 }
