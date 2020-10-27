@@ -12,7 +12,7 @@
 #    NewName:
 #      Name: "Some Name"
 #      <rest of data>
-Config-Version: 2
+Config-Version: 3
 Check-For-Update: true
 General:
   BackPackLimiter:

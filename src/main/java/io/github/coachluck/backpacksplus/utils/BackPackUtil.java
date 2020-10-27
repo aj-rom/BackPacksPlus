@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 9/24/20, 5:45 PM
+ *     Last Modified: 10/27/20, 11:38 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -98,29 +98,14 @@ public class BackPackUtil {
         return data.get(uuidKey, PersistentDataType.STRING);
     }
     
-	public static NamespacedKey getContentKey() {
-		return contentKey;
-	}
-
-	public static NamespacedKey getUuidKey() {
-		// TODO Auto-generated method stub
-		return uuidKey;
-	}
-
-	public static NamespacedKey getNameKey() {
-		// TODO Auto-generated method stub
-		return nameKey;
-	}
-	
     public static String getRandomUUIDString() {
-    	UUID uuid = UUID.randomUUID(); 
-    	String randomUUIDString = uuid.toString();
-    	return randomUUIDString;
+    	UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
     
-    public static String invisablestring(String s) {
-    	String hidden = "";
-    	for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR+""+c;
-    	return hidden;
+    public static String invisableString(String s) {
+    	StringBuilder hidden = new StringBuilder();
+    	for (char c : s.toCharArray()) hidden.append(ChatColor.COLOR_CHAR + "").append(c);
+    	return hidden.toString();
     }
 }

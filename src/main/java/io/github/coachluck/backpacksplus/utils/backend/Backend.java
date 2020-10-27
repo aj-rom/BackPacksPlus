@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 9/21/20, 3:18 PM
+ *     Last Modified: 10/27/20, 11:50 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -43,7 +43,7 @@ public class Backend {
      * @param version the config version
      */
     public void checkConfigVersion(int version) {
-        final int CONFIGURATION_VERSION = 2;
+        final int CONFIGURATION_VERSION = 3;
         if(version >= CONFIGURATION_VERSION)
             return;
 
@@ -52,7 +52,6 @@ public class Backend {
             plugin.getConfig().createSection("General");
             plugin.getConfig().set("General.NestableBackPack", true);
             plugin.getConfig().set("General.BackPackLimiter.Enabled", false);
-            plugin.getConfig().set("General.BackPackFreeRename.Enabled", false);
             plugin.getConfig().set("General.BackPackLimiter.Repeat", 20);
 
             plugin.getMessages().set("Version", 1);
@@ -62,6 +61,12 @@ public class Backend {
         if(version == 1) {
             version = 2;
             plugin.getConfig().set("General.NestableBackPack", null);
+        }
+        if(version == 2) {
+            version = 3;
+            plugin.getConfig().set("General.BackPackFreeRename.Enabled", false);
+            plugin.getMessages().set("General.NoRenamePerm", "&cYou are not allowed to rename backpacks!");
+            plugin.getMessages().set("Version", 2);
         }
 
         plugin.getConfig().set("Config-Version", version);
@@ -86,7 +91,7 @@ public class Backend {
                 return;
             }
             plugin.updateMsg = true;
-            ChatUtil.logMsg("&aThere is a new update available. &ehttps://www.spigotmc.org/resources/backpacksplus.82612/");
+            ChatUtil.logMsg("&aThere is a new update available. &ehttps://www.spigotmc.org/resources/b.82612/");
         });
     }
 

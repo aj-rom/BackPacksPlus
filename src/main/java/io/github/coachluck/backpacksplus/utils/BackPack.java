@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 9/24/20, 5:48 PM
+ *     Last Modified: 10/27/20, 11:52 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -67,7 +67,6 @@ public class BackPack {
     /**
      * The ItemStack of this backpack
      */
-    @Getter
     private final ItemStack backPackHoldItem;
 
     /**
@@ -200,9 +199,7 @@ public class BackPack {
      */
     private ShapedRecipe getShapedRecipe() {
         ShapedRecipe recipe = new ShapedRecipe(nameSpacedKey, backPackHoldItem);
-
         recipe.shape(recipeShapeList.get(0), recipeShapeList.get(1), recipeShapeList.get(2));
-
 
         String path = key + ".Recipe.Materials.";
         for(String recipeKey : plugin.getConfig().getConfigurationSection(path).getKeys(false)) {
@@ -245,30 +242,17 @@ public class BackPack {
         return item;
     }
 
-	public String getName() {
-		// TODO Auto-generated method stub
-		return name;
-	}
-    
-	public String getDisplayName() {
-		// TODO Auto-generated method stub
-		return displayName;
-	}
-
 	public ItemStack getBackPackHoldItem() {
-		// TODO Auto-generated method stub
 		ItemStack item = backPackHoldItem;
-		ItemMeta itemmeta = backPackHoldItem.getItemMeta();
-        ArrayList<String> lore = new ArrayList<String>();
-        
-        String lorestr = BackPackUtil.invisablestring(BackPackUtil.getRandomUUIDString());
-        lore.addAll(itemmeta.getLore());
-        lore.add(lorestr);
-        itemmeta.setLore(lore);
-        item.setItemMeta(itemmeta);
+		ItemMeta itemMeta = backPackHoldItem.getItemMeta();
+
+        String loreStr = BackPackUtil.invisableString(BackPackUtil.getRandomUUIDString());
+        ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
+        lore.add(loreStr);
+        itemMeta.setLore(lore);
+        item.setItemMeta(itemMeta);
 		return item;
 	}
-
 
 
 }

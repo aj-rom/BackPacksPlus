@@ -1,6 +1,6 @@
 /*
  *     File: InventorySerializerUtil.java
- *     Last Modified: 9/4/20, 4:41 PM
+ *     Last Modified: 9/4/20, 4:55 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *

@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 9/24/20, 5:45 PM
+ *     Last Modified: 10/27/20, 11:42 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -80,13 +80,6 @@ public class BackPackUseListener implements Listener {
             return;
         }
 
-//        if(!player.hasPermission("backpack.use." + backPackName.toLowerCase())
-//                && !player.hasPermission("backpack.use.*")) {
-//
-//            ChatUtil.msg(player, plugin.getMessages().getString("General.Use"));
-//            return;
-//        }
-
         final String contents = data.get(BackPackUtil.getContentKey(), PersistentDataType.STRING);
         final Inventory prevInventory = BackPackUtil.getSavedContent(player, contents);
         final int size = plugin.getConfig().getInt("BackPacks." + backPackName + ".Size");
@@ -102,10 +95,6 @@ public class BackPackUseListener implements Listener {
     public void onInventoryInteract(InventoryClickEvent e) {
         final Player player = (Player) e.getWhoClicked();
         
-        if(BackPackUtil.isBackPack(e.getCursor()) && e.getSlotType() == SlotType.ARMOR && e.getClick().isLeftClick() || e.getClick().isShiftClick() || e.getClick().isRightClick()) {
-        	e.setCancelled(true);
-        }
-        
         if (e.isCancelled() || !plugin.viewingBackPack.containsKey(player))
             return;
 
@@ -113,8 +102,8 @@ public class BackPackUseListener implements Listener {
         int slot = plugin.viewingBackPack.get(player);
         final Inventory clickedInventory = e.getClickedInventory();
         if (clickedInventory == e.getInventory() && type.isKeyboardClick() && e.getHotbarButton() == slot) {
-                    e.setCancelled(true);
-                    return;
+                e.setCancelled(true);
+                return;
         }
 
         final InventoryAction action = e.getAction();
@@ -127,16 +116,14 @@ public class BackPackUseListener implements Listener {
 
         final int clickedSLot = e.getSlot();
         final boolean isBottomInventory = player.getOpenInventory().getBottomInventory() == clickedInventory;
-        if(slot == clickedSLot
-                && isBottomInventory) {
+        if(slot == clickedSLot && isBottomInventory) {
             e.setCancelled(true);
             return;
         }
 
         if(isBottomInventory) {
             final ItemStack clickedItem = e.getCurrentItem();
-            if(clickedItem == null || clickedItem.getItemMeta() == null)
-                return;
+            if(clickedItem == null || clickedItem.getItemMeta() == null) return;
 
             final ItemMeta clickedItemMeta = clickedItem.getItemMeta();
             if(BackPackUtil.isBackPack(clickedItemMeta.getPersistentDataContainer()))
