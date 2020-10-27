@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 10/27/20, 11:50 AM
+ *     Last Modified: 10/27/20, 1:12 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -24,7 +24,6 @@ import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.commands.MainCommand;
 import io.github.coachluck.backpacksplus.listeners.BackPackCloseListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackCraftListener;
-import io.github.coachluck.backpacksplus.listeners.BackPackRenameListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackUseListener;
 import io.github.coachluck.backpacksplus.listeners.InventoryWatcherListener;
 import org.bukkit.entity.Player;
@@ -103,7 +102,7 @@ public class Backend {
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
-        pm.registerEvents(new BackPackRenameListener(), plugin);
+        //pm.registerEvents(new BackPackRenameListener(), plugin);
 
         if(plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
             pm.registerEvents(new InventoryWatcherListener(), plugin);
