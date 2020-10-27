@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 10/27/20, 11:31 AM
+ *     Last Modified: 10/27/20, 1:10 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -27,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -63,20 +62,8 @@ public class BackPackCloseListener implements Listener {
         String newContents = InventorySerializerUtil.toBase64(viewingInv.getTopInventory());
         data.set(BackPackUtil.getContentKey(), PersistentDataType.STRING, newContents);
 
-        String uuid = "";
-        Inventory inv = viewingInv.getTopInventory();
-        boolean empty = true;
-        for(ItemStack item : inv.getStorageContents()) {
-            if (item != null) {
-                empty = false;
-                break;
-            }
-        }
-        if(!empty) {
-            uuid = UUID.randomUUID().toString();
-        }
+        data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, UUID.randomUUID().toString());
 
-        data.set(BackPackUtil.getUuidKey(), PersistentDataType.STRING, uuid);
         backPack.setItemMeta(meta);
         player.getInventory().setItem(backPackSlot, backPack);
         plugin.viewingBackPack.remove(player);
