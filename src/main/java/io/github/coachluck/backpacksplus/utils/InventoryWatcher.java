@@ -165,4 +165,8 @@ public class InventoryWatcher {
         return rValue.intValue();
     }
 
+	public void setDone(boolean b) {
+		done=b;
+	}
+
 }

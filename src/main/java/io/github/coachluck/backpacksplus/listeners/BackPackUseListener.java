@@ -32,6 +32,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -100,6 +101,11 @@ public class BackPackUseListener implements Listener {
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
         final Player player = (Player) e.getWhoClicked();
+        
+        if(BackPackUtil.isBackPack(e.getCursor()) && e.getSlotType() == SlotType.ARMOR && e.getClick().isLeftClick() || e.getClick().isShiftClick() || e.getClick().isRightClick()) {
+        	e.setCancelled(true);
+        }
+        
         if (e.isCancelled() || !plugin.viewingBackPack.containsKey(player))
             return;
 

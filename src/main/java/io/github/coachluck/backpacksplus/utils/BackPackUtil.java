@@ -23,6 +23,8 @@ package io.github.coachluck.backpacksplus.utils;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
+
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -32,6 +34,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class BackPackUtil {
 
@@ -93,5 +96,31 @@ public class BackPackUtil {
 
     public static String getUUID(PersistentDataContainer data) {
         return data.get(uuidKey, PersistentDataType.STRING);
+    }
+    
+	public static NamespacedKey getContentKey() {
+		return contentKey;
+	}
+
+	public static NamespacedKey getUuidKey() {
+		// TODO Auto-generated method stub
+		return uuidKey;
+	}
+
+	public static NamespacedKey getNameKey() {
+		// TODO Auto-generated method stub
+		return nameKey;
+	}
+	
+    public static String getRandomUUIDString() {
+    	UUID uuid = UUID.randomUUID(); 
+    	String randomUUIDString = uuid.toString();
+    	return randomUUIDString;
+    }
+    
+    public static String invisablestring(String s) {
+    	String hidden = "";
+    	for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR+""+c;
+    	return hidden;
     }
 }

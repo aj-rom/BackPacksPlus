@@ -245,6 +245,30 @@ public class BackPack {
         return item;
     }
 
+	public String getName() {
+		// TODO Auto-generated method stub
+		return name;
+	}
+    
+	public String getDisplayName() {
+		// TODO Auto-generated method stub
+		return displayName;
+	}
+
+	public ItemStack getBackPackHoldItem() {
+		// TODO Auto-generated method stub
+		ItemStack item = backPackHoldItem;
+		ItemMeta itemmeta = backPackHoldItem.getItemMeta();
+        ArrayList<String> lore = new ArrayList<String>();
+        
+        String lorestr = BackPackUtil.invisablestring(BackPackUtil.getRandomUUIDString());
+        lore.addAll(itemmeta.getLore());
+        lore.add(lorestr);
+        itemmeta.setLore(lore);
+        item.setItemMeta(itemmeta);
+		return item;
+	}
+
 
 
 }

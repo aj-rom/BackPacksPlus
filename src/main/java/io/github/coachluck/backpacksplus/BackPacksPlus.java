@@ -172,4 +172,21 @@ public final class BackPacksPlus extends JavaPlugin {
             e.printStackTrace();
         }
     }
+    
+	public MultiVersionUtil getMultiVersionUtil() {
+		return multiVersionUtil;
+	}
+
+	public YamlConfiguration getMessages() {
+		return messages;
+	}
+
+	public List<BackPack> getBackPacks() {
+		return backPacks;
+	}
+
+	public Backend getBackend() {
+		// TODO Auto-generated method stub
+		return backend;
+	}
 }
