@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 10/27/20, 11:38 AM
+ *     Last Modified: 10/27/20, 1:13 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -23,8 +23,6 @@ package io.github.coachluck.backpacksplus.utils;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
-
-import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -34,7 +32,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class BackPackUtil {
 
@@ -97,15 +94,5 @@ public class BackPackUtil {
     public static String getUUID(PersistentDataContainer data) {
         return data.get(uuidKey, PersistentDataType.STRING);
     }
-    
-    public static String getRandomUUIDString() {
-    	UUID uuid = UUID.randomUUID();
-        return uuid.toString();
-    }
-    
-    public static String invisableString(String s) {
-    	StringBuilder hidden = new StringBuilder();
-    	for (char c : s.toCharArray()) hidden.append(ChatColor.COLOR_CHAR + "").append(c);
-    	return hidden.toString();
-    }
+
 }

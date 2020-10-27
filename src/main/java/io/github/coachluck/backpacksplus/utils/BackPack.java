@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 10/27/20, 11:52 AM
+ *     Last Modified: 10/27/20, 12:35 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -36,6 +36,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BackPack {
 
@@ -67,6 +68,7 @@ public class BackPack {
     /**
      * The ItemStack of this backpack
      */
+    @Getter
     private final ItemStack backPackHoldItem;
 
     /**
@@ -172,7 +174,7 @@ public class BackPack {
         Inventory inv = Bukkit.createInventory(null, size, this.title);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, InventorySerializerUtil.toBase64(inv));
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, name);
-        itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, "");
+        itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
 
         if(customModelData != -1) {
             itemMeta.setCustomModelData(customModelData);
@@ -241,18 +243,4 @@ public class BackPack {
         item.setItemMeta(meta);
         return item;
     }
-
-	public ItemStack getBackPackHoldItem() {
-		ItemStack item = backPackHoldItem;
-		ItemMeta itemMeta = backPackHoldItem.getItemMeta();
-
-        String loreStr = BackPackUtil.invisableString(BackPackUtil.getRandomUUIDString());
-        ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
-        lore.add(loreStr);
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
-		return item;
-	}
-
-
 }
