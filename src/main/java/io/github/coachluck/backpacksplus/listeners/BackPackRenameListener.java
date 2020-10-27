@@ -1,6 +1,6 @@
 /*
  *     File: BackPackRenameListener.java
- *     Last Modified: 10/27/20, 11:47 AM
+ *     Last Modified: 10/27/20, 1:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -20,6 +20,9 @@
 
 package io.github.coachluck.backpacksplus.listeners;
 
+import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.BackPackUtil;
+import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -30,9 +33,6 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
-import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 
 public class BackPackRenameListener implements Listener {
 
@@ -43,8 +43,9 @@ public class BackPackRenameListener implements Listener {
 		if (BackPackUtil.isBackPack(e.getInventory().getItem(0))) {
 			Player p = (Player) e.getViewers().get(0);
 			AnvilInventory inv = e.getInventory();
-			if (p.hasPermission("backpack.rename.allow") || p.hasPermission("backpack.rename")) {
+			if (p.hasPermission("backpack.rename")) {
 
+				// TODO: Fix repair cost not being able to be free
 				if (plugin.getConfig().getBoolean("General.BackPackFreeRename.Enabled")) {
 					Bukkit.getScheduler().runTask(plugin, () -> {
 						inv.setRepairCost(0);
