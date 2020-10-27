@@ -24,6 +24,10 @@ permissions:
       backpacksplus.reload: true
       backpacksplus.help: true
       backpack.*: true
+      backpack.rename.color: true
+      backpack.rename.deny: true
+      backpack.rename.allow: true
+      backpack.rename: true
 
   backpacksplus.use:
     description: Cmd1 permission
