@@ -21,7 +21,6 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import org.bukkit.entity.Player;
@@ -31,6 +30,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.util.UUID;
 
 public class BackPackCraftListener implements Listener {
 
@@ -39,32 +41,33 @@ public class BackPackCraftListener implements Listener {
     @EventHandler
     public void onCraft(CraftItemEvent e) {
         final Player player = (Player) e.getWhoClicked();
-        final ItemStack craftedItem = e.getCurrentItem();
+        ItemStack craftedItem = e.getCurrentItem();
 
         if(craftedItem == null || craftedItem.getItemMeta() == null) return;
-        for(BackPack backPack : plugin.getBackPacks()) {
-            ItemMeta loadedBackPackItem = backPack.getBackPackHoldItem().getItemMeta();
-            ItemMeta craftedItemMeta = craftedItem.getItemMeta();
+        if(!BackPackUtil.isBackPack(craftedItem)) return;
+        if(!BackPackUtil.hasBackPackPermission(player,
+                BackPackUtil.getName(craftedItem.getItemMeta().getPersistentDataContainer()), "craft")) {
+            e.setCurrentItem(null);
+            e.setResult(Event.Result.DENY);
+            e.setCancelled(true);
+            ChatUtil.msg(player, plugin.getMessages().getString("General.CraftPerm"));
 
-            if(loadedBackPackItem.getDisplayName().equals(craftedItemMeta.getDisplayName())
-                    && loadedBackPackItem.getLore().equals(craftedItemMeta.getLore())) {
-
-                if(!BackPackUtil.hasBackPackPermission(player, backPack.getName(), "craft")) {
-                    e.setCurrentItem(null);
-                    e.setResult(Event.Result.DENY);
-                    e.setCancelled(true);
-                    ChatUtil.msg(player, plugin.getMessages().getString("General.CraftPerm"));
-                }
-                else {
-                    craftedItem.setAmount(1);
-                    e.setCurrentItem(craftedItem);
-
-                    e.setResult(Event.Result.ALLOW);
-                    plugin.getMessages().getStringList("BackPack.OnCraft").forEach(s ->
-                            ChatUtil.msg(player, s.replaceAll("%backpack%", backPack.getDisplayName())));
-                }
-                return;
-            }
+            return;
         }
+
+        // TODO: TRY TO ENFORCE UNSTACKED BACKPACKS
+        craftedItem.setAmount(1);
+
+        ItemMeta meta = craftedItem.getItemMeta();
+        meta.getPersistentDataContainer().set(BackPackUtil.getUuidKey(),
+                PersistentDataType.STRING, UUID.randomUUID().toString());
+        craftedItem.setItemMeta(meta);
+
+        e.setCurrentItem(craftedItem);
+
+        e.setResult(Event.Result.ALLOW);
+
+        plugin.getMessages().getStringList("BackPack.OnCraft").forEach(s ->
+                ChatUtil.msg(player, s.replaceAll("%backpack%", meta.getDisplayName())));
     }
 }

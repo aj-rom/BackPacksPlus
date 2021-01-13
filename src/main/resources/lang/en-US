@@ -1,0 +1,35 @@
+Version: 2
+General:
+  Permission: "&cYou do not have permission to use this command!"
+  CraftPerm: "&cYou do not have permission to craft this backpack!"
+  NoRenamePerm: "&cYou are not allowed to rename backpacks!"
+  Use: "&cYou do not have permission to use this backpack!"
+  Offline-Player: "&e%player% &ccould not be found!!"
+  Reload: "&8[&cBack&ePacks&b+&8] &aYou have reloaded the plugin!"
+  BadArgs: "&cIncorrect arguments! &eType &7/bpp help &efor help."
+  Console: "&8[&cBack&ePacks&b+&8] &cYou must be a player to use this command!"
+  NotFound: "&e%backpack% &cdoes not exist."
+  OverLimit: "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once."
+BackPack:
+  OnCraft:
+    - "&8[&a+&8] &aYou have crafted a %backpack%"
+  OnGive: "&7You have given &e%player% &7- &a%amt%x %backpack%"
+  OnReceive: "&7You have been given &7- &a%amt%x %backpack%"
+  Recipe-View:
+    Header:
+      - ""
+      - "&eHere is a list of current &cBackPack &erecipes:"
+      - " &7Hover over to see crafting recipes!"
+    Body: " &8[&a+&8]&7 &e%backpack%"
+    Footer:
+      - ""
+Help:
+  - ""
+  - "&7&m                  &r &8[&cBack&ePacks&b+&8] &7&m                "
+  - " &e/bpp &8 - &7List all accessible backpacks."
+  - " &e/bpp &ahelp &8- &7Shows this page."
+  - " &e/bpp &agive &7<&cBackPack&7> <&cPlayer&7> [&camt&7]"
+  - "   &8- &7Give the player the specified backpack"
+  - " &e/bpp &areload &8- &7Reloads the plugin."
+  - "&7&m                                                     "
+  - ""

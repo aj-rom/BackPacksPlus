@@ -46,8 +46,8 @@ BackPacks:
   Advanced:
     Name: "&e&lAdvanced &c&lBackPack+"
     Title: "&e&lAdvanced&c&lBackPack"
-    Material: "CLOCK"
-    Texture: ""
+    Material: "PLAYER_HEAD"
+    Texture: "http://textures.minecraft.net/texture/a3c153c391c34e2d328a60839e683a9f82ad3048299d8bc6a39e6f915cc5a"
     CustomData:
     Lore:
       - "&8&m                                      "

@@ -40,6 +40,7 @@ public class BackPackRenameListener implements Listener {
 
 	@EventHandler
 	public void listenAnvil(PrepareAnvilEvent e) {
+
 		if (BackPackUtil.isBackPack(e.getInventory().getItem(0))) {
 			Player p = (Player) e.getViewers().get(0);
 			AnvilInventory inv = e.getInventory();
@@ -57,22 +58,14 @@ public class BackPackRenameListener implements Listener {
 				if (item != null && item.getType() != Material.AIR) {
 					if (item.hasItemMeta()) {
 						ItemMeta meta = item.getItemMeta();
-						if (p.hasPermission("backpack.rename.color")) {
-							if (!e.getInventory().getRenameText().isEmpty()) {
-								String text = inv.getRenameText();
-
+						if(!e.getInventory().getRenameText().isEmpty()) {
+							String text = inv.getRenameText();
+							if(p.hasPermission("backpack.rename.color"))
 								meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', text));
-								item.setItemMeta(meta);
-								e.setResult(item);
-							}
-						} else {
-							if (!e.getInventory().getRenameText().isEmpty()) {
-								String text = inv.getRenameText();
-								
-								meta.setDisplayName(text.replaceAll("&([0-9a-z])", ""));
-								item.setItemMeta(meta);
-								e.setResult(item);
-							}
+							else meta.setDisplayName(text.replaceAll("&([0-9a-z])", ""));
+
+							item.setItemMeta(meta);
+							e.setResult(item);
 						}
 					}
 				}
