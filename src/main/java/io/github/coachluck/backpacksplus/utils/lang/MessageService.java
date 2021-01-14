@@ -1,6 +1,6 @@
 /*
  *     File: MessageService.java
- *     Last Modified: 1/12/21, 12:52 PM
+ *     Last Modified: 1/13/21, 3:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -26,6 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.List;
 
 public class MessageService {
 
@@ -33,28 +34,47 @@ public class MessageService {
 
     public MessageService(String language) {
         final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
-        String langPath = "lang/" + language + ".yml";
-        File mFile = new File(plugin.getDataFolder() + langPath);
-
-        if (!mFile.exists()) {
-            ChatUtil.error("No Language: &e" + language + " &ccould be found. Please make sure the selected language is in the &e/lang/ &cdirectory!");
-            ChatUtil.error("Defaulting to &een-US &c...");
-            langPath = "lang/en-US.yml";
-            mFile = new File(plugin.getDataFolder() + langPath);
+        if (plugin.getResource("lang/" + language + ".yml") == null) {
+            ChatUtil.error("Could not find language file: &e" + language + ".yml");
+            ChatUtil.error("Defaulting to &een-US.yml &c...");
+            language = "en.yml";
         }
 
-        plugin.saveResource(langPath, false);
-        messages = YamlConfiguration.loadConfiguration(mFile);
+        plugin.saveResource("lang/" + language + ".yml", false);
+        File langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
+        messages = YamlConfiguration.loadConfiguration(langFile);
     }
 
     public void sendMessage(CommandSender sender, MessageKey messageKey) {
-        ChatUtil.msg(sender, messages.getString(messageKey.getKey()));
+        ChatUtil.msg(sender, retrieveMessage(messageKey));
     }
 
     public void sendMessage(CommandSender sender, MessageKey messageKey, String... replacements) {
-        if (messageKey.getTags().length == 0) {
-            sendMessage(sender, messageKey);
+        ChatUtil.msg(sender, getMessage(messageKey, replacements));
+    }
+
+    public String getMessage(MessageKey messageKey, String... replacements) {
+        String message = retrieveMessage(messageKey);
+        String[] tags = messageKey.getTags();
+
+        if (replacements.length == tags.length) {
+            for (int i = 0; i < tags.length; i++) {
+                message = message.replace(tags[i], replacements[i]);
+            }
         }
 
+        return ChatUtil.format(message);
+    }
+
+    public String getRawMessage(MessageKey messageKey) {
+        return ChatUtil.format(messages.getString(messageKey.getKey()));
+    }
+
+    public List<String> getRawMessageList(MessageKey messageKey) {
+        return ChatUtil.formatLore(messages.getStringList(messageKey.getKey()));
+    }
+
+    private String retrieveMessage(MessageKey messageKey) {
+        return ChatUtil.format(messages.getString(messageKey.getKey()));
     }
 }

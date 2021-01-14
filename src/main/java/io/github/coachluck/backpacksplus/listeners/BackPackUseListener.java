@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 10/27/20, 11:42 AM
+ *     Last Modified: 1/13/21, 5:07 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -23,16 +23,14 @@ package io.github.coachluck.backpacksplus.listeners;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.utils.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -76,14 +74,14 @@ public class BackPackUseListener implements Listener {
         final String backPackName = data.get(BackPackUtil.getNameKey(), PersistentDataType.STRING);
 
         if(!BackPackUtil.hasBackPackPermission(player, backPackName, "use")) {
-            ChatUtil.msg(player, plugin.getMessages().getString("General.Use"));
+            plugin.getMessageService().sendMessage(player, MessageKey.PERMISSION_USE);
             return;
         }
 
         final String contents = data.get(BackPackUtil.getContentKey(), PersistentDataType.STRING);
         final Inventory prevInventory = BackPackUtil.getSavedContent(player, contents);
-        final int size = plugin.getConfig().getInt("BackPacks." + backPackName + ".Size");
-        final String title = ChatUtil.format(plugin.getConfig().getString("BackPacks." + backPackName + ".Title"));
+        final int size = plugin.getBackPacksYaml().getInt(backPackName + ".Size");
+        final String title = ChatUtil.format(plugin.getBackPacksYaml().getString(backPackName + ".Title"));
         Inventory finalInv = Bukkit.createInventory(null, size, title);
 
         finalInv.setContents(prevInventory.getContents());
@@ -94,40 +92,12 @@ public class BackPackUseListener implements Listener {
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent e) {
         final Player player = (Player) e.getWhoClicked();
-        
+
         if (e.isCancelled() || !plugin.viewingBackPack.containsKey(player))
             return;
 
-        final ClickType type = e.getClick();
-        int slot = plugin.viewingBackPack.get(player);
-        final Inventory clickedInventory = e.getClickedInventory();
-        if (clickedInventory == e.getInventory() && type.isKeyboardClick() && e.getHotbarButton() == slot) {
-                e.setCancelled(true);
-                return;
-        }
-
-        final InventoryAction action = e.getAction();
-        if((action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD)
-                && slot == e.getHotbarButton()) {
-
-                e.setCancelled(true);
-                return;
-        }
-
-        final int clickedSLot = e.getSlot();
-        final boolean isBottomInventory = player.getOpenInventory().getBottomInventory() == clickedInventory;
-        if(slot == clickedSLot && isBottomInventory) {
+        if (BackPackUtil.isBackPack(e.getCurrentItem())) {
             e.setCancelled(true);
-            return;
-        }
-
-        if(isBottomInventory) {
-            final ItemStack clickedItem = e.getCurrentItem();
-            if(clickedItem == null || clickedItem.getItemMeta() == null) return;
-
-            final ItemMeta clickedItemMeta = clickedItem.getItemMeta();
-            if(BackPackUtil.isBackPack(clickedItemMeta.getPersistentDataContainer()))
-                e.setCancelled(true);
         }
     }
 }

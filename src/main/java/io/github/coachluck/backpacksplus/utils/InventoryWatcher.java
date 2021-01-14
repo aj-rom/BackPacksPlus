@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 10/27/20, 11:31 AM
+ *     Last Modified: 1/13/21, 5:07 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,7 +21,7 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -128,9 +128,8 @@ public class InventoryWatcher {
                     return;
                 }
 
-                ChatUtil.msg(player, plugin.getMessages().getString("General.OverLimit")
-                                .replaceAll("%removed%", "" + removedCount)
-                                .replaceAll("%limit%", "" + limit));
+                plugin.getMessageService().sendMessage(player, MessageKey.OVER_LIMIT,
+                        Integer.toString(removedCount), Integer.toString(limit));
             }
         };
     }
