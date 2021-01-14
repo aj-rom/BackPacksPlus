@@ -7,9 +7,6 @@ Config-Version: 0
 Language: "en"
 Check-For-Update: true
 General:
-  AllowBackPackInEnderChest: false
   BackPackLimiter:
     Enabled: false
     Repeat: 20
-  BackPackFreeRename:
-    Enabled: false
