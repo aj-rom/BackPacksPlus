@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 1/14/21, 12:24 AM
+ *     Last Modified: 1/14/21, 4:18 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -30,20 +30,25 @@ import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.plugin.PluginManager;
 
 public class Backend {
-    private final BackPacksPlus plugin;
+    private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
-    public Backend(BackPacksPlus plugin) {
-        this.plugin = plugin;
-    }
+    private Backend() {}
 
     /**
      * Ensures that the configuration is updated to the newest version
      * @param version the config version
      */
-    public void checkConfigVersion(int version) {
-        final int CONFIGURATION_VERSION = 0;
+    public static void checkConfigVersion(int version) {
+        final int CONFIGURATION_VERSION = 3;
         if(version >= CONFIGURATION_VERSION)
             return;
+
+        if (version == 2) {
+            FileConverter_v2to3.convert();
+            plugin.getConfig().set("BackPacks", null);
+            plugin.getConfig().set("Language", "custom");
+            version = 3;
+        }
 
         plugin.getConfig().set("Config-Version", version);
         plugin.saveConfig();
@@ -53,7 +58,7 @@ public class Backend {
     /**
      * Checks for plugin updates
      */
-    public void checkForUpdates() {
+    public static void checkForUpdates() {
         if(!plugin.getConfig().getBoolean("Check-For-Update"))
             return;
 
@@ -72,7 +77,7 @@ public class Backend {
     /**
      * Registers all listeners for the plugin
      */
-    public void registerListeners() {
+    public static void registerListeners() {
         PluginManager pm = plugin.getServer().getPluginManager();
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
@@ -82,8 +87,8 @@ public class Backend {
             pm.registerEvents(new InventoryWatcherListener(), plugin);
         }
 
-        plugin.getCommand("bpp").setExecutor(new MainCommand(plugin));
-        plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessageService().getRawMessage(MessageKey.PERMISSION_COMMAND)));
+        plugin.getCommand("bpp").setExecutor(new MainCommand());
+        plugin.getCommand("bpp").setPermissionMessage(plugin.getMessageService()
+                .getRawMessage(MessageKey.PERMISSION_COMMAND));
     }
-
 }
