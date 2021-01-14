@@ -1,0 +1,66 @@
+# To add backpacks just copy a section, for example "BackPacks.Basic" or "BackPacks.Advanced"
+# Then paste at the bottom, and rename to "BackPacks.NewName"
+# For example:
+#  Basic:
+#    Name: "Some Name"
+#    <rest of data>
+#  NewName:
+#    Name: "Some Name"
+#    <rest of data>
+Basic:
+  Name: "&c&lBackPack+"
+  Title: "&e&lBackPack"
+  Material: "PLAYER_HEAD"
+  Texture: "http://textures.minecraft.net/texture/8351e505989838e27287e7afbc7f97e796cab5f3598a76160c131c940d0c5"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 18
+  Recipe:
+    Shape:
+      - "LLL"
+      - "LCL"
+      - "LLL"
+    Materials:
+      L: "LEATHER"
+      C: "CHEST"
+Advanced:
+  Name: "&e&lAdvanced &c&lBackPack+"
+  Title: "&e&lAdvanced&c&lBackPack"
+  Material: "PLAYER_HEAD"
+  Texture: "http://textures.minecraft.net/texture/a3c153c391c34e2d328a60839e683a9f82ad3048299d8bc6a39e6f915cc5a"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 27
+  Recipe:
+    Shape:
+      - "GGG"
+      - "GCG"
+      - "GGG"
+    Materials:
+      G: "GOLD_BLOCK"
+      C: "CHEST"
+Mega:
+  Name: "&b&lMega &c&lBackPack+"
+  Title: "&b&lMega&c&lBackPack"
+  Material: "PLAYER_HEAD"
+  Texture: "http://textures.minecraft.net/texture/df70fab3246fe027ce0bba885a73c6e82d8ff8f358231e8461f956560cfa58f"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 45
+  Recipe:
+    Shape:
+      - "DDD"
+      - "DCD"
+      - "DDD"
+    Materials:
+      D: "DIAMOND_BLOCK"
+      C: "CHEST"
