@@ -44,6 +44,7 @@ Advanced:
   Whitelist: [ ]
   Blacklist:
     - DIAMOND_SWORD
+    - DIAMOND_AXE
   Recipe:
     Shape:
       - "GGG"
