@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 1/13/21, 5:10 PM
+ *     Last Modified: 1/13/21, 10:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,6 +21,8 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.api.InventorySerializerUtil;
+import io.github.coachluck.backpacksplus.api.SkullHelper;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -91,6 +93,7 @@ public class BackPack {
     /**
      * The NameSpacedKey of the backpack [ backpack_<name> ]
      */
+    @Getter
     private final NamespacedKey nameSpacedKey;
 
     private int size;
@@ -106,6 +109,12 @@ public class BackPack {
 
     private final BackPacksPlus plugin;
 
+    @Getter
+    private final List<Material> whiteList = new ArrayList<>();
+
+    @Getter
+    private final List<Material> blackList = new ArrayList<>();
+
     public BackPack(String key, ConfigurationSection section) {
         this.plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.key = key;
@@ -116,6 +125,14 @@ public class BackPack {
         checkAndSetAll(section);
 
         plugin.getMultiVersionUtil().registerRecipe(nameSpacedKey, getShapedRecipe());
+    }
+
+    public boolean hasWhiteList() {
+        return whiteList.size() > 0;
+    }
+
+    public boolean hasBlackList() {
+        return blackList.size() > 0;
     }
 
     public boolean isCustomTextured() {
@@ -222,6 +239,7 @@ public class BackPack {
         checkAndSetTitle(s);
         checkAndSetMat(s);
         checkAndSetSize(s);
+        checkAndSetWhiteAndBlackList(s);
         this.backPackHoldItem = getBackPackItem();
         checkAndSetRecipe(s);
         this.shapedRecipe = getRecipe(s);
@@ -269,6 +287,24 @@ public class BackPack {
             tempSize = 9;
         }
         this.size = tempSize;
+    }
+
+    private void checkAndSetWhiteAndBlackList(ConfigurationSection section) {
+        List<String> wList = section.getStringList("Whitelist");
+        List<String> bList = section.getStringList("Blacklist");
+
+        if (wList.size() > 0) {
+            wList.forEach(s -> {
+                whiteList.add(Material.getMaterial(s));
+            });
+            return;
+        }
+
+        if (bList.size() > 0) {
+            bList.forEach(s -> {
+                blackList.add(Material.getMaterial(s));
+            });
+        }
     }
 
     private void checkAndSetRecipe(ConfigurationSection section) {

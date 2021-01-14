@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 1/13/21, 5:07 PM
+ *     Last Modified: 1/13/21, 10:50 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,7 +21,8 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
+import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.Bukkit;
@@ -30,6 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -45,7 +48,7 @@ public class BackPackUseListener implements Listener {
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent e) {
-        if(e.getItem() == null || e.getHand() == null ||
+        if (e.getItem() == null || e.getHand() == null ||
                 (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK))
             return;
 
@@ -55,13 +58,13 @@ public class BackPackUseListener implements Listener {
         final EquipmentSlot heldBackPackSlot = e.getHand();
         ItemStack item = e.getItem();
 
-        if(item.getType() == Material.AIR || !item.hasItemMeta()
+        if (item.getType() == Material.AIR || !item.hasItemMeta()
                 || item.getAmount() != 1 || item.getItemMeta() == null)
             return;
 
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        if(!BackPackUtil.isBackPack(data))
+        if (!BackPackUtil.isBackPack(data))
             return;
 
         e.setCancelled(true);
@@ -96,7 +99,62 @@ public class BackPackUseListener implements Listener {
         if (e.isCancelled() || !plugin.viewingBackPack.containsKey(player))
             return;
 
-        if (BackPackUtil.isBackPack(e.getCurrentItem())) {
+        ItemStack currentItem = e.getCurrentItem();
+        final ClickType type = e.getClick();
+        int slot = plugin.viewingBackPack.get(player);
+        final Inventory clickedInventory = e.getClickedInventory();
+        if (clickedInventory == e.getInventory() && type.isKeyboardClick() && e.getHotbarButton() == slot) {
+            e.setCancelled(true);
+            return;
+        }
+
+        final InventoryAction action = e.getAction();
+        if (action == InventoryAction.HOTBAR_SWAP || action == InventoryAction.HOTBAR_MOVE_AND_READD) {
+            ItemStack swapItem = e.getView().getBottomInventory().getItem(e.getHotbarButton());
+            if (BackPackUtil.isBackPack(swapItem)) {
+                e.setCancelled(true);
+                return;
+            }
+
+            currentItem = swapItem;
+        }
+
+        final int clickedSLot = e.getSlot();
+        final boolean isBottomInventory = player.getOpenInventory().getBottomInventory() == clickedInventory;
+        if (slot == clickedSLot && isBottomInventory) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if (isBottomInventory) {
+            final ItemStack clickedItem = e.getCurrentItem();
+            if (clickedItem == null || clickedItem.getItemMeta() == null) return;
+            if (BackPackUtil.isBackPack(clickedItem)) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
+        ItemStack item = e.getView().getBottomInventory().getItem(slot);
+        if (item == null) {
+            item = player.getInventory().getItemInOffHand();
+        }
+
+        if (currentItem == null) {
+            currentItem = e.getCursor();
+        }
+
+        final Material currentType = currentItem.getType();
+        if (currentType == Material.AIR || e.getAction() == InventoryAction.PICKUP_ALL) {
+            return;
+        }
+
+        final BackPack currentPack = BackPackUtil.getBackPackFromItem(item);
+        if ((currentPack.hasBlackList() && currentPack.getBlackList().contains(currentType))
+            || (currentPack.hasWhiteList() && !currentPack.getWhiteList().contains(currentType))) {
+
+            plugin.getMessageService().sendMessage(player, MessageKey.ITEM_NOT_ALLOWED,
+                    currentPack.getDisplayName(), currentType.toString());
             e.setCancelled(true);
         }
     }

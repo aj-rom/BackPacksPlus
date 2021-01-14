@@ -1,6 +1,6 @@
 /*
  *     File: MessageKey.java
- *     Last Modified: 1/13/21, 3:41 PM
+ *     Last Modified: 1/13/21, 10:39 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -43,6 +43,7 @@ public enum MessageKey {
     BACKPACK_RECIPE_HEADER("BackPack.Recipe-View.Header"),
     BACKPACK_RECIPE_BODY("BackPack.Recipe-View.Body", "%backpack%", "%num%"),
     BACKPACK_RECIPE_FOOTER("BackPack.Recipe-View.Footer"),
+    ITEM_NOT_ALLOWED("BackPack.ItemNotAllowed", "%backpack%", "%item%"),
 
     /** Help Section **/
     HELP("Help");
