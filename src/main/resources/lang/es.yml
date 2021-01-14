@@ -11,6 +11,7 @@ General:
   OverLimit: "&7Se removieron &c%removed% mochilas de tu inventario &7porque solo tienes permitido llevar
     &e%limit% &7al mismo tiempo."
 BackPack:
+  ItemNotAllowed: "%backpack% &cno le permite almacenar &e%item% &cdentro."
   OnCraft:
     - "&8[&a+&8] &aHas creado un %backpack%"
   OnGive: "&7Has dado &e%player% &7- &a%amt%x %backpack%"

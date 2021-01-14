@@ -18,6 +18,10 @@ Basic:
     - "&8&m                                      "
   Enchanted: true
   Size: 18
+  Whitelist:
+    - DIAMOND
+    - DIAMOND_BLOCK
+  Blacklist: [ ]
   Recipe:
     Shape:
       - "LLL"
@@ -37,6 +41,9 @@ Advanced:
     - "&8&m                                      "
   Enchanted: true
   Size: 27
+  Whitelist: [ ]
+  Blacklist:
+    - DIAMOND_SWORD
   Recipe:
     Shape:
       - "GGG"
@@ -56,6 +63,8 @@ Mega:
     - "&8&m                                      "
   Enchanted: true
   Size: 45
+  Whitelist: [ ]
+  Blacklist: [ ]
   Recipe:
     Shape:
       - "DDD"

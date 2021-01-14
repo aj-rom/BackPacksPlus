@@ -10,6 +10,7 @@ General:
   NotFound: "&e%backpack% &c不存在。"
   OverLimit: "&7刪除了 &c％removed％ &7個背包，因為只允許攜帶一次 &e％limit％"
 BackPack:
+  ItemNotAllowed: "％backpack％ ＆c不允許您將 ＆e％item％ 存儲在其中"
   OnCraft:
     - "&8[&a+&8] &a你合成了一个 %backpack%"
   OnGive: "&7你给了 &e%player% &7- &a%amt%x &7个 &a %backpack%"

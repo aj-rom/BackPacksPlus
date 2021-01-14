@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 10/27/20, 1:10 PM
+ *     Last Modified: 1/13/21, 10:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,8 +21,8 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
-import io.github.coachluck.backpacksplus.utils.InventorySerializerUtil;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
+import io.github.coachluck.backpacksplus.api.InventorySerializerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
