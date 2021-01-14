@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 1/13/21, 10:50 PM
+ *     Last Modified: 1/14/21, 2:52 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -84,6 +84,9 @@ public class BackPack {
      */
     private Material material;
 
+    @Getter
+    private final boolean enderChestEnabled;
+
 
     /**
      * The string list from config of the recipe
@@ -121,6 +124,7 @@ public class BackPack {
         this.nameSpacedKey = new NamespacedKey(plugin, "backpack_" + key);
         this.lore = ChatUtil.formatLore(section.getStringList("Lore"));
         this.enchanted = section.getBoolean("Enchanted");
+        this.enderChestEnabled = section.getBoolean("EnderChest");
 
         checkAndSetAll(section);
 
@@ -283,7 +287,8 @@ public class BackPack {
     private void checkAndSetSize(ConfigurationSection section) {
         int tempSize = section.getInt("Size");
         if (tempSize % 9 != 0 || tempSize < 9 || tempSize > 54) {
-            configError("must have a size of one of the following: &e9, 18, 27, 36, 45, 54");
+            if(!isEnderChestEnabled())
+                configError("must have a size of one of the following: &e9, 18, 27, 36, 45, 54");
             tempSize = 9;
         }
         this.size = tempSize;

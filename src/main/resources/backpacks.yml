@@ -10,7 +10,7 @@
 Basic:
   Name: "&c&lBackPack+"
   Title: "&e&lBackPack"
-  Material: "PLAYER_HEAD"
+  Material: "CUSTOM"
   Texture: "http://textures.minecraft.net/texture/8351e505989838e27287e7afbc7f97e796cab5f3598a76160c131c940d0c5"
   Lore:
     - "&8&m                                      "
@@ -33,7 +33,7 @@ Basic:
 Advanced:
   Name: "&e&lAdvanced &c&lBackPack+"
   Title: "&e&lAdvanced&c&lBackPack"
-  Material: "PLAYER_HEAD"
+  Material: "CUSTOM"
   Texture: "http://textures.minecraft.net/texture/a3c153c391c34e2d328a60839e683a9f82ad3048299d8bc6a39e6f915cc5a"
   Lore:
     - "&8&m                                      "
@@ -56,7 +56,7 @@ Advanced:
 Mega:
   Name: "&b&lMega &c&lBackPack+"
   Title: "&b&lMega&c&lBackPack"
-  Material: "PLAYER_HEAD"
+  Material: "CUSTOM"
   Texture: "http://textures.minecraft.net/texture/df70fab3246fe027ce0bba885a73c6e82d8ff8f358231e8461f956560cfa58f"
   Lore:
     - "&8&m                                      "
@@ -73,4 +73,24 @@ Mega:
       - "DDD"
     Materials:
       D: "DIAMOND_BLOCK"
+      C: "CHEST"
+EndPack:
+  EnderChest: true
+  Name: "&5&lEndPack"
+  Title: "&5&lEndPack"
+  Material: "CUSTOM"
+  Texture: "http://textures.minecraft.net/texture/b12c0a39cf46a72c18fba307b815462d19974feee7a078643569decbf5b7"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click to open your &5EnderChest"
+    - "&8&m                                      "
+  Whitelist: [ ]
+  Blacklist: [ ]
+  Recipe:
+    Shape:
+      - "EEE"
+      - "ECE"
+      - "EEE"
+    Materials:
+      E: "STICK"
       C: "CHEST"
