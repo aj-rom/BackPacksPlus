@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 1/13/21, 10:50 PM
+ *     Last Modified: 1/14/21, 3:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -40,11 +40,9 @@ import java.util.List;
 
 public class MainCommand implements CommandExecutor, TabCompleter {
 
-    private final BackPacksPlus plugin;
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
-    public MainCommand(BackPacksPlus plugin) {
-        this.plugin = plugin;
-    }
+    public MainCommand() { }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 1/13/21, 10:48 PM
+ *     Last Modified: 1/14/21, 3:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -58,7 +58,7 @@ public class InventoryWatcher {
     /**
      * Instance of the plugin
      */
-    private final BackPacksPlus plugin;
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     /**
      * Allows calls from storage to cancel the task
@@ -71,7 +71,6 @@ public class InventoryWatcher {
         this.limit = getLimit(player);
         this.player = player;
         this.task = getTask();
-        this.plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.done = false;
         run();
     }

@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 1/14/21, 12:19 AM
+ *     Last Modified: 1/14/21, 4:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -36,7 +36,7 @@ import java.io.IOException;
 
 public class BackPackUtil {
 
-    private static final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @Getter
     public static final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
@@ -118,6 +118,10 @@ public class BackPackUtil {
     }
 
     public static BackPack getBackPackFromItem(ItemStack item) {
+        if (item.getItemMeta() == null) {
+            return null;
+        }
+
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
 
         for (BackPack bp : plugin.getBackPacks()) {

@@ -1,6 +1,6 @@
 /*
  *     File: MessageService.java
- *     Last Modified: 1/13/21, 3:48 PM
+ *     Last Modified: 1/14/21, 3:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -33,11 +33,16 @@ public class MessageService {
     private final YamlConfiguration messages;
 
     public MessageService(String language) {
-        final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
-        if (plugin.getResource("lang/" + language + ".yml") == null) {
+        final BackPacksPlus plugin = BackPacksPlus.getInstance();
+        if (language.equalsIgnoreCase("custom")) {
+            File langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
+            messages = YamlConfiguration.loadConfiguration(langFile);
+            return;
+        }
+        else if (plugin.getResource("lang/" + language + ".yml") == null) {
             ChatUtil.error("Could not find language file: &e" + language + ".yml");
-            ChatUtil.error("Defaulting to &een-US.yml &c...");
-            language = "en.yml";
+            ChatUtil.error("Defaulting to &een.yml &c...");
+            language = "en";
         }
 
         plugin.saveResource("lang/" + language + ".yml", false);

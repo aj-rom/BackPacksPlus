@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 1/13/21, 10:48 PM
+ *     Last Modified: 1/14/21, 3:07 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -37,7 +37,7 @@ import java.util.UUID;
 
 public class BackPackCraftListener implements Listener {
 
-    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
     public void onCraft(CraftItemEvent e) {

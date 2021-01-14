@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 1/14/21, 2:52 AM
+ *     Last Modified: 1/14/21, 3:11 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -110,7 +110,7 @@ public class BackPack {
     private ShapedRecipe shapedRecipe;
 
 
-    private final BackPacksPlus plugin;
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @Getter
     private final List<Material> whiteList = new ArrayList<>();
@@ -119,7 +119,6 @@ public class BackPack {
     private final List<Material> blackList = new ArrayList<>();
 
     public BackPack(String key, ConfigurationSection section) {
-        this.plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.key = key;
         this.nameSpacedKey = new NamespacedKey(plugin, "backpack_" + key);
         this.lore = ChatUtil.formatLore(section.getStringList("Lore"));
