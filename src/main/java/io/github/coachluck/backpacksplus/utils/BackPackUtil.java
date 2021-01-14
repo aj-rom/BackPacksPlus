@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 10/27/20, 1:13 PM
+ *     Last Modified: 1/13/21, 3:41 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -94,5 +94,21 @@ public class BackPackUtil {
     public static String getUUID(PersistentDataContainer data) {
         return data.get(uuidKey, PersistentDataType.STRING);
     }
+    /**
+     * Sends a backpack to the desired player
+     * @param targetToReceive the player to receive the backpack
+     * @param itemToGive the backpack item to give
+     * @param amount the amount of backpacks to give
+     * @return the amount of backpacks added to their inventory
+     */
+    public static Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amount) {
+        int amt = amount;
+        if(amt < 1) amt = 1;
+        if(amt > 64) amt = 64;
 
+        itemToGive.setAmount(amt);
+        targetToReceive.getInventory().addItem(itemToGive);
+
+        return amt;
+    }
 }
