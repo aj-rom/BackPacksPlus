@@ -1,6 +1,6 @@
 /*
  *     File: Reflector.java
- *     Last Modified: 10/27/20, 11:31 AM
+ *     Last Modified: 1/13/21, 11:53 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -38,9 +38,4 @@ public class Reflector {
         else
             multiVersionUtil = new MultiVersionUtil_1_15();
     }
-
-	public MultiVersionUtil getMultiVersionUtil() {
-		// TODO Auto-generated method stub
-		return multiVersionUtil;
-	}
 }

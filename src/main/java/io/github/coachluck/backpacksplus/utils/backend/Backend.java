@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 1/13/21, 5:05 PM
+ *     Last Modified: 1/14/21, 12:24 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -78,7 +78,7 @@ public class Backend {
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
 
-        if(plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
+        if (plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
             pm.registerEvents(new InventoryWatcherListener(), plugin);
         }
 

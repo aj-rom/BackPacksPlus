@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 1/13/21, 10:48 PM
+ *     Last Modified: 1/14/21, 12:19 AM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -61,6 +61,10 @@ public class BackPackUtil {
     public static boolean isBackPack(PersistentDataContainer data) {
         return data != null && !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
                 && data.has(nameKey, PersistentDataType.STRING);
+    }
+
+    public static Inventory getSavedContent(Player player, PersistentDataContainer data) {
+        return getSavedContent(player, getContent(data));
     }
 
     public static Inventory getSavedContent(Player player, String contents) {
