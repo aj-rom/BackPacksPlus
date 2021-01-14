@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 1/14/21, 2:52 AM
+ *     Last Modified: 1/14/21, 4:17 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -44,7 +44,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class BackPackUseListener implements Listener {
 
-    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
     public void onClickEvent(PlayerInteractEvent e) {
@@ -91,31 +91,27 @@ public class BackPackUseListener implements Listener {
     {
         final Player player = (Player) e.getWhoClicked();
         final InventoryType invType = InventoryType.CHEST;
-        if (e.isCancelled() || e.getCurrentItem() == null || e.getInventory().getType() != invType
+        if (e.isCancelled() || e.getInventory().getType() != invType
                 || !plugin.viewingBackPack.containsKey(player))
             return;
 
         lockInv(e, invType);
-
-
     }
 
-    // Handles Ender Chest Backpack nesting
     @EventHandler
     public void onEndChestOpen(InventoryClickEvent e)
     {
         final InventoryType invType = InventoryType.ENDER_CHEST;
-        if (e.isCancelled() || e.getCurrentItem() == null || e.getView().getTopInventory().getType() != invType
-                || plugin.getConfig().getBoolean("AllowBackPackInEnderChest")) return;
+        if (e.isCancelled() || e.getView().getTopInventory().getType() != invType) return;
 
         lockInv(e, invType);
-
     }
 
-    private void lockInv(InventoryClickEvent e, InventoryType invType) {
+    private void lockInv(InventoryClickEvent e, InventoryType invType)
+    {
         final Player player = (Player) e.getWhoClicked();
         final InventoryAction action = e.getAction();
-        final ItemStack currentItem = e.getCurrentItem();
+        ItemStack currentItem = e.getCurrentItem();
 
         if (isPickingUp(action) && e.getClickedInventory().getType() == InventoryType.PLAYER
                 && BackPackUtil.isBackPack(e.getCurrentItem())) {
@@ -134,7 +130,8 @@ public class BackPackUseListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            return;
+
+            currentItem = (hotItem == null) ? e.getCurrentItem() : hotItem;
         }
         if (action == InventoryAction.PLACE_ALL || action == InventoryAction.PLACE_ONE
                 || action == InventoryAction.PLACE_SOME) {
@@ -145,6 +142,12 @@ public class BackPackUseListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
+
+            if (e.getCursor().getType() == Material.AIR) {
+                return;
+            }
+
+            currentItem = e.getCursor();
         }
         if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             if (e.getClickedInventory().getType() != InventoryType.PLAYER) return;
@@ -154,23 +157,34 @@ public class BackPackUseListener implements Listener {
             }
         }
 
-        Material currentType = e.getCurrentItem().getType();
-        BackPack currentPack = BackPackUtil.getBackPackFromItem(player.getItemInHand());
+        Material currentType = currentItem.getType();
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (!BackPackUtil.isBackPack(item))
+            item = player.getInventory().getItemInOffHand();
 
-        if (BackPackUtil.isBackPack(e.getCurrentItem())) {
-            e.setCancelled(true);
-            plugin.getMessageService().sendMessage(player, MessageKey.ITEM_NOT_ALLOWED,
-                    currentPack.getDisplayName(), "BACKPACK");
-            return;
-        }
-
-        if ((currentPack.hasBlackList() && currentPack.getBlackList().contains(currentType))
+        BackPack currentPack = getCurrentBackPack(item);
+        if (currentPack != null && (currentPack.hasBlackList() && currentPack.getBlackList().contains(currentType))
                 || (currentPack.hasWhiteList() && !currentPack.getWhiteList().contains(currentType))) {
             plugin.getMessageService().sendMessage(player, MessageKey.ITEM_NOT_ALLOWED,
                     currentPack.getDisplayName(),
                     currentType.toString());
             e.setCancelled(true);
         }
+    }
+
+    private BackPack getCurrentBackPack(ItemStack item) {
+        BackPack currentPack = null;
+        if (BackPackUtil.getBackPackFromItem(item) != null) {
+            currentPack = BackPackUtil.getBackPackFromItem(item);
+        }
+        else {
+            for (BackPack bp : plugin.getBackPacks()) {
+                if (bp.isEnderChestEnabled()) {
+                    currentPack = bp;
+                }
+            }
+        }
+        return currentPack;
     }
 
     private boolean isPickingUp(InventoryAction action)
@@ -186,17 +200,6 @@ public class BackPackUseListener implements Listener {
                 && action != InventoryAction.HOTBAR_MOVE_AND_READD
                 && action != InventoryAction.MOVE_TO_OTHER_INVENTORY
                 && action != InventoryAction.PLACE_ONE && action != InventoryAction.PLACE_SOME;
-    }
-
-    private void debug(InventoryClickEvent e)
-    {
-        System.out.println("\nClick Type: " + e.getClick().toString());
-        System.out.println("Current item: " + e.getCurrentItem().getType());
-        System.out.println("Cursor: " + e.getCursor().getType());
-        System.out.println("HotBarButton: " + e.getHotbarButton());
-        System.out.println("Action: " + e.getAction().toString());
-        System.out.println("Inventory: " + e.getClickedInventory().getType().toString());
-        System.out.println("SlotType: " + e.getSlotType().toString() + "\n");
     }
 
     private PersistentDataContainer getBackPackData(Player player, EquipmentSlot heldBackPackSlot, ItemStack item)
