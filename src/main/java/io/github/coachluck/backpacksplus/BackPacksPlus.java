@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 10/27/20, 11:31 AM
+ *     Last Modified: 1/13/21, 4:37 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -22,18 +22,18 @@ package io.github.coachluck.backpacksplus;
 
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.InventoryWatcher;
+import io.github.coachluck.backpacksplus.utils.Timer;
 import io.github.coachluck.backpacksplus.utils.backend.Backend;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageService;
 import io.github.coachluck.backpacksplus.utils.multiversion.MultiVersionUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.Reflector;
 import lombok.Getter;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,10 +47,16 @@ public final class BackPacksPlus extends JavaPlugin {
     public boolean updateMsg;
 
     /**
-     * Holds messages.yml as a YamlConfiguration object
+     * Holds the message service
      */
     @Getter
-    private YamlConfiguration messages;
+    private MessageService messageService;
+
+    /**
+     * Holds backpacks.yml as a YamlConfiguration Object
+     */
+    @Getter
+    private YamlConfiguration backPacksYaml;
 
     /**
      * The Backend for this plugin
@@ -59,7 +65,7 @@ public final class BackPacksPlus extends JavaPlugin {
     private Backend backend;
 
     /**
-     * The loaded list of all backpacks defined in config.yml
+     * The loaded list of all backpacks defined in config-old.yml
      */
     @Getter
     private List<BackPack> backPacks;
@@ -77,23 +83,33 @@ public final class BackPacksPlus extends JavaPlugin {
     public HashMap<UUID, InventoryWatcher> playerStackLimit;
 
     @Getter
-    public MultiVersionUtil multiVersionUtil;
+    private MultiVersionUtil multiVersionUtil;
+
+    private Timer timer;
 
     @Override
     public void onLoad() {
+        timer = new Timer();
         backend = new Backend(this);
         setUpConfig();
         backPacks = new ArrayList<>();
         viewingBackPack = new HashMap<>();
         playerStackLimit = new HashMap<>();
         multiVersionUtil = new Reflector().getMultiVersionUtil();
+        ChatUtil.logMsg("&aLoaded in &e" + timer.getDuration() + " ms&a ...");
     }
 
     @Override
     public void onEnable() {
+        timer.reset();
         backend.checkForUpdates();
-        loadBackPacks();
         backend.registerListeners();
+        ChatUtil.logMsg("&aRegistered commands and listeners &7( &e" + timer.getDuration() + " ms&7 )");
+
+        timer.reset();
+        loadBackPacks();
+        ChatUtil.logMsg("&aLoaded BackPacks &7( &e" + timer.getDuration() + " ms&7 )");
+
     }
 
     /**
@@ -101,62 +117,29 @@ public final class BackPacksPlus extends JavaPlugin {
      */
     private void setUpConfig() {
         saveDefaultConfig();
-        File messageFile = new File(getDataFolder(), "/messages.yml");
-        if(!messageFile.exists()) {
-            saveResource("messages.yml", false);
-        }
-
-        messages = YamlConfiguration.loadConfiguration(messageFile);
-
         final int CONFIG_VERSION = getConfig().getInt("Config-Version");
         backend.checkConfigVersion(CONFIG_VERSION);
+        messageService = new MessageService(getConfig().getString("Language"));
+        saveResource("backpacks.yml", false);
+        
+        backPacksYaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "backpacks.yml"));
     }
-
-
+    
     /**
      * Loads and reloads all of the backpacks for the plugin
      */
     public void loadBackPacks() {
-        if(!backPacks.isEmpty()) backPacks.clear();
-        for(String backPackName : getConfig().getConfigurationSection("BackPacks").getKeys(false)) {
-            final String path = "BackPacks." + backPackName + ".";
-            final String displayName = getConfig().getString(path + "Name");
-            final List<String> lore = getConfig().getStringList(path + "Lore");
-            final List<String> recipeShapeList = getConfig().getStringList(path + "Recipe.Shape");
-            final boolean enchanted = getConfig().getBoolean(path + "Enchanted");
-            final String title = getConfig().getString(path + "Title");
-            Material mat = null;
+        if(backPacks != null && !backPacks.isEmpty()) backPacks.clear();
+        for(String backPackName : backPacksYaml.getKeys(false)) {
+            BackPack backPack = new BackPack(backPackName, backPacksYaml.getConfigurationSection(backPackName));
 
-            String material = getConfig().getString(path + "Material");
-            try {
-                mat = Material.valueOf(material);
-            } catch (IllegalArgumentException | NoClassDefFoundError e) {
-                ChatUtil.error("&eError when trying to load material for &cBackPack:&7 " + backPackName);
-                ChatUtil.error("&ePlease use a different material or check the spelling.");
-                ChatUtil.logMsg("Material Read - " + material);
-                continue;
-            }
-
-            if(displayName == null || recipeShapeList.size() != 3 || title == null) {
-                ChatUtil.error("Error loading backpack " + backPackName + ", please make sure your configuration is set up properly!");
-                ChatUtil.error("Display Name: " + displayName);
-                ChatUtil.error("Title: " + title);
-                System.out.println(displayName + recipeShapeList);
-                continue;
-            }
-            BackPack backPack = new BackPack(backPackName, mat, displayName, lore, recipeShapeList, title, enchanted);
             backPacks.add(backPack);
         }
     }
 
-    public void reloadMessages() {
-        File messageFile = new File(getDataFolder(), "/messages.yml");
-        messages = YamlConfiguration.loadConfiguration(messageFile);
-    }
-
     public BackPack getBackPackByName(String name) {
         for(BackPack backPack : backPacks) {
-            if(name.equalsIgnoreCase(backPack.getName())) {
+            if(name.equalsIgnoreCase(backPack.getKey())) {
                 return backPack;
             }
         }
@@ -164,29 +147,9 @@ public final class BackPacksPlus extends JavaPlugin {
         return null;
     }
 
-    public void saveMessages() {
-        try {
-            messages.save(new File(getDataFolder(), "messages.yml"));
-        } catch (IOException e) {
-            ChatUtil.error("Error saving &emessages.yml&c!");
-            e.printStackTrace();
-        }
+    public void reload() {
+        reloadConfig();
+        messageService = new MessageService(getConfig().getString("Language"));
+        loadBackPacks();
     }
-    
-	public MultiVersionUtil getMultiVersionUtil() {
-		return multiVersionUtil;
-	}
-
-	public YamlConfiguration getMessages() {
-		return messages;
-	}
-
-	public List<BackPack> getBackPacks() {
-		return backPacks;
-	}
-
-	public Backend getBackend() {
-		// TODO Auto-generated method stub
-		return backend;
-	}
 }
