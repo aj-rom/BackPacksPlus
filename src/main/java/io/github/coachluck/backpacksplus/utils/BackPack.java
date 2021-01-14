@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 10/27/20, 1:13 PM
+ *     Last Modified: 1/13/21, 5:10 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,13 +21,12 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.InventorySerializerUtil;
-import io.github.coachluck.backpacksplus.utils.SkullHelper;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -38,28 +37,23 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class BackPack {
 
     /**
-     * Namespace key, and search key
-     */
-    @Getter
-    private final String name;
-
-    /**
      * The display name for the item
      */
     @Getter
-    private final String displayName;
+    private String displayName;
 
 
     /**
      * The title to display when opening the backpack
      */
     @Getter
-    private final String title;
+    private String title;
 
     /**
      * The key 'BackPacks.<name>' for config and data storage
@@ -71,7 +65,7 @@ public class BackPack {
      * The ItemStack of this backpack
      */
     @Getter
-    private final ItemStack backPackHoldItem;
+    private ItemStack backPackHoldItem;
 
     /**
      * The lore of this backpack
@@ -86,102 +80,102 @@ public class BackPack {
     /**
      * The material of the item
      */
-    private final Material material;
+    private Material material;
 
-    /**
-     * Custom model data integer
-     */
-    private final int customModelData;
 
     /**
      * The string list from config of the recipe
      */
-    private final List<String> recipeShapeList;
+    private List<String> recipeShapeList;
 
     /**
      * The NameSpacedKey of the backpack [ backpack_<name> ]
      */
     private final NamespacedKey nameSpacedKey;
 
-    private final int size;
+    private int size;
 
     /**
      * The texture url for custom textures
      */
-    private final String textureUrl;
+    private String textureUrl;
+
+    @Getter
+    private ShapedRecipe shapedRecipe;
 
 
     private final BackPacksPlus plugin;
 
-    /**
-     * Create a backpack
-     * @param key the name of the backpack
-     * @param material the material of the backpack
-     * @param displayName the display name for the item of the backpack
-     * @param lore the lore for the backpack
-     * @param recipeShapeList the recipe in a 3 line list
-     * @param title the title of the backpack inventory
-     * @param enchanted whether or not the backpack should be enchanted
-     */
-    public BackPack(String key, Material material, String displayName, List<String> lore, List<String> recipeShapeList, String title, boolean enchanted) {
-        plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
-        this.name = key;
-        this.key = "BackPacks." + key;
-        this.title = ChatUtil.format(title);
-        this.displayName = displayName;
-        this.lore = ChatUtil.formatLore(lore);
-        this.recipeShapeList = recipeShapeList;
-        this.enchanted = enchanted;
-        this.material = material;
+    public BackPack(String key, ConfigurationSection section) {
+        this.plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+        this.key = key;
         this.nameSpacedKey = new NamespacedKey(plugin, "backpack_" + key);
+        this.lore = ChatUtil.formatLore(section.getStringList("Lore"));
+        this.enchanted = section.getBoolean("Enchanted");
 
-        String texture = plugin.getConfig().getString(this.key + ".Texture");
-        if(texture != null) {
-            this.textureUrl = texture;
-        } else {
-            this.textureUrl = "";
+        checkAndSetAll(section);
+
+        plugin.getMultiVersionUtil().registerRecipe(nameSpacedKey, getShapedRecipe());
+    }
+
+    public boolean isCustomTextured() {
+        return textureUrl != null || material == Material.PLAYER_HEAD;
+    }
+
+    /**
+     * Returns the display Item For the active backpack list
+     * @return the display item
+     */
+    public ItemStack getDisplayItem() {
+        final String path = key + ".Recipe.";
+        final List<String> shape = plugin.getBackPacksYaml().getStringList(
+                path + "Shape");
+
+        ItemStack item = getBackPackItem();
+        ItemMeta meta = item.getItemMeta();
+        List<String> newLore = new ArrayList<>();
+
+        newLore.add(ChatUtil.format("&8--------"));
+        for(int i = 0; i < 3; i++) {
+            newLore.add(ChatUtil.format("&8| &e"
+                    + shape.get(i).charAt(0) + " &8| &e"
+                    + shape.get(i).charAt(1) + " &8| &e"
+                    + shape.get(i).charAt(2) + " &8|"));
+            newLore.add(ChatUtil.format("&8--------"));
         }
 
-        int customData = plugin.getConfig().getInt(this.key + ".CustomData");
-        if(customData >= 0) {
-            this.customModelData = plugin.getConfig().getInt(this.key + ".CustomData");
-        } else {
-            this.customModelData = -1;
+        ConfigurationSection matSection = plugin.getBackPacksYaml().getConfigurationSection(path + "Materials");
+        for(String key : matSection.getKeys(false)) {
+            newLore.add(ChatUtil.format("&e" + key + "&7 - &b"
+                    + plugin.getBackPacksYaml().getString(path + "Materials." + key)));
         }
 
-        this.size = plugin.getConfig().getInt(this.key + ".Size");
 
-        backPackHoldItem = getBackPackItem();
-        plugin.getMultiVersionUtil().registerRecipe(this.nameSpacedKey, this.getShapedRecipe());
+        meta.setLore(newLore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Creates the backpack item
      */
-    public ItemStack getBackPackItem() {
-        Material material = this.material;
+    private ItemStack getBackPackItem() {
         ItemStack bpItem = new ItemStack(material);
 
-        if(!textureUrl.isEmpty() &&
-                (material.toString().equalsIgnoreCase("SKULL")
-                        || material.toString().equalsIgnoreCase("PLAYER_HEAD")))
-        {
+        if (isCustomTextured()) {
             bpItem = SkullHelper.getCustomSkull(textureUrl);
         }
 
         ItemMeta itemMeta = bpItem.getItemMeta();
-        itemMeta.setDisplayName(ChatUtil.format(displayName));
+        itemMeta.setDisplayName(displayName);
         itemMeta.setLore(lore);
 
-        Inventory inv = Bukkit.createInventory(null, size, this.title);
+        Inventory inv = Bukkit.createInventory(null, size, title);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, InventorySerializerUtil.toBase64(inv));
-        itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, name);
+        itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, key);
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
 
-        if(customModelData != -1) {
-            itemMeta.setCustomModelData(customModelData);
-        }
-        if(enchanted) {
+        if (enchanted) {
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
         }
 
@@ -197,52 +191,121 @@ public class BackPack {
         return bpItem;
     }
 
+    private ShapedRecipe getRecipe(ConfigurationSection section) {
 
-    /**
-     * Get's the namespaced
-     */
-    private ShapedRecipe getShapedRecipe() {
-        ShapedRecipe recipe = new ShapedRecipe(nameSpacedKey, backPackHoldItem);
-        recipe.shape(recipeShapeList.get(0), recipeShapeList.get(1), recipeShapeList.get(2));
+        ShapedRecipe sR = new ShapedRecipe(nameSpacedKey, getBackPackItem());
+        sR.shape(recipeShapeList.get(0), recipeShapeList.get(1), recipeShapeList.get(2));
 
-        String path = key + ".Recipe.Materials.";
-        for(String recipeKey : plugin.getConfig().getConfigurationSection(path).getKeys(false)) {
+        String path = "Recipe.Materials.";
+        for(String recipeKey : section.getConfigurationSection(path).getKeys(false)) {
             char rKey = recipeKey.charAt(0);
-            Material material = Material.getMaterial(plugin.getConfig().getString(path + rKey + ".Material"));
-            recipe.setIngredient(rKey, material);
+            String mat = section.getString(path + recipeKey);
+
+            if (mat == null || mat.isEmpty()) {
+                configError("must have a valid material for its recipe. Currently empty at &eMaterials." + rKey);
+            }
+
+            Material material = Material.getMaterial(mat);
+            if (material == null) {
+                configError("must have a valid material for its recipe. Currently &eMaterials."
+                        + recipeKey + " &cis &e" + mat);
+            }
+
+            sR.setIngredient(rKey, material);
         }
-        return recipe;
+
+        return sR;
     }
 
-    /**
-     * Returns the display Item For the active backpack list
-     * @return the display item
-     */
-    public ItemStack getDisplayItem() {
-        final String path = "BackPacks." + name + ".Recipe.";
-        final List<String> shape = plugin.getConfig().getStringList(
-                path + "Shape");
+    private void checkAndSetAll(ConfigurationSection s) {
+        checkAndSetName(s);
+        checkAndSetTitle(s);
+        checkAndSetMat(s);
+        checkAndSetSize(s);
+        this.backPackHoldItem = getBackPackItem();
+        checkAndSetRecipe(s);
+        this.shapedRecipe = getRecipe(s);
+    }
 
-        ItemStack item = getBackPackItem();
-        ItemMeta meta = item.getItemMeta();
-        List<String> newLore = new ArrayList<>();
-
-        newLore.add(ChatUtil.format("&8--------"));
-        for(int i = 0; i < 3; i++) {
-            newLore.add(ChatUtil.format("&8| &e"
-                    + shape.get(i).substring(0, 1) + " &8| &e"
-                    + shape.get(i).substring(1, 2) + " &8| &e"
-                    + shape.get(i).substring(2, 3) + " &8|"));
-            newLore.add(ChatUtil.format("&8--------"));
+    private void checkAndSetName(ConfigurationSection section) {
+        final String tempDisplay = section.getString("Name");
+        if (tempDisplay == null || tempDisplay.isEmpty()) {
+            configError("must have a name!");
         }
 
-        for(String key : plugin.getConfig().getConfigurationSection(path + "Materials").getKeys(false)) {
-            newLore.add(ChatUtil.format("&e" + key + "&7 - &b" + plugin.getConfig().getString(path + "Materials." + key + ".Material")));
+        this.displayName = ChatUtil.format(tempDisplay);
+    }
+
+    private void checkAndSetTitle(ConfigurationSection section) {
+        final String tempTitle = section.getString("Title");
+        if (tempTitle == null || tempTitle.isEmpty()) {
+            configError("must have a title!");
+        }
+        this.title = ChatUtil.format(tempTitle);
+    }
+
+    private void checkAndSetMat(ConfigurationSection section) {
+        final String matString = section.getString("Material");
+        if (matString == null || matString.isEmpty()) {
+            configError("must have a material!");
         }
 
+        if (isCustomTexture(matString)) {
+            this.material = Material.PLAYER_HEAD;
+            this.textureUrl = section.getString("Texture");
+        } else {
+            this.material = Material.getMaterial(matString);
+        }
 
-        meta.setLore(newLore);
-        item.setItemMeta(meta);
-        return item;
+        if (this.material == null) {
+            configError("must have a valid material. Material: &e" + matString + " could not be found.");
+        }
+    }
+
+    private void checkAndSetSize(ConfigurationSection section) {
+        int tempSize = section.getInt("Size");
+        if (tempSize % 9 != 0 || tempSize < 9 || tempSize > 54) {
+            configError("must have a size of one of the following: &e9, 18, 27, 36, 45, 54");
+            tempSize = 9;
+        }
+        this.size = tempSize;
+    }
+
+    private void checkAndSetRecipe(ConfigurationSection section) {
+        List<String> recipe = section.getStringList("Recipe.Shape");
+        if (recipe.size() != 3) {
+            configError("must have a recipe be a 3x3 square. &7( Currently " + recipe.size() + "x3&7)");
+        }
+
+        List<Character> letters = new ArrayList<>();
+        for (String s : recipe) {
+            if (s.length() != 3) {
+                configError("must only have 3 characters per line. Currently: &e" + s);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                char c = s.charAt(i);
+                if (!letters.contains(c)) letters.add(c);
+            }
+        }
+
+        Set<String> mats = section.getConfigurationSection("Recipe.Materials").getKeys(false);
+        letters.forEach(c -> {
+            if (!mats.contains(c.toString())) {
+                configError("must contain character in material list from recipe! Unknown character: &e" + c);
+            }
+        });
+
+        this.recipeShapeList = recipe;
+    }
+    private boolean isCustomTexture(String s) {
+        if (s == null || s.isEmpty()) return false;
+
+        return s.equalsIgnoreCase("skull") || s.equalsIgnoreCase("player_head")
+                || s.equalsIgnoreCase("custom") || s.equalsIgnoreCase("texture");
+    }
+
+    private void configError(String error) {
+        ChatUtil.error("BackPack &e" + this.key + " &c" + error);
     }
 }
