@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 1/13/21, 3:41 PM
+ *     Last Modified: 1/13/21, 10:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,9 +18,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.api;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
 import org.bukkit.NamespacedKey;
@@ -110,5 +111,19 @@ public class BackPackUtil {
         targetToReceive.getInventory().addItem(itemToGive);
 
         return amt;
+    }
+
+    public static BackPack getBackPackFromItem(ItemStack item) {
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+
+        for (BackPack bp : plugin.getBackPacks()) {
+            if (!getName(data).equalsIgnoreCase(bp.getKey())) {
+                continue;
+            }
+
+            return bp;
+        }
+
+        return null;
     }
 }

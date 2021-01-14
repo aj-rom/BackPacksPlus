@@ -1,6 +1,6 @@
 /*
  *     File: Timer.java
- *     Last Modified: 1/13/21, 4:10 PM
+ *     Last Modified: 1/13/21, 10:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,7 +18,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.api;
 
 import lombok.Getter;
 
