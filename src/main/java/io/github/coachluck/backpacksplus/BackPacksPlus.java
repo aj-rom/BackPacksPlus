@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 1/13/21, 10:49 PM
+ *     Last Modified: 1/14/21, 3:32 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -59,12 +59,6 @@ public final class BackPacksPlus extends JavaPlugin {
     private YamlConfiguration backPacksYaml;
 
     /**
-     * The Backend for this plugin
-     */
-    @Getter
-    private Backend backend;
-
-    /**
      * The loaded list of all backpacks defined in config-old.yml
      */
     @Getter
@@ -85,31 +79,31 @@ public final class BackPacksPlus extends JavaPlugin {
     @Getter
     private MultiVersionUtil multiVersionUtil;
 
-    private Timer timer;
-
     @Override
     public void onLoad() {
-        timer = new Timer();
-        backend = new Backend(this);
+        Timer timer = new Timer();
         setUpConfig();
         backPacks = new ArrayList<>();
         viewingBackPack = new HashMap<>();
         playerStackLimit = new HashMap<>();
+
         multiVersionUtil = new Reflector().getMultiVersionUtil();
-        ChatUtil.logMsg("&aLoaded in &e" + timer.getDuration() + " ms&a ...");
+        messageService = new MessageService(getConfig().getString("Language"));
+        ChatUtil.logMsg("&aLoaded backend services &7( &e" + timer.getDuration() + " ms &7)");
+
+        timer.reset();
+        File bpFile = new File(getDataFolder(), "backpacks.yml");
+        backPacksYaml = YamlConfiguration.loadConfiguration(bpFile);
+        loadBackPacks();
+        ChatUtil.logMsg("&aLoaded backpacks &7( &e" + timer.getDuration() + " ms &7)");
     }
 
     @Override
     public void onEnable() {
-        timer.reset();
-        backend.checkForUpdates();
-        backend.registerListeners();
+        Timer timer = new Timer();
+        Backend.registerListeners();
         ChatUtil.logMsg("&aRegistered commands and listeners &7( &e" + timer.getDuration() + " ms&7 )");
-
-        timer.reset();
-        loadBackPacks();
-        ChatUtil.logMsg("&aLoaded BackPacks &7( &e" + timer.getDuration() + " ms&7 )");
-
+        Backend.checkForUpdates();
     }
 
     /**
@@ -117,12 +111,9 @@ public final class BackPacksPlus extends JavaPlugin {
      */
     private void setUpConfig() {
         saveDefaultConfig();
-        final int CONFIG_VERSION = getConfig().getInt("Config-Version");
-        backend.checkConfigVersion(CONFIG_VERSION);
-        messageService = new MessageService(getConfig().getString("Language"));
         saveResource("backpacks.yml", false);
-        
-        backPacksYaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "backpacks.yml"));
+        final int CONFIG_VERSION = getConfig().getInt("Config-Version");
+        Backend.checkConfigVersion(CONFIG_VERSION);
     }
     
     /**
@@ -149,7 +140,12 @@ public final class BackPacksPlus extends JavaPlugin {
 
     public void reload() {
         reloadConfig();
+        backPacksYaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "backpacks.yml"));
         messageService = new MessageService(getConfig().getString("Language"));
         loadBackPacks();
+    }
+
+    public static BackPacksPlus getInstance() {
+        return JavaPlugin.getPlugin(BackPacksPlus.class);
     }
 }
