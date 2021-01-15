@@ -1,4 +1,4 @@
-Version: 2
+# English translation file
 General:
   Permission: "&cYou do not have permission to use this command!"
   CraftPerm: "&cYou do not have permission to craft this backpack!"
@@ -11,6 +11,7 @@ General:
   NotFound: "&e%backpack% &cdoes not exist."
   OverLimit: "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once."
 BackPack:
+  ItemNotAllowed: "%backpack% &cdoes not let you store &e%item% &cinside."
   OnCraft:
     - "&8[&a+&8] &aYou have crafted a %backpack%"
   OnGive: "&7You have given &e%player% &7- &a%amt%x %backpack%"

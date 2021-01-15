@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 10/27/20, 1:12 PM
+ *     Last Modified: 1/14/21, 10:52 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -26,59 +26,42 @@ import io.github.coachluck.backpacksplus.listeners.BackPackCloseListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackCraftListener;
 import io.github.coachluck.backpacksplus.listeners.BackPackUseListener;
 import io.github.coachluck.backpacksplus.listeners.InventoryWatcherListener;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.plugin.PluginManager;
 
 public class Backend {
-    private final BackPacksPlus plugin;
+    private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
-    public Backend(BackPacksPlus plugin) {
-        this.plugin = plugin;
-    }
+    private Backend() {}
 
     /**
      * Ensures that the configuration is updated to the newest version
      * @param version the config version
      */
-    public void checkConfigVersion(int version) {
+    public static void checkConfigVersion(int version)
+    {
+        int currentVer = version;
         final int CONFIGURATION_VERSION = 3;
         if(version >= CONFIGURATION_VERSION)
             return;
 
-        if(version == 0) {
-            version = 1;
-            plugin.getConfig().createSection("General");
-            plugin.getConfig().set("General.NestableBackPack", true);
-            plugin.getConfig().set("General.BackPackLimiter.Enabled", false);
-            plugin.getConfig().set("General.BackPackLimiter.Repeat", 20);
-
-            plugin.getMessages().set("Version", 1);
-            plugin.getMessages().set("General.OverLimit",
-                    "&7Removed &c%removed% backpacks &7because you are only allowed to carry &e%limit% &7at once.");
-        }
-        if(version == 1) {
-            version = 2;
-            plugin.getConfig().set("General.NestableBackPack", null);
-        }
-        if(version == 2) {
-            version = 3;
-            plugin.getConfig().set("General.BackPackFreeRename.Enabled", false);
-            plugin.getMessages().set("General.NoRenamePerm", "&cYou are not allowed to rename backpacks!");
-            plugin.getMessages().set("Version", 2);
+        if (version == 2) {
+            FileConverterUtil.convert();
+            plugin.getConfig().set("BackPacks", null);
+            plugin.getConfig().set("Language", "custom");
+            currentVer = 3;
         }
 
-        plugin.getConfig().set("Config-Version", version);
+        plugin.getConfig().set("Config-Version", currentVer);
         plugin.saveConfig();
-        plugin.saveMessages();
-
-        plugin.reloadMessages();
         plugin.reloadConfig();
     }
+
     /**
      * Checks for plugin updates
      */
-    public void checkForUpdates() {
+    public static void checkForUpdates()
+    {
         if(!plugin.getConfig().getBoolean("Check-For-Update"))
             return;
 
@@ -97,37 +80,19 @@ public class Backend {
     /**
      * Registers all listeners for the plugin
      */
-    public void registerListeners() {
+    public static void registerListeners()
+    {
         PluginManager pm = plugin.getServer().getPluginManager();
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
-        //pm.registerEvents(new BackPackRenameListener(), plugin);
 
-        if(plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
+        if (plugin.getConfig().getBoolean("General.BackPackLimiter.Enabled")) {
             pm.registerEvents(new InventoryWatcherListener(), plugin);
         }
 
-        plugin.getCommand("bpp").setExecutor(new MainCommand(plugin));
-        plugin.getCommand("bpp").setPermissionMessage(ChatUtil.format(plugin.getMessages().getString("General.Permission")));
+        plugin.getCommand("bpp").setExecutor(new MainCommand());
+        plugin.getCommand("bpp").setPermissionMessage(plugin.getMessageService()
+                .getRawMessage(MessageKey.PERMISSION_COMMAND));
     }
-
-    /**
-     * Sends a backpack to the desired player
-     * @param targetToReceive the player to receive the backpack
-     * @param itemToGive the backpack item to give
-     * @param amount the amount of backpacks to give
-     * @return the amount of backpacks added to their inventory
-     */
-    public Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amount) {
-        int amt = amount;
-        if(amt < 1) amt = 1;
-        if(amt > 64) amt = 64;
-
-        itemToGive.setAmount(amt);
-        targetToReceive.getInventory().addItem(itemToGive);
-
-        return amt;
-    }
-
 }

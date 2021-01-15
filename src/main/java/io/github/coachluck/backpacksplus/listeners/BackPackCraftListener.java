@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 9/24/20, 6:18 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,8 +21,9 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -36,10 +37,11 @@ import java.util.UUID;
 
 public class BackPackCraftListener implements Listener {
 
-    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
-    public void onCraft(CraftItemEvent e) {
+    public void onCraft(CraftItemEvent e)
+    {
         final Player player = (Player) e.getWhoClicked();
         ItemStack craftedItem = e.getCurrentItem();
 
@@ -50,7 +52,7 @@ public class BackPackCraftListener implements Listener {
             e.setCurrentItem(null);
             e.setResult(Event.Result.DENY);
             e.setCancelled(true);
-            ChatUtil.msg(player, plugin.getMessages().getString("General.CraftPerm"));
+            plugin.getMessageService().sendMessage(player, MessageKey.PERMISSION_CRAFT);
 
             return;
         }
@@ -67,7 +69,7 @@ public class BackPackCraftListener implements Listener {
 
         e.setResult(Event.Result.ALLOW);
 
-        plugin.getMessages().getStringList("BackPack.OnCraft").forEach(s ->
+        plugin.getMessageService().getRawMessageList(MessageKey.BACKPACK_CRAFT).forEach(s ->
                 ChatUtil.msg(player, s.replaceAll("%backpack%", meta.getDisplayName())));
     }
 }

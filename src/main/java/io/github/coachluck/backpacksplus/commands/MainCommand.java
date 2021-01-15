@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 9/24/20, 6:18 PM
+ *     Last Modified: 1/14/21, 10:46 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,10 +21,11 @@
 package io.github.coachluck.backpacksplus.commands;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
+import io.github.coachluck.backpacksplus.api.DisplayItemHelper;
 import io.github.coachluck.backpacksplus.utils.BackPack;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
-import io.github.coachluck.backpacksplus.utils.DisplayItemHelper;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,17 +40,14 @@ import java.util.List;
 
 public class MainCommand implements CommandExecutor, TabCompleter {
 
-    private final BackPacksPlus plugin;
-
-    public MainCommand(BackPacksPlus plugin) {
-        this.plugin = plugin;
-    }
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
         if(args.length == 0) {
             if(!(sender instanceof Player)) {
-                ChatUtil.msg(sender, plugin.getMessages().getString("General.Console"));
+                plugin.getMessageService().sendMessage(sender, MessageKey.NO_CONSOLE);
                 return true;
             }
 
@@ -80,7 +78,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                plugin.getMessages().getStringList("Help").forEach(s -> ChatUtil.msg(sender, s));
+                plugin.getMessageService().getRawMessageList(MessageKey.HELP).forEach(s -> ChatUtil.msg(sender, s));
                 return true;
             case "g":
                 if(!sender.hasPermission("backpacksplus.give")) {
@@ -89,21 +87,19 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                 }
 
                 if(args.length < 3) {
-                    ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
+                    plugin.getMessageService().sendMessage(sender, MessageKey.INCORRECT_ARGS);
                     return true;
                 }
 
                 final BackPack backPackToGive = plugin.getBackPackByName(args[1]);
                 if(backPackToGive == null) {
-                    ChatUtil.msg(sender, plugin.getMessages().getString("General.NotFound")
-                            .replaceAll("%backpack%", args[1]));
+                    plugin.getMessageService().sendMessage(sender, MessageKey.NOT_FOUND, args[1]);
                     return true;
                 }
 
                 final Player targetToReceive = Bukkit.getPlayerExact(args[2]);
                 if(targetToReceive == null) {
-                    ChatUtil.msg(sender, plugin.getMessages().getString("General.Offline-Player")
-                            .replaceAll("%player%", args[2]));
+                    plugin.getMessageService().sendMessage(sender, MessageKey.OFFLINE_PLAYER, args[2]);
                     return true;
                 }
 
@@ -119,19 +115,20 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
                 final int finalAmount = Integer.parseInt(amount);
                 Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-                    int amt = plugin.getBackend().sendBackPackItems(targetToReceive, backPackToGive.getBackPackHoldItem(), finalAmount);
+                    int amt = BackPackUtil.sendBackPackItems(targetToReceive, backPackToGive.getBackPackHoldItem(), finalAmount);
                     sendBackPack(sender, targetToReceive, amt, backPackToGive);
                 });
                 return true;
             default:
-                ChatUtil.msg(sender, plugin.getMessages().getString("General.BadArgs"));
+                plugin.getMessageService().sendMessage(sender, MessageKey.INCORRECT_ARGS);
                 return true;
         }
 
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args)
+    {
         final String pre = "backpacksplus.";
 
         if(args.length == 1) {
@@ -157,7 +154,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                     List<String> backpacks = new ArrayList<>();
 
                     for (BackPack backPack : plugin.getBackPacks()) {
-                        backpacks.add(backPack.getName());
+                        backpacks.add(backPack.getKey());
                     }
 
                     List<String> completions = new ArrayList<>();
@@ -202,8 +199,9 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * Sends a permission message to the player.
      * @param sender the person executing the command
      */
-    private void sendPerm(CommandSender sender) {
-        ChatUtil.msg(sender, plugin.getMessages().getString("General.Permission"));
+    private void sendPerm(CommandSender sender)
+    {
+        plugin.getMessageService().sendMessage(sender, MessageKey.PERMISSION_COMMAND);
     }
 
 
@@ -214,59 +212,43 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * @param amt the amount of backpacks to give
      * @param backPackToGive the backpack to give the target
      */
-    private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive) {
-        final String recMsg = getMsg("OnReceive", targetToReceive, amt, backPackToGive.getDisplayName());
-        final String giveMsg = getMsg("OnGive", targetToReceive, amt, backPackToGive.getDisplayName());
+    private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive)
+    {
+        final String amount = Integer.toString(amt);
+        final String backPackName = backPackToGive.getDisplayName();
+        plugin.getMessageService().sendMessage(targetToReceive, MessageKey.BACKPACK_RECEIVE,
+                amount, backPackName);
 
-        ChatUtil.msg(targetToReceive, recMsg);
 
         if(!sender.equals(targetToReceive))
-            ChatUtil.msg(sender, giveMsg);
-    }
-
-    /**
-     * Gets the desired messages on BackPack send and replaces placeholders
-     * @param path the desired path (OnReceive/OnGive)
-     * @param sender who is sending the backpack
-     * @param amount the amount of backpacks to send
-     * @param displayName the display name of the backpack
-     * @return the replaced message
-     */
-    private String getMsg(String path, CommandSender sender, Integer amount, String displayName) {
-        String msg = plugin.getMessages().getString("BackPack." + path);
-
-        if(msg == null) return "Error";
-
-        msg = msg
-                .replaceAll("%player%", sender.getName())
-                .replaceAll("%amt%", Integer.toString(amount))
-                .replaceAll("%backpack%", displayName);
-
-        return msg;
+            plugin.getMessageService().sendMessage(sender, MessageKey.BACKPACK_GIVE,
+                    targetToReceive.getDisplayName(), amount, backPackName);
     }
 
     /**
      * Sends the list of backpacks with recipes to the player
      * @param player the player to send the list too
      */
-    private void sendBackPackList(Player player) {
+    private void sendBackPackList(Player player)
+    {
         Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            plugin.getMessages().getStringList("BackPack.Recipe-View.Header")
+            plugin.getMessageService().getRawMessageList(MessageKey.BACKPACK_RECIPE_HEADER)
                     .forEach(s -> ChatUtil.msg(player, s));
             int i = 1;
 
             final List<BackPack> backPacks = plugin.getBackPacks();
             for(BackPack backPack : backPacks) {
-                if(BackPackUtil.hasBackPackPermission(player, backPack.getName(), "craft")) {
+                if(BackPackUtil.hasBackPackPermission(player, backPack.getKey(), "craft")) {
                     DisplayItemHelper.sendItemTooltipMessage(player,
-                            ChatUtil.format(plugin.getMessages().getString("BackPack.Recipe-View.Body")
-                                    .replaceAll("%backpack%", backPack.getDisplayName())
-                                    .replaceAll("%num%", Integer.toString(i))),
+                            plugin.getMessageService().getMessage(MessageKey.BACKPACK_RECIPE_BODY,
+                                    backPack.getDisplayName(),
+                                    Integer.toString(i)),
                             backPack);
                 }
             }
 
-            plugin.getMessages().getStringList("BackPack.Recipe-View.Footer").forEach(s -> ChatUtil.msg(player, s));
+            plugin.getMessageService().getRawMessageList(MessageKey.BACKPACK_RECIPE_FOOTER)
+                    .forEach(s -> ChatUtil.msg(player, s));
         });
     }
 
@@ -274,14 +256,10 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * Reloads the plugin
      * @param sender who is reloading the plugin
      */
-    private void reloadPlugin(CommandSender sender) {
-        Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
-            plugin.reloadConfig();
-            plugin.reloadMessages();
-        });
-
-        plugin.loadBackPacks();
-        ChatUtil.msg(sender, plugin.getMessages().getString("General.Reload"));
+    private void reloadPlugin(CommandSender sender)
+    {
+        plugin.reload();
+        plugin.getMessageService().sendMessage(sender, MessageKey.RELOAD);
     }
 
 }

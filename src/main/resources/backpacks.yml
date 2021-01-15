@@ -1,0 +1,96 @@
+# To add backpacks just copy a section, for example "BackPacks.Basic" or "BackPacks.Advanced"
+# Then paste at the bottom, and rename to "BackPacks.NewName"
+# For example:
+#  Basic:
+#    Name: "Some Name"
+#    <rest of data>
+#  NewName:
+#    Name: "Some Name"
+#    <rest of data>
+Basic:
+  Name: "&c&lBackPack+"
+  Title: "&e&lBackPack"
+  Material: "CUSTOM"
+  Texture: "http://textures.minecraft.net/texture/8351e505989838e27287e7afbc7f97e796cab5f3598a76160c131c940d0c5"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 18
+  Whitelist:
+    - DIAMOND
+    - DIAMOND_BLOCK
+  Blacklist: [ ]
+  Recipe:
+    Shape:
+      - "LLL"
+      - "LCL"
+      - "LLL"
+    Materials:
+      L: "LEATHER"
+      C: "CHEST"
+Advanced:
+  Name: "&e&lAdvanced &c&lBackPack+"
+  Title: "&e&lAdvanced&c&lBackPack"
+  Material: "CUSTOM"
+  Texture: "http://textures.minecraft.net/texture/a3c153c391c34e2d328a60839e683a9f82ad3048299d8bc6a39e6f915cc5a"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 27
+  Whitelist: [ ]
+  Blacklist:
+    - DIAMOND_SWORD
+    - DIAMOND_AXE
+  Recipe:
+    Shape:
+      - "GGG"
+      - "GCG"
+      - "GGG"
+    Materials:
+      G: "GOLD_BLOCK"
+      C: "CHEST"
+Mega:
+  Name: "&b&lMega &c&lBackPack+"
+  Title: "&b&lMega&c&lBackPack"
+  Material: "CUSTOM"
+  Texture: "http://textures.minecraft.net/texture/df70fab3246fe027ce0bba885a73c6e82d8ff8f358231e8461f956560cfa58f"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click me to open this &dBackPack"
+    - "&8&m                                      "
+  Enchanted: true
+  Size: 45
+  Whitelist: [ ]
+  Blacklist: [ ]
+  Recipe:
+    Shape:
+      - "DDD"
+      - "DCD"
+      - "DDD"
+    Materials:
+      D: "DIAMOND_BLOCK"
+      C: "CHEST"
+EndPack:
+  EnderChest: true
+  Name: "&5&lEndPack"
+  Title: "&5&lEndPack"
+  Material: "CUSTOM"
+  Texture: "http://textures.minecraft.net/texture/b12c0a39cf46a72c18fba307b815462d19974feee7a078643569decbf5b7"
+  Lore:
+    - "&8&m                                      "
+    - " &7Click to open your &5EnderChest"
+    - "&8&m                                      "
+  Whitelist: [ ]
+  Blacklist: [ ]
+  Recipe:
+    Shape:
+      - "EEE"
+      - "ECE"
+      - "EEE"
+    Materials:
+      E: "STICK"
+      C: "CHEST"

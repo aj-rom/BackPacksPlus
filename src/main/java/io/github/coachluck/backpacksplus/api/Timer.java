@@ -1,6 +1,6 @@
 /*
- *     File: MultiVersionUtil_1_15.java
- *     Last Modified: 1/14/21, 10:30 PM
+ *     File: Timer.java
+ *     Last Modified: 1/13/21, 10:48 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,28 +18,24 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils.multiversion;
+package io.github.coachluck.backpacksplus.api;
 
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
+import lombok.Getter;
 
-public class MultiVersionUtil_1_15 implements MultiVersionUtil {
+public class Timer {
 
-    @Override
-    public void registerRecipe(NamespacedKey namespacedKey, ShapedRecipe recipe)
-    {
-        Bukkit.getServer().removeRecipe(namespacedKey);
-        Bukkit.getServer().addRecipe(recipe);
+    @Getter
+    private long startTime;
+
+    public Timer() {
+        this.startTime = System.currentTimeMillis();
     }
 
-    @Override
-    public void setInventorySlot(Player player, EquipmentSlot slot, ItemStack item)
-    {
-        player.getInventory().setItem(slot, item);
+    public long getDuration() {
+        return System.currentTimeMillis() - startTime;
     }
 
+    public void reset() {
+        startTime = System.currentTimeMillis();
+    }
 }

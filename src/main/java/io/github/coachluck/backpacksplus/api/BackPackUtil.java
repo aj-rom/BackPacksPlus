@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 10/27/20, 1:13 PM
+ *     Last Modified: 1/14/21, 10:53 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,9 +18,10 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.api;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import lombok.Getter;
 import org.bukkit.NamespacedKey;
@@ -35,7 +36,7 @@ import java.io.IOException;
 
 public class BackPackUtil {
 
-    private static final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @Getter
     public static final NamespacedKey contentKey = new NamespacedKey(plugin, "content");
@@ -46,7 +47,8 @@ public class BackPackUtil {
     @Getter
     public static final NamespacedKey uuidKey = new NamespacedKey(plugin, "uuid");
 
-    public static boolean isBackPack(ItemStack item) {
+    public static boolean isBackPack(ItemStack item)
+    {
         if(item == null)
             return false;
 
@@ -57,12 +59,18 @@ public class BackPackUtil {
         return isBackPack(meta.getPersistentDataContainer());
     }
 
-    public static boolean isBackPack(PersistentDataContainer data) {
+    public static boolean isBackPack(PersistentDataContainer data)
+    {
         return data != null && !data.isEmpty() && data.has(contentKey, PersistentDataType.STRING)
                 && data.has(nameKey, PersistentDataType.STRING);
     }
 
-    public static Inventory getSavedContent(Player player, String contents) {
+    public static Inventory getSavedContent(Player player, PersistentDataContainer data) {
+        return getSavedContent(player, getContent(data));
+    }
+
+    public static Inventory getSavedContent(Player player, String contents)
+    {
         Inventory inv = null;
         try {
             inv = InventorySerializerUtil.fromBase64(contents);
@@ -75,7 +83,8 @@ public class BackPackUtil {
         return inv;
     }
 
-    public static boolean hasBackPackPermission(Player player, String backPackName, String type) {
+    public static boolean hasBackPackPermission(Player player, String backPackName, String type)
+    {
         final String selector = type.toLowerCase();
         if(player.hasPermission("backpack.*") || player.hasPermission("backpack." + selector + ".*")) {
             return true;
@@ -83,16 +92,54 @@ public class BackPackUtil {
         return player.hasPermission("backpack." + selector + "." + backPackName.toLowerCase());
     }
 
-    public static String getContent(PersistentDataContainer data) {
+    public static String getContent(PersistentDataContainer data)
+    {
         return data.get(contentKey, PersistentDataType.STRING);
     }
 
-    public static String getName(PersistentDataContainer data) {
+    public static String getName(PersistentDataContainer data)
+    {
         return data.get(nameKey, PersistentDataType.STRING);
     }
 
-    public static String getUUID(PersistentDataContainer data) {
+    public static String getUUID(PersistentDataContainer data)
+    {
         return data.get(uuidKey, PersistentDataType.STRING);
     }
 
+    /**
+     * Sends a backpack to the desired player
+     * @param targetToReceive the player to receive the backpack
+     * @param itemToGive the backpack item to give
+     * @param amount the amount of backpacks to give
+     * @return the amount of backpacks added to their inventory
+     */
+    public static Integer sendBackPackItems(Player targetToReceive, ItemStack itemToGive, int amount)
+    {
+        int amt = amount;
+        if(amt < 1) amt = 1;
+        if(amt > 64) amt = 64;
+
+        itemToGive.setAmount(amt);
+        targetToReceive.getInventory().addItem(itemToGive);
+
+        return amt;
+    }
+
+    public static BackPack getBackPackFromItem(ItemStack item)
+    {
+        if (item.getItemMeta() == null) {
+            return null;
+        }
+
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+
+        for (BackPack bp : plugin.getBackPacks()) {
+            if (getName(data).equalsIgnoreCase(bp.getKey())) {
+                return bp;
+            }
+        }
+
+        return null;
+    }
 }

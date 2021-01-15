@@ -1,10 +1,8 @@
----
-#Message File
-Version: 1
+# Spanish Translations
 General:
   Permission: "&cNo tienes permiso para usar este comando!"
-  CraftPerm: "& c¡No tienes permiso para crear esta mochila!"
-  Use: "& c¡No tienes permiso para usar esta mochila!"
+  CraftPerm: "&c¡No tienes permiso para crear esta mochila!"
+  Use: "&c¡No tienes permiso para usar esta mochila!"
   Offline-Player: "&e%player% &cNo pudo ser encontrado!!"
   Reload: "&8[&cMochilas&8] &aHas recargado el plugin!"
   BadArgs: "&cArgumentos incorrectos! &eEscribe &7/bpp help &epara ayuda."
@@ -13,6 +11,7 @@ General:
   OverLimit: "&7Se removieron &c%removed% mochilas de tu inventario &7porque solo tienes permitido llevar
     &e%limit% &7al mismo tiempo."
 BackPack:
+  ItemNotAllowed: "%backpack% &cno le permite almacenar &e%item% &cdentro."
   OnCraft:
     - "&8[&a+&8] &aHas creado un %backpack%"
   OnGive: "&7Has dado &e%player% &7- &a%amt%x %backpack%"

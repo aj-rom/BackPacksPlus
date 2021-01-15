@@ -1,5 +1,4 @@
-# Message File
-Version: 0
+# Chinese (Traditional) Translations
 General:
   Permission: "&c你没有权限使用此命令！"
   CraftPerm: "&c你没有权限合成此背包！"
@@ -9,9 +8,9 @@ General:
   BadArgs: "&c错误参数！ &e输入 &7/bpp help &e以获得帮助。"
   Console: "&8[&c背&e包&b+&8] &c只有玩家可以使用此命令。"
   NotFound: "&e%backpack% &c不存在。"
-  OverLimit: "&7刪除了 &c％removed％ &7個背包，因為只允許攜帶
-    一次 &e％limit％"
+  OverLimit: "&7刪除了 &c％removed％ &7個背包，因為只允許攜帶一次 &e％limit％"
 BackPack:
+  ItemNotAllowed: "％backpack％ ＆c不允許您將 ＆e％item％ 存儲在其中"
   OnCraft:
     - "&8[&a+&8] &a你合成了一个 %backpack%"
   OnGive: "&7你给了 &e%player% &7- &a%amt%x &7个 &a %backpack%"

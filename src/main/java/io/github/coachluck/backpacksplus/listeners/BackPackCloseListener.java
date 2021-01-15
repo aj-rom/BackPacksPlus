@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 10/27/20, 1:10 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,8 +21,8 @@
 package io.github.coachluck.backpacksplus.listeners;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.BackPackUtil;
-import io.github.coachluck.backpacksplus.utils.InventorySerializerUtil;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
+import io.github.coachluck.backpacksplus.api.InventorySerializerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,10 +38,11 @@ import java.util.UUID;
 
 public class BackPackCloseListener implements Listener {
 
-    private final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
+    public void onInventoryClose(InventoryCloseEvent e)
+    {
         final InventoryView viewingInv = e.getView();
         final Player player = (Player) e.getPlayer();
         if(!plugin.viewingBackPack.containsKey(player))

@@ -1,6 +1,4 @@
----
-#Message File
-Version: 1
+# German Translation File
 General:
   Permission: "&cSie haben keine Berechtigung, diesen Befehl zu verwenden!"
   CraftPerm: "&cSie haben keine Berechtigung, diesen Rucksack zu erstellen!"
@@ -13,6 +11,7 @@ General:
   OverLimit: "&7wurden entfernt &c%removed% Rucksäcke aus deinem Inventar &7weil du nur
     &e%limit% &7gleichzeitig tragen darfst."
 BackPack:
+  ItemNotAllowed: "%backpack% &cSie können &e%item% &cnicht darin speichern."
   OnCraft:
     - "&8[&a+&8] &aDu hast %backpack% gecraftet"
   OnGive: "&7Du hast &e%player% &7- &a%amt%x %backpack% gegeben"

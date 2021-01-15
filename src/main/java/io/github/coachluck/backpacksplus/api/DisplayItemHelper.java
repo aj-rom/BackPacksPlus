@@ -1,6 +1,6 @@
 /*
  *     File: DisplayItemHelper.java
- *     Last Modified: 9/4/20, 4:55 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -18,8 +18,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.coachluck.backpacksplus.utils;
+package io.github.coachluck.backpacksplus.api;
 
+import io.github.coachluck.backpacksplus.utils.BackPack;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.ReflectionUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,7 +40,8 @@ public class DisplayItemHelper {
      * @param itemStack the item to convert
      * @return the Json string representation of the item
      */
-    private static String convertItemStackToJson(ItemStack itemStack) {
+    private static String convertItemStackToJson(ItemStack itemStack)
+    {
 
         Class<?> craftItemStackClazz = ReflectionUtil.getOBCClass("inventory.CraftItemStack");
         Method asNMSCopyMethod = ReflectionUtil.getMethod(craftItemStackClazz, "asNMSCopy", ItemStack.class);
@@ -70,7 +72,8 @@ public class DisplayItemHelper {
      * @param message the message to add the hover element too.
      * @param backPack to show the recipe of
      */
-    public static void sendItemTooltipMessage(Player player, String message, BackPack backPack) {
+    public static void sendItemTooltipMessage(Player player, String message, BackPack backPack)
+    {
         final ItemStack item = backPack.getDisplayItem();
         final String itemJson = convertItemStackToJson(item);
         BaseComponent[] hoverEventComponents = new BaseComponent[]{

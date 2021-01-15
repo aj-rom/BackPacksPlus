@@ -1,6 +1,6 @@
 /*
  *     File: ReflectionUtil.java
- *     Last Modified: 9/4/20, 4:55 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -38,17 +38,17 @@ public class ReflectionUtil {
     /*
      * Cache of NMS classes that we've searched for
      */
-    private static Map<String, Class<?>> loadedNMSClasses = new HashMap<>();
+    private static final Map<String, Class<?>> loadedNMSClasses = new HashMap<>();
 
     /*
      * Cache of OBS classes that we've searched for
      */
-    private static Map<String, Class<?>> loadedOBCClasses = new HashMap<>();
+    private static final Map<String, Class<?>> loadedOBCClasses = new HashMap<>();
 
     /*
      * Cache of methods that we've found in particular classes
      */
-    private static Map<Class<?>, Map<String, Method>> loadedMethods = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Method>> loadedMethods = new HashMap<>();
 
 
     /**
@@ -56,7 +56,8 @@ public class ReflectionUtil {
      *
      * @return The version string of OBC and NMS packages
      */
-    public static String getVersion() {
+    public static String getVersion()
+    {
         if (versionString == null) {
             String name = Bukkit.getServer().getClass().getPackage().getName();
             versionString = name.substring(name.lastIndexOf('.') + 1) + ".";
@@ -71,7 +72,8 @@ public class ReflectionUtil {
      * @param nmsClassName The name of the class
      * @return The class
      */
-    public static Class<?> getNMSClass(String nmsClassName) {
+    public static Class<?> getNMSClass(String nmsClassName)
+    {
         if (loadedNMSClasses.containsKey(nmsClassName)) {
             return loadedNMSClasses.get(nmsClassName);
         }
@@ -96,7 +98,8 @@ public class ReflectionUtil {
      * @param obcClassName the path to the class
      * @return the found class at the specified path
      */
-    public synchronized static Class<?> getOBCClass(String obcClassName) {
+    public synchronized static Class<?> getOBCClass(String obcClassName)
+    {
         if (loadedOBCClasses.containsKey(obcClassName)) {
             return loadedOBCClasses.get(obcClassName);
         }
@@ -124,7 +127,8 @@ public class ReflectionUtil {
      * @param params     Any parameters that the method has
      * @return The method with appropriate paramaters
      */
-    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params) {
+    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params)
+    {
         if (!loadedMethods.containsKey(clazz)) {
             loadedMethods.put(clazz, new HashMap<>());
         }
@@ -159,13 +163,15 @@ public class ReflectionUtil {
      *            a compatible field type
      * @return the field accessor
      */
-    public static <T> FieldAccessor<T> getField(Class<?> target, String name, Class<T> fieldType) {
+    public static <T> FieldAccessor<T> getField(Class<?> target, String name, Class<T> fieldType)
+    {
         return getField(target, name, fieldType, 0);
     }
 
 
     // Common method
-    private static <T> FieldAccessor<T> getField(Class<?> target, String name, Class<T> fieldType, int indx) {
+    private static <T> FieldAccessor<T> getField(Class<?> target, String name, Class<T> fieldType, int indx)
+    {
         int index = indx;
         for (final Field field : target.getDeclaredFields()) {
             if ((name == null || field.getName().equals(name)) && fieldType.isAssignableFrom(field.getType())
@@ -206,7 +212,7 @@ public class ReflectionUtil {
 
             }
         }
-        // Search in parent classes
+
         if (target.getSuperclass() != null)
             return getField(target.getSuperclass(), name, fieldType, index);
         throw new IllegalArgumentException("Cannot find field with type " + fieldType);
@@ -226,7 +232,7 @@ public class ReflectionUtil {
          *            the target object, or NULL for a static field
          * @return the value of the field
          */
-        public T get(Object target);
+        T get(Object target);
 
         /**
          * Set the content of a field.
@@ -236,7 +242,7 @@ public class ReflectionUtil {
          * @param value
          *            the new value of the field
          */
-        public void set(Object target, Object value);
+        void set(Object target, Object value);
 
         /**
          * Determine if the given object has this field.
@@ -245,7 +251,7 @@ public class ReflectionUtil {
          *            the object to test
          * @return TRUE if it does, FALSE otherwise
          */
-        public boolean hasField(Object target);
+        boolean hasField(Object target);
     }
 
 }

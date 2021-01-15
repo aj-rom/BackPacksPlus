@@ -1,6 +1,6 @@
 /*
  *     File: MessageKey.java
- *     Last Modified: 1/12/21, 12:51 PM
+ *     Last Modified: 1/13/21, 10:39 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -41,8 +41,9 @@ public enum MessageKey {
     BACKPACK_GIVE("BackPack.OnGive", "%player%", "%amt%", "%backpack%"),
     BACKPACK_RECEIVE("BackPack.OnReceive", "%amt%", "%backpack%"),
     BACKPACK_RECIPE_HEADER("BackPack.Recipe-View.Header"),
-    BACKPACK_RECIPE_BODY("BackPack.Recipe-View.Body", "%backpack%"),
+    BACKPACK_RECIPE_BODY("BackPack.Recipe-View.Body", "%backpack%", "%num%"),
     BACKPACK_RECIPE_FOOTER("BackPack.Recipe-View.Footer"),
+    ITEM_NOT_ALLOWED("BackPack.ItemNotAllowed", "%backpack%", "%item%"),
 
     /** Help Section **/
     HELP("Help");

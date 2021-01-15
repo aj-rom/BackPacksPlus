@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 10/27/20, 11:31 AM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -21,7 +21,8 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
-import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
+import io.github.coachluck.backpacksplus.api.BackPackUtil;
+import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ public class InventoryWatcher {
     /**
      * Instance of the plugin
      */
-    private final BackPacksPlus plugin;
+    private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     /**
      * Allows calls from storage to cancel the task
@@ -66,11 +67,11 @@ public class InventoryWatcher {
     @Setter
     private boolean done;
 
-    public InventoryWatcher(Player player) {
+    public InventoryWatcher(Player player)
+    {
         this.limit = getLimit(player);
         this.player = player;
         this.task = getTask();
-        this.plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
         this.done = false;
         run();
     }
@@ -79,7 +80,8 @@ public class InventoryWatcher {
      * Gets the InventoryWatcher task
      * @return Runnable that checks the inventory for excess backpacks and removes them
      */
-    private Runnable getTask() {
+    private Runnable getTask()
+    {
 
         return new BukkitRunnable() {
 
@@ -128,9 +130,8 @@ public class InventoryWatcher {
                     return;
                 }
 
-                ChatUtil.msg(player, plugin.getMessages().getString("General.OverLimit")
-                                .replaceAll("%removed%", "" + removedCount)
-                                .replaceAll("%limit%", "" + limit));
+                plugin.getMessageService().sendMessage(player, MessageKey.OVER_LIMIT,
+                        Integer.toString(removedCount), Integer.toString(limit));
             }
         };
     }
@@ -138,7 +139,8 @@ public class InventoryWatcher {
     /**
      * Runs the InventoryWatcher at the configured delay
      */
-    private void run() {
+    private void run()
+    {
         taskID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin,
                 task, 0L, plugin.getConfig().getInt("General.BackPackLimiter.Repeat"));
     }
@@ -148,7 +150,8 @@ public class InventoryWatcher {
      * @param player the player to get the limit of
      * @return number of backpacks the player can hold at once.
      */
-    private int getLimit(Player player) {
+    private int getLimit(Player player)
+    {
         AtomicInteger rValue = new AtomicInteger();
         player.getEffectivePermissions().forEach((perm) -> {
             if(perm.getValue() && perm.getPermission().startsWith("backpacks.limit.")) {
@@ -164,9 +167,5 @@ public class InventoryWatcher {
 
         return rValue.intValue();
     }
-
-	public void setDone(boolean b) {
-		done=b;
-	}
 
 }
