@@ -22,7 +22,7 @@ More information on permissions can be found [here](https://github.com/CoachLuck
 ### Custom Textures
 In order to use custom textures you must first find a head skin from [MineCraftHeads.com](https://minecraft-heads.com/custom-heads/search?searchword=backpack) and scroll down and copy the Minecraft URL section.
 
-Ensure that all of these under the desired backpack are set to PLAYER_HEAD, and custom data is unset.
+Ensure that all of these under the desired backpack are set.
 
 Next insert the desired textures link.
 ```Yaml
