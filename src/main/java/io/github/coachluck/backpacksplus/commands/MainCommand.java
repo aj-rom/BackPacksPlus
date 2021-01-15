@@ -1,6 +1,6 @@
 /*
  *     File: MainCommand.java
- *     Last Modified: 1/14/21, 3:11 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -45,7 +45,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     public MainCommand() { }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
         if(args.length == 0) {
             if(!(sender instanceof Player)) {
                 plugin.getMessageService().sendMessage(sender, MessageKey.NO_CONSOLE);
@@ -128,7 +129,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args)
+    {
         final String pre = "backpacksplus.";
 
         if(args.length == 1) {
@@ -199,7 +201,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * Sends a permission message to the player.
      * @param sender the person executing the command
      */
-    private void sendPerm(CommandSender sender) {
+    private void sendPerm(CommandSender sender)
+    {
         plugin.getMessageService().sendMessage(sender, MessageKey.PERMISSION_COMMAND);
     }
 
@@ -211,7 +214,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * @param amt the amount of backpacks to give
      * @param backPackToGive the backpack to give the target
      */
-    private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive) {
+    private void sendBackPack(CommandSender sender, Player targetToReceive, int amt, BackPack backPackToGive)
+    {
         final String amount = Integer.toString(amt);
         final String backPackName = backPackToGive.getDisplayName();
         plugin.getMessageService().sendMessage(targetToReceive, MessageKey.BACKPACK_RECEIVE,
@@ -227,7 +231,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * Sends the list of backpacks with recipes to the player
      * @param player the player to send the list too
      */
-    private void sendBackPackList(Player player) {
+    private void sendBackPackList(Player player)
+    {
         Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             plugin.getMessageService().getRawMessageList(MessageKey.BACKPACK_RECIPE_HEADER)
                     .forEach(s -> ChatUtil.msg(player, s));
@@ -253,7 +258,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
      * Reloads the plugin
      * @param sender who is reloading the plugin
      */
-    private void reloadPlugin(CommandSender sender) {
+    private void reloadPlugin(CommandSender sender)
+    {
         plugin.reload();
         plugin.getMessageService().sendMessage(sender, MessageKey.RELOAD);
     }

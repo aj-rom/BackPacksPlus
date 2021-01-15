@@ -1,6 +1,6 @@
 /*
  *     File: FileConverter_v2to3.java
- *     Last Modified: 1/14/21, 4:18 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -30,11 +30,12 @@ import java.util.ArrayList;
 
 public class FileConverter_v2to3 {
 
-    private static final BackPacksPlus plugin = BackPacksPlus.getPlugin(BackPacksPlus.class);
+    private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     private FileConverter_v2to3() { }
 
-    public static void convert() {
+    public static void convert()
+    {
         ConfigurationSection backPacksOld = plugin.getConfig().getConfigurationSection("BackPacks");
         File newBackPackFile = new File(plugin.getDataFolder(), "backpacks.yml");
         if (!newBackPackFile.exists()) {

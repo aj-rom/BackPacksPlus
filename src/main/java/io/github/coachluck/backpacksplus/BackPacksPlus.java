@@ -1,6 +1,6 @@
 /*
  *     File: BackPacksPlus.java
- *     Last Modified: 1/14/21, 3:32 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -41,46 +41,25 @@ import java.util.UUID;
 
 public final class BackPacksPlus extends JavaPlugin {
 
-    /**
-     * Whether or not to display an update message
-     */
-    public boolean updateMsg;
-
-    /**
-     * Holds the message service
-     */
     @Getter
     private MessageService messageService;
 
-    /**
-     * Holds backpacks.yml as a YamlConfiguration Object
-     */
     @Getter
     private YamlConfiguration backPacksYaml;
 
-    /**
-     * The loaded list of all backpacks defined in config-old.yml
-     */
     @Getter
     private List<BackPack> backPacks;
-
-    /**
-     * Holds all players that are currently in a backpack
-     * Also holds the slot that the opened backpack is in
-     */
-    public HashMap<Player, Integer> viewingBackPack;
-
-    /**
-     * Holds the UUID and InventoryWatcher for each player
-     * (For removing backpacks over permissible limit)
-     */
-    public HashMap<UUID, InventoryWatcher> playerStackLimit;
 
     @Getter
     private MultiVersionUtil multiVersionUtil;
 
+    public HashMap<Player, Integer> viewingBackPack;
+    public HashMap<UUID, InventoryWatcher> playerStackLimit;
+    public boolean updateMsg;
+
     @Override
-    public void onLoad() {
+    public void onLoad()
+    {
         Timer timer = new Timer();
         setUpConfig();
         backPacks = new ArrayList<>();
@@ -99,27 +78,24 @@ public final class BackPacksPlus extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         Timer timer = new Timer();
         Backend.registerListeners();
         ChatUtil.logMsg("&aRegistered commands and listeners &7( &e" + timer.getDuration() + " ms&7 )");
         Backend.checkForUpdates();
     }
 
-    /**
-     * Sets up configuration file and messages file
-     */
-    private void setUpConfig() {
+    private void setUpConfig()
+    {
         saveDefaultConfig();
         saveResource("backpacks.yml", false);
         final int CONFIG_VERSION = getConfig().getInt("Config-Version");
         Backend.checkConfigVersion(CONFIG_VERSION);
     }
-    
-    /**
-     * Loads and reloads all of the backpacks for the plugin
-     */
-    public void loadBackPacks() {
+
+    public void loadBackPacks()
+    {
         if(backPacks != null && !backPacks.isEmpty()) backPacks.clear();
         for(String backPackName : backPacksYaml.getKeys(false)) {
             BackPack backPack = new BackPack(backPackName, backPacksYaml.getConfigurationSection(backPackName));
@@ -128,7 +104,8 @@ public final class BackPacksPlus extends JavaPlugin {
         }
     }
 
-    public BackPack getBackPackByName(String name) {
+    public BackPack getBackPackByName(String name)
+    {
         for(BackPack backPack : backPacks) {
             if(name.equalsIgnoreCase(backPack.getKey())) {
                 return backPack;
@@ -138,7 +115,8 @@ public final class BackPacksPlus extends JavaPlugin {
         return null;
     }
 
-    public void reload() {
+    public void reload()
+    {
         reloadConfig();
         backPacksYaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "backpacks.yml"));
         messageService = new MessageService(getConfig().getString("Language"));

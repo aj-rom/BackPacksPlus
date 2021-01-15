@@ -1,6 +1,6 @@
 /*
  *     File: Reflector.java
- *     Last Modified: 1/13/21, 11:53 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -31,7 +31,8 @@ public class Reflector {
     @Getter
     private final MultiVersionUtil multiVersionUtil;
 
-    public Reflector() {
+    public Reflector()
+    {
         if(serverVersion.startsWith("v1_14"))
             multiVersionUtil = new MultiVersionUtil_1_14();
 

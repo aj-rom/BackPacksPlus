@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 1/14/21, 4:18 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -38,7 +38,8 @@ public class Backend {
      * Ensures that the configuration is updated to the newest version
      * @param version the config version
      */
-    public static void checkConfigVersion(int version) {
+    public static void checkConfigVersion(int version)
+    {
         final int CONFIGURATION_VERSION = 3;
         if(version >= CONFIGURATION_VERSION)
             return;
@@ -58,7 +59,8 @@ public class Backend {
     /**
      * Checks for plugin updates
      */
-    public static void checkForUpdates() {
+    public static void checkForUpdates()
+    {
         if(!plugin.getConfig().getBoolean("Check-For-Update"))
             return;
 
@@ -77,7 +79,8 @@ public class Backend {
     /**
      * Registers all listeners for the plugin
      */
-    public static void registerListeners() {
+    public static void registerListeners()
+    {
         PluginManager pm = plugin.getServer().getPluginManager();
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);

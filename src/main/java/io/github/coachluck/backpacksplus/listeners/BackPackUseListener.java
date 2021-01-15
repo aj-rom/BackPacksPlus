@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUseListener.java
- *     Last Modified: 1/14/21, 4:17 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -47,7 +47,8 @@ public class BackPackUseListener implements Listener {
     private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
-    public void onClickEvent(PlayerInteractEvent e) {
+    public void onClickEvent(PlayerInteractEvent e)
+    {
         if (e.getItem() == null || e.getHand() == null ||
                 (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK))
             return;
@@ -172,7 +173,8 @@ public class BackPackUseListener implements Listener {
         }
     }
 
-    private BackPack getCurrentBackPack(ItemStack item) {
+    private BackPack getCurrentBackPack(ItemStack item)
+    {
         BackPack currentPack = null;
         if (BackPackUtil.getBackPackFromItem(item) != null) {
             currentPack = BackPackUtil.getBackPackFromItem(item);

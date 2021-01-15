@@ -1,6 +1,6 @@
 /*
  *     File: BackPack.java
- *     Last Modified: 1/14/21, 3:11 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -84,6 +84,9 @@ public class BackPack {
      */
     private Material material;
 
+    /**
+     * Whether or not this backpack opens an enderchest
+     */
     @Getter
     private final boolean enderChestEnabled;
 
@@ -99,6 +102,9 @@ public class BackPack {
     @Getter
     private final NamespacedKey nameSpacedKey;
 
+    /**
+     * Size of the inventory
+     */
     private int size;
 
     /**
@@ -118,7 +124,8 @@ public class BackPack {
     @Getter
     private final List<Material> blackList = new ArrayList<>();
 
-    public BackPack(String key, ConfigurationSection section) {
+    public BackPack(String key, ConfigurationSection section)
+    {
         this.key = key;
         this.nameSpacedKey = new NamespacedKey(plugin, "backpack_" + key);
         this.lore = ChatUtil.formatLore(section.getStringList("Lore"));
@@ -130,15 +137,18 @@ public class BackPack {
         plugin.getMultiVersionUtil().registerRecipe(nameSpacedKey, getShapedRecipe());
     }
 
-    public boolean hasWhiteList() {
+    public boolean hasWhiteList()
+    {
         return whiteList.size() > 0;
     }
 
-    public boolean hasBlackList() {
+    public boolean hasBlackList()
+    {
         return blackList.size() > 0;
     }
 
-    public boolean isCustomTextured() {
+    public boolean isCustomTextured()
+    {
         return textureUrl != null || material == Material.PLAYER_HEAD;
     }
 
@@ -146,7 +156,8 @@ public class BackPack {
      * Returns the display Item For the active backpack list
      * @return the display item
      */
-    public ItemStack getDisplayItem() {
+    public ItemStack getDisplayItem()
+    {
         final String path = key + ".Recipe.";
         final List<String> shape = plugin.getBackPacksYaml().getStringList(
                 path + "Shape");
@@ -179,7 +190,8 @@ public class BackPack {
     /**
      * Creates the backpack item
      */
-    private ItemStack getBackPackItem() {
+    private ItemStack getBackPackItem()
+    {
         ItemStack bpItem = new ItemStack(material);
 
         if (isCustomTextured()) {
@@ -211,7 +223,8 @@ public class BackPack {
         return bpItem;
     }
 
-    private ShapedRecipe getRecipe(ConfigurationSection section) {
+    private ShapedRecipe getRecipe(ConfigurationSection section)
+    {
 
         ShapedRecipe sR = new ShapedRecipe(nameSpacedKey, getBackPackItem());
         sR.shape(recipeShapeList.get(0), recipeShapeList.get(1), recipeShapeList.get(2));
@@ -237,7 +250,8 @@ public class BackPack {
         return sR;
     }
 
-    private void checkAndSetAll(ConfigurationSection s) {
+    private void checkAndSetAll(ConfigurationSection s)
+    {
         checkAndSetName(s);
         checkAndSetTitle(s);
         checkAndSetMat(s);
@@ -248,7 +262,8 @@ public class BackPack {
         this.shapedRecipe = getRecipe(s);
     }
 
-    private void checkAndSetName(ConfigurationSection section) {
+    private void checkAndSetName(ConfigurationSection section)
+    {
         final String tempDisplay = section.getString("Name");
         if (tempDisplay == null || tempDisplay.isEmpty()) {
             configError("must have a name!");
@@ -257,7 +272,8 @@ public class BackPack {
         this.displayName = ChatUtil.format(tempDisplay);
     }
 
-    private void checkAndSetTitle(ConfigurationSection section) {
+    private void checkAndSetTitle(ConfigurationSection section)
+    {
         final String tempTitle = section.getString("Title");
         if (tempTitle == null || tempTitle.isEmpty()) {
             configError("must have a title!");
@@ -265,7 +281,8 @@ public class BackPack {
         this.title = ChatUtil.format(tempTitle);
     }
 
-    private void checkAndSetMat(ConfigurationSection section) {
+    private void checkAndSetMat(ConfigurationSection section)
+    {
         final String matString = section.getString("Material");
         if (matString == null || matString.isEmpty()) {
             configError("must have a material!");
@@ -283,7 +300,8 @@ public class BackPack {
         }
     }
 
-    private void checkAndSetSize(ConfigurationSection section) {
+    private void checkAndSetSize(ConfigurationSection section)
+    {
         int tempSize = section.getInt("Size");
         if (tempSize % 9 != 0 || tempSize < 9 || tempSize > 54) {
             if(!isEnderChestEnabled())
@@ -293,7 +311,8 @@ public class BackPack {
         this.size = tempSize;
     }
 
-    private void checkAndSetWhiteAndBlackList(ConfigurationSection section) {
+    private void checkAndSetWhiteAndBlackList(ConfigurationSection section)
+    {
         List<String> wList = section.getStringList("Whitelist");
         List<String> bList = section.getStringList("Blacklist");
 
@@ -311,7 +330,8 @@ public class BackPack {
         }
     }
 
-    private void checkAndSetRecipe(ConfigurationSection section) {
+    private void checkAndSetRecipe(ConfigurationSection section)
+    {
         List<String> recipe = section.getStringList("Recipe.Shape");
         if (recipe.size() != 3) {
             configError("must have a recipe be a 3x3 square. &7( Currently " + recipe.size() + "x3&7)");
@@ -338,14 +358,16 @@ public class BackPack {
 
         this.recipeShapeList = recipe;
     }
-    private boolean isCustomTexture(String s) {
+    private boolean isCustomTexture(String s)
+    {
         if (s == null || s.isEmpty()) return false;
 
         return s.equalsIgnoreCase("skull") || s.equalsIgnoreCase("player_head")
                 || s.equalsIgnoreCase("custom") || s.equalsIgnoreCase("texture");
     }
 
-    private void configError(String error) {
+    private void configError(String error)
+    {
         ChatUtil.error("BackPack &e" + this.key + " &c" + error);
     }
 }

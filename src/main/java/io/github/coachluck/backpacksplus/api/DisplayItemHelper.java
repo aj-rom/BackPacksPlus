@@ -1,6 +1,6 @@
 /*
  *     File: DisplayItemHelper.java
- *     Last Modified: 1/13/21, 10:48 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -40,7 +40,8 @@ public class DisplayItemHelper {
      * @param itemStack the item to convert
      * @return the Json string representation of the item
      */
-    private static String convertItemStackToJson(ItemStack itemStack) {
+    private static String convertItemStackToJson(ItemStack itemStack)
+    {
 
         Class<?> craftItemStackClazz = ReflectionUtil.getOBCClass("inventory.CraftItemStack");
         Method asNMSCopyMethod = ReflectionUtil.getMethod(craftItemStackClazz, "asNMSCopy", ItemStack.class);
@@ -71,7 +72,8 @@ public class DisplayItemHelper {
      * @param message the message to add the hover element too.
      * @param backPack to show the recipe of
      */
-    public static void sendItemTooltipMessage(Player player, String message, BackPack backPack) {
+    public static void sendItemTooltipMessage(Player player, String message, BackPack backPack)
+    {
         final ItemStack item = backPack.getDisplayItem();
         final String itemJson = convertItemStackToJson(item);
         BaseComponent[] hoverEventComponents = new BaseComponent[]{

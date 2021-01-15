@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCraftListener.java
- *     Last Modified: 1/14/21, 3:07 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -40,7 +40,8 @@ public class BackPackCraftListener implements Listener {
     private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
-    public void onCraft(CraftItemEvent e) {
+    public void onCraft(CraftItemEvent e)
+    {
         final Player player = (Player) e.getWhoClicked();
         ItemStack craftedItem = e.getCurrentItem();
 

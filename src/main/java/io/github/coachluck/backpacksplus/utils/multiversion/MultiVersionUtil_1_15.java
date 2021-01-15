@@ -1,6 +1,6 @@
 /*
  *     File: MultiVersionUtil_1_15.java
- *     Last Modified: 9/4/20, 4:19 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -30,13 +30,15 @@ import org.bukkit.inventory.ShapedRecipe;
 public class MultiVersionUtil_1_15 implements MultiVersionUtil {
 
     @Override
-    public void registerRecipe(NamespacedKey namespacedKey, ShapedRecipe recipe) {
+    public void registerRecipe(NamespacedKey namespacedKey, ShapedRecipe recipe)
+    {
         Bukkit.getServer().removeRecipe(namespacedKey);
         Bukkit.getServer().addRecipe(recipe);
     }
 
     @Override
-    public void setInventorySlot(Player player, EquipmentSlot slot, ItemStack item) {
+    public void setInventorySlot(Player player, EquipmentSlot slot, ItemStack item)
+    {
         player.getInventory().setItem(slot, item);
     }
 

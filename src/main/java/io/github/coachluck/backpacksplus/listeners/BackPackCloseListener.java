@@ -1,6 +1,6 @@
 /*
  *     File: BackPackCloseListener.java
- *     Last Modified: 1/14/21, 3:07 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -41,7 +41,8 @@ public class BackPackCloseListener implements Listener {
     private final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
+    public void onInventoryClose(InventoryCloseEvent e)
+    {
         final InventoryView viewingInv = e.getView();
         final Player player = (Player) e.getPlayer();
         if(!plugin.viewingBackPack.containsKey(player))

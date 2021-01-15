@@ -1,6 +1,6 @@
 /*
  *     File: SkullHelper.java
- *     Last Modified: 1/13/21, 10:48 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -41,7 +41,8 @@ public class SkullHelper {
      * @param url skin url
      * @return itemstack
      */
-    public static ItemStack getCustomSkull(String url) {
+    public static ItemStack getCustomSkull(String url)
+    {
         byte[] encodedData = Base64.getUrlEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
         return getCustomSkull64(encodedData);
     }
@@ -53,7 +54,8 @@ public class SkullHelper {
      * @return itemstack
      */
     @SuppressWarnings("deprecation")
-    public static ItemStack getCustomSkull64(byte[] url64) {
+    public static ItemStack getCustomSkull64(byte[] url64)
+    {
 
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         PropertyMap propertyMap = profile.getProperties();
@@ -73,7 +75,8 @@ public class SkullHelper {
         return head;
     }
 
-    public static Material getSkull() {
+    public static Material getSkull()
+    {
         if (skull == null) {
             try {
                 skull = Material.matchMaterial("SKULL_ITEM");

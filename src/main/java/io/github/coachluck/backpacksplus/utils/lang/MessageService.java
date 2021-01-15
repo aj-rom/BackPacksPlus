@@ -1,6 +1,6 @@
 /*
  *     File: MessageService.java
- *     Last Modified: 1/14/21, 3:11 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -32,7 +32,8 @@ public class MessageService {
 
     private final YamlConfiguration messages;
 
-    public MessageService(String language) {
+    public MessageService(String language)
+    {
         final BackPacksPlus plugin = BackPacksPlus.getInstance();
         if (language.equalsIgnoreCase("custom")) {
             File langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
@@ -50,7 +51,8 @@ public class MessageService {
         messages = YamlConfiguration.loadConfiguration(langFile);
     }
 
-    public void sendMessage(CommandSender sender, MessageKey messageKey) {
+    public void sendMessage(CommandSender sender, MessageKey messageKey)
+    {
         ChatUtil.msg(sender, retrieveMessage(messageKey));
     }
 
@@ -58,7 +60,8 @@ public class MessageService {
         ChatUtil.msg(sender, getMessage(messageKey, replacements));
     }
 
-    public String getMessage(MessageKey messageKey, String... replacements) {
+    public String getMessage(MessageKey messageKey, String... replacements)
+    {
         String message = retrieveMessage(messageKey);
         String[] tags = messageKey.getTags();
 
@@ -71,15 +74,18 @@ public class MessageService {
         return ChatUtil.format(message);
     }
 
-    public String getRawMessage(MessageKey messageKey) {
+    public String getRawMessage(MessageKey messageKey)
+    {
         return ChatUtil.format(messages.getString(messageKey.getKey()));
     }
 
-    public List<String> getRawMessageList(MessageKey messageKey) {
+    public List<String> getRawMessageList(MessageKey messageKey)
+    {
         return ChatUtil.formatLore(messages.getStringList(messageKey.getKey()));
     }
 
-    private String retrieveMessage(MessageKey messageKey) {
+    private String retrieveMessage(MessageKey messageKey)
+    {
         return ChatUtil.format(messages.getString(messageKey.getKey()));
     }
 }

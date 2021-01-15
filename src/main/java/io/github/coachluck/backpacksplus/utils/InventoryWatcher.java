@@ -1,6 +1,6 @@
 /*
  *     File: InventoryWatcher.java
- *     Last Modified: 1/14/21, 3:11 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -67,7 +67,8 @@ public class InventoryWatcher {
     @Setter
     private boolean done;
 
-    public InventoryWatcher(Player player) {
+    public InventoryWatcher(Player player)
+    {
         this.limit = getLimit(player);
         this.player = player;
         this.task = getTask();
@@ -79,7 +80,8 @@ public class InventoryWatcher {
      * Gets the InventoryWatcher task
      * @return Runnable that checks the inventory for excess backpacks and removes them
      */
-    private Runnable getTask() {
+    private Runnable getTask()
+    {
 
         return new BukkitRunnable() {
 
@@ -137,7 +139,8 @@ public class InventoryWatcher {
     /**
      * Runs the InventoryWatcher at the configured delay
      */
-    private void run() {
+    private void run()
+    {
         taskID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(plugin,
                 task, 0L, plugin.getConfig().getInt("General.BackPackLimiter.Repeat"));
     }
@@ -147,7 +150,8 @@ public class InventoryWatcher {
      * @param player the player to get the limit of
      * @return number of backpacks the player can hold at once.
      */
-    private int getLimit(Player player) {
+    private int getLimit(Player player)
+    {
         AtomicInteger rValue = new AtomicInteger();
         player.getEffectivePermissions().forEach((perm) -> {
             if(perm.getValue() && perm.getPermission().startsWith("backpacks.limit.")) {
@@ -163,9 +167,5 @@ public class InventoryWatcher {
 
         return rValue.intValue();
     }
-
-	public void setDone(boolean b) {
-		done=b;
-	}
 
 }

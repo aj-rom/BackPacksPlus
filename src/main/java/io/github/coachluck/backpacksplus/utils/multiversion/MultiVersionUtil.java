@@ -1,6 +1,6 @@
 /*
  *     File: MultiVersionUtil.java
- *     Last Modified: 9/4/20, 4:40 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -26,7 +26,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-public interface MultiVersionUtil {
+public interface MultiVersionUtil
+{
 
     /**
      * Register the recipe for the server

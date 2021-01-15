@@ -1,6 +1,6 @@
 /*
  *     File: ChatUtil.java
- *     Last Modified: 9/4/20, 4:55 PM
+ *     Last Modified: 1/14/21, 10:30 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -35,11 +35,13 @@ public class ChatUtil {
     public static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
     public static final char COLOR_CHAR = '\u00A7';
 
-    public static void msg(Player player, String message) {
+    public static void msg(Player player, String message)
+    {
         player.sendMessage(format(message));
     }
 
-    public static void msg(CommandSender sender, String message) {
+    public static void msg(CommandSender sender, String message)
+    {
         sender.sendMessage(format(message));
     }
 
@@ -47,7 +49,8 @@ public class ChatUtil {
      * Simple string formatter
      * @param format the string to translate color codes
      * **/
-    public static String format(String format) {
+    public static String format(String format)
+    {
         String formatted = format;
         if(formatted.contains("&#"))
             formatted = translateHexColorCodes(formatted);
@@ -59,12 +62,14 @@ public class ChatUtil {
      * Logs the message to console with plugin prefix
      * @param message the message to color code and send to console
      * **/
-    public static void logMsg(String message) {
+    public static void logMsg(String message)
+    {
         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "&7[&eBackPacks+&7]&r " + message));
     }
 
-    public static void error(String message) {
+    public static void error(String message)
+    {
         Bukkit.getConsoleSender().sendMessage(format("&7[&cBackPacks+&7] &8- " + message));
     }
 
@@ -73,7 +78,8 @@ public class ChatUtil {
      * @param lore the string list to format
      * @return the formatted list of strings
      */
-    public static List<String> formatLore(List<String> lore) {
+    public static List<String> formatLore(List<String> lore)
+    {
         List<String> formattedLore = new ArrayList<>();
         lore.forEach(s -> {
             formattedLore.add(ChatUtil.format(s));
@@ -86,7 +92,8 @@ public class ChatUtil {
      * @param message the string to colorize
      * @return the colored string
      */
-    public static String translateHexColorCodes(String message) {
+    public static String translateHexColorCodes(String message)
+    {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
 
