@@ -1,6 +1,6 @@
 /*
  *     File: Backend.java
- *     Last Modified: 1/14/21, 10:48 PM
+ *     Last Modified: 1/14/21, 10:52 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -46,7 +46,7 @@ public class Backend {
             return;
 
         if (version == 2) {
-            FileConverter.convert();
+            FileConverterUtil.convert();
             plugin.getConfig().set("BackPacks", null);
             plugin.getConfig().set("Language", "custom");
             currentVer = 3;

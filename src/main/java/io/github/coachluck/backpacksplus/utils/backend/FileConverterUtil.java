@@ -1,6 +1,6 @@
 /*
- *     File: FileConverter.java
- *     Last Modified: 1/14/21, 10:48 PM
+ *     File: FileConverterUtil.java
+ *     Last Modified: 1/14/21, 10:52 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -28,11 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FileConverter {
+public class FileConverterUtil {
 
     private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
-    private FileConverter() { }
+    private FileConverterUtil() { }
 
     public static void convert()
     {

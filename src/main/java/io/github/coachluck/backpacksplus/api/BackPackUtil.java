@@ -1,6 +1,6 @@
 /*
  *     File: BackPackUtil.java
- *     Last Modified: 1/14/21, 10:30 PM
+ *     Last Modified: 1/14/21, 10:53 PM
  *     Project: BackPacksPlus
  *     Copyright (C) 2020 CoachL_ck
  *
@@ -135,11 +135,9 @@ public class BackPackUtil {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
 
         for (BackPack bp : plugin.getBackPacks()) {
-            if (!getName(data).equalsIgnoreCase(bp.getKey())) {
-                continue;
+            if (getName(data).equalsIgnoreCase(bp.getKey())) {
+                return bp;
             }
-
-            return bp;
         }
 
         return null;
