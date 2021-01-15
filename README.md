@@ -26,9 +26,9 @@ Ensure that all of these under the desired backpack are set to PLAYER_HEAD, and 
 
 Next insert the desired textures link.
 ```Yaml
-    Material: "PLAYER_HEAD"
+    # Can be PLAYER_HEAD, SKULL, or CUSTOM
+    Material: ""CUSTOM"
     Texture: "http://textures.minecraft.net/texture/<YOURCUSTOMTEXTUREID>"
-    CustomData:
 ```
 
 ### Translations
