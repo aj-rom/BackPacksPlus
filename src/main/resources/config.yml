@@ -3,7 +3,7 @@
 # Support: https://discord.gg/HVSNTK3XwN
 # PLAYER_HEAD Textures: https://minecraft-heads.com/
 # Please do not change Config-Version
-Config-Version: 0
+Config-Version: 3
 Language: "en"
 Check-For-Update: true
 General:
