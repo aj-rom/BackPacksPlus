@@ -154,4 +154,12 @@ public class BackPackUtil {
 
         return false;
     }
+
+    public static ItemStack getEnderPack() {
+        for (BackPack bp :plugin.getBackPacks()) {
+            if (bp.isEnderChestEnabled()) return bp.getBackPackHoldItem();
+        }
+
+        return null;
+    }
 }
