@@ -36,6 +36,8 @@ import java.io.IOException;
 
 public class BackPackUtil {
 
+    public static boolean enderChestEnabled;
+
     private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
     @Getter
@@ -141,5 +143,15 @@ public class BackPackUtil {
         }
 
         return null;
+    }
+
+    public static boolean isEndChestEnabled() {
+        for (BackPack bp : plugin.getBackPacks()) {
+            if (bp.isEnderChestEnabled()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

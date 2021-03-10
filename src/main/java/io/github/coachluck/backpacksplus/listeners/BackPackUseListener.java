@@ -103,7 +103,8 @@ public class BackPackUseListener implements Listener {
     public void onEndChestOpen(InventoryClickEvent e)
     {
         final InventoryType invType = InventoryType.ENDER_CHEST;
-        if (e.isCancelled() || e.getView().getTopInventory().getType() != invType) return;
+        if (e.isCancelled() || !BackPackUtil.isEndChestEnabled()
+                || e.getView().getTopInventory().getType() != invType) return;
 
         lockInv(e, invType);
     }
