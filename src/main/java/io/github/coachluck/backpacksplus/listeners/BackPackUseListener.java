@@ -103,7 +103,8 @@ public class BackPackUseListener implements Listener {
     public void onEndChestOpen(InventoryClickEvent e)
     {
         final InventoryType invType = InventoryType.ENDER_CHEST;
-        if (e.isCancelled() || e.getView().getTopInventory().getType() != invType) return;
+        if (e.isCancelled() || !BackPackUtil.isEndChestEnabled()
+                || e.getView().getTopInventory().getType() != invType) return;
 
         lockInv(e, invType);
     }
@@ -160,8 +161,12 @@ public class BackPackUseListener implements Listener {
 
         Material currentType = currentItem.getType();
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (!BackPackUtil.isBackPack(item))
-            item = player.getInventory().getItemInOffHand();
+        if (!BackPackUtil.isBackPack(item)) {
+            if (BackPackUtil.isEndChestEnabled())
+                item = BackPackUtil.getEnderPack();
+
+            else item = player.getInventory().getItemInOffHand();
+        }
 
         BackPack currentPack = getCurrentBackPack(item);
         if (currentPack != null && (currentPack.hasBlackList() && currentPack.getBlackList().contains(currentType))
