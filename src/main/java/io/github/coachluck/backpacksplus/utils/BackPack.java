@@ -112,6 +112,11 @@ public class BackPack {
      */
     private String textureUrl;
 
+    /**
+     * The custom model data for the backpack
+     */
+    private int customModelData;
+
     @Getter
     private ShapedRecipe shapedRecipe;
 
@@ -211,6 +216,10 @@ public class BackPack {
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
         }
 
+        if (customModelData != -1) {
+            itemMeta.setCustomModelData(customModelData);
+        }
+
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -257,9 +266,16 @@ public class BackPack {
         checkAndSetMat(s);
         checkAndSetSize(s);
         checkAndSetWhiteAndBlackList(s);
+        checkAndSetCustomData(s);
         this.backPackHoldItem = getBackPackItem();
         checkAndSetRecipe(s);
         this.shapedRecipe = getRecipe(s);
+    }
+
+    private void checkAndSetCustomData(ConfigurationSection s) {
+        if (s.isSet("CustomData")) {
+            this.customModelData = s.getInt("CustomData");
+        } else this.customModelData = -1;
     }
 
     private void checkAndSetName(ConfigurationSection section)
