@@ -18,7 +18,7 @@
 - To give craft or usage permissions for all backpacks you can do: `backpack.<craft/use>.*`
 - To give craft and usage of all backpacks you can do: `backpack.*`
 
-More information on permissions can be found [here](https://github.com/CoachLuck/BackPacksPlus/wiki/Permissions).
+More information on permissions can be found [here](https://github.com/aj-rom/BackPacksPlus/wiki/Permissions).
 ### Custom Textures
 In order to use custom textures you must first find a head skin from [MineCraftHeads.com](https://minecraft-heads.com/custom-heads/search?searchword=backpack) and scroll down and copy the Minecraft URL section.
 
@@ -32,4 +32,4 @@ Next insert the desired textures link.
 ```
 
 ### Translations
-A guide to using languages other than English can be found in the [Wiki](https://github.com/CoachLuck/BackPacksPlus/wiki/Translations).
+A guide to using languages other than English can be found in the [Wiki](https://github.com/aj-rom/BackPacksPlus/wiki/Translations).
