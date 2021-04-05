@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -39,6 +40,18 @@ import java.util.UUID;
 public class BackPackCloseListener implements Listener {
 
     private final BackPacksPlus plugin = BackPacksPlus.getInstance();
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent e)
+    {
+        final Player player = e.getPlayer();
+        final ItemStack potentialPack = e.getItemDrop().getItemStack();
+
+        if (plugin.viewingBackPack.containsKey(player) && BackPackUtil.isBackPack(potentialPack)) {
+            // TODO : Add message while preventing the dropping of a backpack
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e)
