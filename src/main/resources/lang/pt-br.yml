@@ -1,0 +1,37 @@
+# Portuguese translation file
+General:
+  Permission: "&cVocê não tem permissão para usar este comando!"
+  CraftPerm: "&cVocê não tem permissão para criar esta backpack!"
+  NoRenamePerm: "&cVocê não tem permissão para renomear backpacks!"
+  Use: "&cVocê não tem permissão para usar esta backpack!"
+  Offline-Player: "&e%player% &cnão pode ser encontrado!!"
+  Reload: "&8[&cBack&ePacks&b+&8] &aVocê recarregou o plugin!"
+  BadArgs: "&cArgumento Incorreto! &eType &7/bpp help &efor help."
+  Console: "&8[&cBack&ePacks&b+&8] &cVocê deve ser um jogador para usar este comando!"
+  NotFound: "&e%backpack% &cnão existe."
+  OverLimit: "&7Removido &c%removed% backpacks &7porque você só tem permissão para carregar  &e%limit% &7at uma vez."
+BackPack:
+  ItemNotAllowed: "%backpack% &cnão permite que você armazene &e%item%."
+  OnCraft:
+    - "&8[&a+&8] &aVocê criou uma %backpack%"
+  OnGive: "&7Você deu &e%player% &7- &a%amt%x %backpack%"
+  OnReceive: "&7Você deu &7- &a%amt%x %backpack%"
+  Recipe-View:
+    Header:
+      - ""
+      - "&eAqui está uma lista de &cBackPack &erecipes atuais:"
+      - " &7Passe o mouse para ver as instruções!"
+    Body: " &8[&a+&8]&7 &e%backpack%"
+    Footer:
+      - ""
+Help:
+  - ""
+  - "&7&m                  &r &8[&cBack&ePacks&b+&8] &7&m                "
+  - " &e/bpp &8 - &7Liste todas as backpacks acessíveis."
+  - " &e/bpp &aAjuda &8- &7Mostrar esta página."
+  - " &e/bpp &adeu &7<&cBackPack&7> <&cPlayer&7> [&camt&7]"
+  - "   &8- &7Dê ao jogador a backpack especificada"
+  - " &e/bpp &arecarregue &8- &7Recarregue o plugin"
+  - "&7&m                                                     "
+  - ""
+  
