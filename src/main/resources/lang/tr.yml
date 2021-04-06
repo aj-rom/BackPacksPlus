@@ -1,0 +1,36 @@
+# Turkish translation file
+General:
+  Permission: "&cBu komutu kullanmak için yetkin yok!"
+  CraftPerm: "&cBu çantayı üretmek için yetkin yok!"
+  NoRenamePerm: "&cÇantayı yeniden adlandırman için yetkin yok!"
+  Use: "&cBu çantayı kullanmak için yetkin yok!"
+  Offline-Player: "&e%player% &cisimli oyuncu bulunamadı!"
+  Reload: "&8[&cBack&ePacks&b+&8] &aPlugin yenilendi!"
+  BadArgs: "&cIncorrect arguments! &eYardım için &7/bpp help &ekomutunu yaz."
+  Console: "&8[&cBack&ePacks&b+&8] &cBu komutu kullanmak için oyuncu olman gerekiyor!"
+  NotFound: "&e%backpack% &cisimli çanta mevcut değil."
+  OverLimit: "&7Bir seferde yalnızca &e%limit% &7tane çanta taşımana izin verildiği için &c%removed% &7adet sırt çantası kaldırıldı. "
+BackPack:
+  ItemNotAllowed: "%backpack% &cçantasına &e%item% &cisimli eşyayı koyamazsın."
+  OnCraft:
+    - "&8[&a+&8] &a%backpack% isimli çantayı ürettin."
+  OnGive: "&e%player% &7isimli oyuncuya &7- &a%amt%x %backpack% çantası verdin."
+  OnReceive: "&a%amt%x %backpack% &7- &7isimli çanta sana verildi."
+  Recipe-View:
+    Header:
+      - ""
+      - "&eŞuanki &cÇantaların &eüretim tarifleri:"
+      - " &7Tarifleri görmek için fare ile üzerine gelin!"
+    Body: " &8[&a+&8]&7 &e%backpack%"
+    Footer:
+      - ""
+Help:
+  - ""
+  - "&7&m                  &r &8[&cBack&ePacks&b+&8] &7&m               "
+  - " &e/bpp &8 - &7Tüm çantaları gösterir."
+  - " &e/bpp &ahelp &8- &7Bu sayfayı gösterir."
+  - " &e/bpp &agive &7<&cBackPack&7> <&cPlayer&7> [&camt&7]"
+  - "   &8- &7Oyuncuya çanta verir"
+  - " &e/bpp &areload &8- &7Plugini yeniler."
+  - "&7&m                                                     "
+  - ""
