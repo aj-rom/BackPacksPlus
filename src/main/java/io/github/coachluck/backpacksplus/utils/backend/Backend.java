@@ -22,10 +22,7 @@ package io.github.coachluck.backpacksplus.utils.backend;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.commands.MainCommand;
-import io.github.coachluck.backpacksplus.listeners.BackPackCloseListener;
-import io.github.coachluck.backpacksplus.listeners.BackPackCraftListener;
-import io.github.coachluck.backpacksplus.listeners.BackPackUseListener;
-import io.github.coachluck.backpacksplus.listeners.InventoryWatcherListener;
+import io.github.coachluck.backpacksplus.listeners.*;
 import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import org.bukkit.plugin.PluginManager;
 
@@ -83,6 +80,7 @@ public class Backend {
     public static void registerListeners()
     {
         PluginManager pm = plugin.getServer().getPluginManager();
+        pm.registerEvents(new BackPackPlacementListener(), plugin);
         pm.registerEvents(new BackPackCraftListener(), plugin);
         pm.registerEvents(new BackPackUseListener(), plugin);
         pm.registerEvents(new BackPackCloseListener(), plugin);
