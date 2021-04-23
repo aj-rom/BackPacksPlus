@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class BackPackPlacementListener implements Listener {
 
     @EventHandler
-    public void onArmorEquip(BlockPlaceEvent e) {
+    public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) return;
         if (BackPackUtil.isBackPack(e.getItemInHand()))
             e.setCancelled(true);
