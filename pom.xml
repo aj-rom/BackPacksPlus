@@ -15,7 +15,7 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<url>github.com/CoachLuck/BackPacksPlus</url>
+	<url>github.com/aj-rom/BackPacksPlus</url>
 
 	<build>
 		<defaultGoal>clean package</defaultGoal>
