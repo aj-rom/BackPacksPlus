@@ -1,4 +1,5 @@
-# To add backpacks just copy a section, for example "BackPacks.Basic" or "BackPacks.Advanced"
+# More Info https://github.com/aj-rom/BackPacksPlus/wiki/BackPack-File
+#  To add backpacks just copy a section, for example "BackPacks.Basic" or "BackPacks.Advanced"
 # Then paste at the bottom, and rename to "BackPacks.NewName"
 # For example:
 #  Basic:

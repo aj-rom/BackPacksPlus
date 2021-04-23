@@ -4,7 +4,7 @@ main: io.github.coachluck.backpacksplus.BackPacksPlus
 api-version: 1.13
 prefix: BackPacksPlus
 authors: [CoachLuck]
-website: github.com/CoachLuck/BackPacksPlus
+website: github.com/aj-rom/BackPacksPlus
 commands:
   bpp:
     description: Main command
