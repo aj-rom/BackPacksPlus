@@ -25,7 +25,9 @@ import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.ReflectionUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -80,7 +82,7 @@ public class DisplayItemHelper {
                 new TextComponent(itemJson)
         };
 
-        final HoverEvent event = new HoverEvent(HoverEvent.Action.SHOW_ITEM, hoverEventComponents);
+        final HoverEvent event = new HoverEvent(Action.SHOW_TEXT, new Text(hoverEventComponents));
 
         TextComponent component = new TextComponent(message);
         component.setHoverEvent(event);
