@@ -20,16 +20,13 @@
 
 package io.github.coachluck.backpacksplus.api;
 
+import de.tr7zw.nbtapi.NBTItem;
 import io.github.coachluck.backpacksplus.utils.BackPack;
-import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
-import io.github.coachluck.backpacksplus.utils.multiversion.ReflectionUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.lang.reflect.Method;
 
 public class DisplayItemHelper {
 
@@ -42,28 +39,9 @@ public class DisplayItemHelper {
      */
     private static String convertItemStackToJson(ItemStack itemStack)
     {
+        NBTItem nbti = new NBTItem(itemStack);
 
-        Class<?> craftItemStackClazz = ReflectionUtil.getOBCClass("inventory.CraftItemStack");
-        Method asNMSCopyMethod = ReflectionUtil.getMethod(craftItemStackClazz, "asNMSCopy", ItemStack.class);
-
-        Class<?> nmsItemStackClazz = ReflectionUtil.getNMSClass("ItemStack");
-        Class<?> nbtTagCompoundClazz = ReflectionUtil.getNMSClass("NBTTagCompound");
-        Method saveNmsItemStackMethod = ReflectionUtil.getMethod(nmsItemStackClazz, "save", nbtTagCompoundClazz);
-
-        Object nmsNbtTagCompoundObj;
-        Object nmsItemStackObj;
-        Object itemAsJsonObject;
-
-        try {
-            nmsNbtTagCompoundObj = nbtTagCompoundClazz.newInstance();
-            nmsItemStackObj = asNMSCopyMethod.invoke(null, itemStack);
-            itemAsJsonObject = saveNmsItemStackMethod.invoke(nmsItemStackObj, nmsNbtTagCompoundObj);
-        } catch (Throwable t) {
-            ChatUtil.error("&cFailed to serialize itemstack to nms item");
-            return null;
-        }
-
-        return itemAsJsonObject.toString();
+        return nbti.toString();
     }
 
     /**
