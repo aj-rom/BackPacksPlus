@@ -20,6 +20,7 @@
 
 package io.github.coachluck.backpacksplus.api;
 
+import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.coachluck.backpacksplus.utils.BackPack;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -39,9 +40,9 @@ public class DisplayItemHelper {
      */
     private static String convertItemStackToJson(ItemStack itemStack)
     {
-        NBTItem nbti = new NBTItem(itemStack);
+        NBTCompound itemData = NBTItem.convertItemtoNBT(itemStack);
 
-        return nbti.toString();
+        return itemData.toString();
     }
 
     /**
