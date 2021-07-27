@@ -124,7 +124,7 @@ public class InventoryWatcher {
                         if (difference > 0) {
                             // Drop item first
                             itemStack.setAmount(difference);
-                            world.dropItem(location, itemStack);
+                            dropItem(world, location, itemStack);
                             
                             // Then delete it
                             itemStack.setAmount(amountToKeep);
@@ -173,6 +173,16 @@ public class InventoryWatcher {
         });
 
         return rValue.intValue();
+    }
+    
+    private void dropItem(final World world, final Location location, final ItemStack itemStack)
+    {
+        final ItemStack dropStack = itemStack.clone();
+        
+        Bukkit.getScheduler().scheduleSyncDelayedTask(
+            plugin,
+            () -> world.dropItem(location, dropStack)
+        );
     }
 
 }
