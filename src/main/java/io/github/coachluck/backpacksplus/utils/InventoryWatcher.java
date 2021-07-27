@@ -122,11 +122,13 @@ public class InventoryWatcher {
                         removedCount = removedCount + difference;
 
                         if (difference > 0) {
-                            itemStack.setAmount(amountToKeep);
-                            player.getInventory().setItem(i, itemStack);
-
+                            // Drop item first
                             itemStack.setAmount(difference);
                             world.dropItem(location, itemStack);
+                            
+                            // Then delete it
+                            itemStack.setAmount(amountToKeep);
+                            player.getInventory().setItem(i, itemStack);
                         }
                     }
                 }
