@@ -69,7 +69,7 @@ public class SkullHelper {
 
         // Getting the compound, that way we can set the skin information
         NBTCompound skull = nbti.addCompound("SkullOwner");
-        skull.setString("Id", UUID.fromString(url64).toString());
+        skull.setString("Id", UUID.nameUUIDFromBytes(url64.getBytes()).toString());
 
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", url64);
