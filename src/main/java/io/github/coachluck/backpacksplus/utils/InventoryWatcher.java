@@ -181,7 +181,7 @@ public class InventoryWatcher {
         
         Bukkit.getScheduler().scheduleSyncDelayedTask(
             plugin,
-            () -> world.dropItem(location, dropStack)
+            () -> world.dropItem(location, dropStack, item -> item.setPickupDelay(40))
         );
     }
 
