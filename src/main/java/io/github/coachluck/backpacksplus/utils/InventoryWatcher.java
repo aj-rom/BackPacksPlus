@@ -117,7 +117,7 @@ public class InventoryWatcher {
                     int prevCount = count;
                     count = count + itemStack.getAmount();
                     if (count > limit) {
-                        int amountToKeep = limit - prevCount;
+                        int amountToKeep = Math.max(0, limit - prevCount);
                         int difference = itemStack.getAmount() - amountToKeep;
                         removedCount = removedCount + difference;
 
