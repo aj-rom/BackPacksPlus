@@ -25,6 +25,8 @@ import io.github.coachluck.backpacksplus.api.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -96,11 +98,16 @@ public class InventoryWatcher {
 
                 timer++;
 
-                PlayerInventory inventory = player.getInventory();
+                ItemStack[] items = player.getInventory().getContents();
+                Location location = player.getLocation();
+                World world = player.getWorld();
 
                 int count = 0;
                 int removedCount = 0;
-                for (ItemStack itemStack : inventory.getContents()) {
+
+                for (int i = 0; i < items.length; ++i) {
+                    ItemStack itemStack = items[i];
+
                     if (itemStack == null)
                         continue;
                     ItemMeta meta = itemStack.getItemMeta();
@@ -114,14 +121,12 @@ public class InventoryWatcher {
                         int difference = itemStack.getAmount() - amountToKeep;
                         removedCount = removedCount + difference;
 
-                        if(difference > 0) {
-                            itemStack.setAmount(difference);
-                            player.getInventory().remove(itemStack);
-                        }
-
-                        if(amountToKeep > 0) {
+                        if (difference > 0) {
                             itemStack.setAmount(amountToKeep);
-                            player.getInventory().addItem(itemStack);
+                            player.getInventory().setItem(i, itemStack);
+
+                            itemStack.setAmount(difference);
+                            world.dropItem(location, itemStack);
                         }
                     }
                 }
