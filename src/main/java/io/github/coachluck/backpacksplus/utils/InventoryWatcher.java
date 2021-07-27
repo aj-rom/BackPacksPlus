@@ -23,6 +23,8 @@ package io.github.coachluck.backpacksplus.utils;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.api.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -99,8 +101,7 @@ public class InventoryWatcher {
                 timer++;
 
                 ItemStack[] items = player.getInventory().getContents();
-                Location location = player.getLocation();
-                World world = player.getWorld();
+                List<ItemStack> toDrop = new LinkedList<>();
 
                 int count = 0;
                 int removedCount = 0;
@@ -124,7 +125,7 @@ public class InventoryWatcher {
                         if (difference > 0) {
                             // Drop item first
                             itemStack.setAmount(difference);
-                            dropItem(world, location, itemStack);
+                            toDrop.add(itemStack.clone());
                             
                             // Then delete it
                             itemStack.setAmount(amountToKeep);
@@ -137,6 +138,14 @@ public class InventoryWatcher {
                     return;
                 }
 
+                Location location = player.getLocation();
+                World world = player.getWorld();
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(
+                    plugin,
+                    () -> toDrop.forEach(dropStack -> world
+                        .dropItem(location, dropStack, item -> item.setPickupDelay(40)))
+                );
                 plugin.getMessageService().sendMessage(player, MessageKey.OVER_LIMIT,
                         Integer.toString(removedCount), Integer.toString(limit));
             }
@@ -173,16 +182,6 @@ public class InventoryWatcher {
         });
 
         return rValue.intValue();
-    }
-    
-    private void dropItem(final World world, final Location location, final ItemStack itemStack)
-    {
-        final ItemStack dropStack = itemStack.clone();
-        
-        Bukkit.getScheduler().scheduleSyncDelayedTask(
-            plugin,
-            () -> world.dropItem(location, dropStack, item -> item.setPickupDelay(40))
-        );
     }
 
 }
