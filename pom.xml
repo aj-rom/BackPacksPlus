@@ -27,8 +27,7 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<!-- needed to compile with JDK 16 and lombok -->
-					<fork>true</fork>
+					<fork>false</fork>
 					<compilerArgs>
 						<arg>-J--illegal-access=permit</arg>
 					</compilerArgs>
@@ -36,7 +35,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.16</version>
+							<version>1.18.20</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
