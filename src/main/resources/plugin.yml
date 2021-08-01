@@ -2,8 +2,9 @@ name: BackPacksPlus
 version: ${project.version}
 main: io.github.coachluck.backpacksplus.BackPacksPlus
 api-version: 1.13
+depend: [NBTAPI]
 prefix: BackPacksPlus
-authors: [CoachLuck]
+authors: [CoachLuck, BrainStone]
 website: github.com/aj-rom/BackPacksPlus
 commands:
   bpp:
