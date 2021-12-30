@@ -20,13 +20,11 @@
 
 package io.github.coachluck.backpacksplus.api;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
-import io.github.coachluck.backpacksplus.utils.multiversion.ReflectionUtil;
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBTListCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Base64;
 import java.util.UUID;
@@ -53,26 +51,30 @@ public class SkullHelper {
      * @param url64 skin url
      * @return itemstack
      */
-    @SuppressWarnings("deprecation")
     public static ItemStack getCustomSkull64(byte[] url64)
     {
+        return getCustomSkull64(new String(url64));
+    }
 
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        PropertyMap propertyMap = profile.getProperties();
-        if (propertyMap == null) {
-            throw new IllegalStateException("Profile doesn't contain a property map");
-        }
+    /**
+     * Return a skull that has a custom texture specified by url.
+     *
+     * @param url64 skin url
+     * @return itemstack
+     */
+    public static ItemStack getCustomSkull64(String url64)
+    {
+        ItemStack head = new ItemStack(getSkull(), 1);
+        NBTItem nbti = new NBTItem(head);
 
-        String encodedData = new String(url64);
-        propertyMap.put("textures", new Property("textures", encodedData));
+        // Getting the compound, that way we can set the skin information
+        NBTCompound skull = nbti.addCompound("SkullOwner");
+        skull.setString("Id", UUID.nameUUIDFromBytes(url64.getBytes()).toString());
 
-        ItemStack head = new ItemStack(getSkull(), 1, (short) 3);
-        ItemMeta headMeta = head.getItemMeta();
-        Class<?> headMetaClass = headMeta.getClass();
+        NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
+        texture.setString("Value", url64);
 
-        ReflectionUtil.getField(headMetaClass, "profile", GameProfile.class).set(headMeta, profile);
-        head.setItemMeta(headMeta);
-        return head;
+        return nbti.getItem();
     }
 
     public static Material getSkull()
