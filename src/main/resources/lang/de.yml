@@ -8,7 +8,7 @@ General:
   BadArgs: "&cFalsche Argumente! &eschreib &7/bpp help &efür hilfe."
   Console: "&8[&cBack&ePacks&b+&8] &cSie müssen ein Spieler sein, um diesen Befehl verwenden zu können!"
   NotFound: "&e%backpack% &cexistiert nicht."
-  OverLimit: "&7wurden entfernt &c%removed% Rucksäcke aus deinem Inventar &7weil du nur
+  OverLimit: "&c%removed% Rucksäcke wurden auf den Boden geworfen &7weil du nur
     &e%limit% &7gleichzeitig tragen darfst."
 BackPack:
   ItemNotAllowed: "%backpack% &cSie können &e%item% &cnicht darin speichern."

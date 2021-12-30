@@ -23,8 +23,12 @@ package io.github.coachluck.backpacksplus.utils;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.api.BackPackUtil;
 import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -96,11 +100,15 @@ public class InventoryWatcher {
 
                 timer++;
 
-                PlayerInventory inventory = player.getInventory();
+                ItemStack[] items = player.getInventory().getContents();
+                List<ItemStack> toDrop = new LinkedList<>();
 
                 int count = 0;
                 int removedCount = 0;
-                for (ItemStack itemStack : inventory.getContents()) {
+
+                for (int i = 0; i < items.length; ++i) {
+                    ItemStack itemStack = items[i];
+
                     if (itemStack == null)
                         continue;
                     ItemMeta meta = itemStack.getItemMeta();
@@ -110,18 +118,18 @@ public class InventoryWatcher {
                     int prevCount = count;
                     count = count + itemStack.getAmount();
                     if (count > limit) {
-                        int amountToKeep = limit - prevCount;
+                        int amountToKeep = Math.max(0, limit - prevCount);
                         int difference = itemStack.getAmount() - amountToKeep;
                         removedCount = removedCount + difference;
 
-                        if(difference > 0) {
+                        if (difference > 0) {
+                            // Drop item first
                             itemStack.setAmount(difference);
-                            player.getInventory().remove(itemStack);
-                        }
-
-                        if(amountToKeep > 0) {
+                            toDrop.add(itemStack.clone());
+                            
+                            // Then delete it
                             itemStack.setAmount(amountToKeep);
-                            player.getInventory().addItem(itemStack);
+                            player.getInventory().setItem(i, itemStack);
                         }
                     }
                 }
@@ -130,6 +138,14 @@ public class InventoryWatcher {
                     return;
                 }
 
+                Location location = player.getLocation();
+                World world = player.getWorld();
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(
+                    plugin,
+                    () -> toDrop.forEach(dropStack -> world
+                        .dropItem(location, dropStack, item -> item.setPickupDelay(40)))
+                );
                 plugin.getMessageService().sendMessage(player, MessageKey.OVER_LIMIT,
                         Integer.toString(removedCount), Integer.toString(limit));
             }
