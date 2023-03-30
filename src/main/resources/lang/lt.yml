@@ -1,0 +1,36 @@
+# Lithuanian translation file
+General:
+  Permission: "&cJūs neturite leidimo naudoti šią komandą!"
+  CraftPerm: "&cJūs neturite leidimo gaminti šią kuprinę!"
+  NoRenamePerm: "&cJums neleidžiama pervadinti kuprinių!"
+  Use: "&cJūs neturite leidimo naudotis šia kuprine!"
+  Offline-Player: "&e%player% &cnepavyko rasti!"
+  Reload: "&8[&cBack&ePacks&b+&8] &aPerkrovėte papildinį!"
+  BadArgs: "&cIncorrect arguments! &eRašyk &7/bpp help &edėl pagalbos."
+  Console: "&8[&cBack&ePacks&b+&8] &cNorėdami naudoti šią komandą, turite būti žaidėjas!"
+  NotFound: "&e%backpack% &cneegzistuoja."
+  OverLimit: "&7Panaikintos &c%removed% kuprinės &7nes leidžiama nešiotis tik &e%limit% &7vienu metu."
+BackPack:
+  ItemNotAllowed: "%backpack% &cneleidžia nešioti &e%item% &cviduje."
+  OnCraft:
+    - "&8[&a+&8] &aJūs sukūrėte %backpack%"
+  OnGive: "&7Jūs suteikėte &e%player% &7- &a%amt%x %backpack%"
+  OnReceive: "&7Jums buvo suteikta &7- &a%amt%x %backpack%"
+  Recipe-View:
+    Header:
+      - ""
+      - "&eČia pateikiamas dabartinių &cBackPack &ereceptai:"
+      - " &7Užveskite pelės žymeklį, kad pamatytumėte  receptus!"
+    Body: " &8[&a+&8]&7 &e%backpack%"
+    Footer:
+      - ""
+Help:
+  - ""
+  - "&7&m                  &r &8[&cBack&ePacks&b+&8] &7&m                "
+  - " &e/bpp &8 - &7Visų prieinamų kuprinių sąrašas."
+  - " &e/bpp &ahelp &8- &7Rodo šį puslapį."
+  - " &e/bpp &agive &7<&cBackPack&7> <&cPlayer&7> [&camt&7]"
+  - "   &8- &7Suteikite žaidėjui nurodytą kuprinę"
+  - " &e/bpp &areload &8- &7Perkrauna papildinį."
+  - "&7&m                                                     "
+  - ""
