@@ -25,15 +25,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ChatUtil {
 
     public static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
-    public static final char COLOR_CHAR = '\u00A7';
+    public static final char COLOR_CHAR = '§';
 
     public static void msg(Player player, String message)
     {
@@ -64,8 +64,7 @@ public class ChatUtil {
      * **/
     public static void logMsg(String message)
     {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
-                "&7[&eBackPacks+&7]&r " + message));
+        Bukkit.getConsoleSender().sendMessage(format("&7[&eBackPacks+&7]&r " + message));
     }
 
     public static void error(String message)
@@ -74,17 +73,13 @@ public class ChatUtil {
     }
 
     /**
-     * Formats the string list to support color cods
+     * Formats the string list to support color codes
      * @param lore the string list to format
      * @return the formatted list of strings
      */
     public static List<String> formatLore(List<String> lore)
     {
-        List<String> formattedLore = new ArrayList<>();
-        lore.forEach(s -> {
-            formattedLore.add(ChatUtil.format(s));
-        });
-        return formattedLore;
+        return lore.stream().map(ChatUtil::format).collect(Collectors.toList());
     }
 
     /**
@@ -95,7 +90,7 @@ public class ChatUtil {
     public static String translateHexColorCodes(String message)
     {
         Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
+        StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);
 
         while (matcher.find()) {
             String group = matcher.group(1);
@@ -107,5 +102,4 @@ public class ChatUtil {
         }
         return matcher.appendTail(buffer).toString();
     }
-
 }
