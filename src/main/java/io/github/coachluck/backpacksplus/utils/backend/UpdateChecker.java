@@ -20,34 +20,54 @@
 
 package io.github.coachluck.backpacksplus.utils.backend;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Consumer;
+import io.github.coachluck.backpacksplus.BackPacksPlus;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
-public class UpdateChecker {
+public final class UpdateChecker {
 
-    private final Plugin plugin;
-    private final int resourceId;
+    private static final String resourceId = "82612";
 
-    public UpdateChecker(Plugin plugin, int resourceId) {
-        this.plugin = plugin;
-        this.resourceId = resourceId;
-    }
-
-    public void getVersion(final Consumer<String> consumer) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+    // org.bukkit.consumer deprecated since 1.20.2
+    // use java.util.function.Consumer instead which has been included in Java 1.8+
+    public static void getVersion(final Consumer<String> consumer) {
+        BackPacksPlus.runTaskAsynchronously(() -> {
+            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
                 if (scanner.hasNext()) {
                     consumer.accept(scanner.next());
                 }
             } catch (IOException exception) {
                 ChatUtil.logMsg("&cCannot look for updates: &e" + exception.getMessage());
             }
+        });
+    }
+
+    // Attempt to extract integer values from a versioned string
+    private static int parseVersionString(String version) {
+        String reformatted = version.replaceAll("\\.", "");
+        try {
+            return Integer.parseInt(reformatted);
+        } catch (NumberFormatException exception) {
+            ChatUtil.logMsg("&cCannot parse version: &e" + reformatted);
+            return -1;
+        }
+    }
+
+    // Initiate the update task
+    public static void checkForUpdate() {
+        int currentVersion = parseVersionString(BackPacksPlus.getInstance().getDescription().getVersion());
+        getVersion( newVersionString -> {
+            int newVersion = parseVersionString(newVersionString);
+            if (currentVersion >= newVersion) {
+                ChatUtil.logMsg("&aYou are running the latest version.");
+                return;
+            }
+
+            ChatUtil.logMsg("&aThere is a new update available. &ehttps://www.spigotmc.org/resources/b.82612/");
         });
     }
 }

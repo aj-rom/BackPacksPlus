@@ -23,7 +23,7 @@ package io.github.coachluck.backpacksplus.utils.backend;
 import io.github.coachluck.backpacksplus.BackPacksPlus;
 import io.github.coachluck.backpacksplus.commands.MainCommand;
 import io.github.coachluck.backpacksplus.listeners.*;
-import io.github.coachluck.backpacksplus.utils.lang.MessageKey;
+
 import org.bukkit.plugin.PluginManager;
 
 public class Backend {
@@ -62,16 +62,7 @@ public class Backend {
         if(!plugin.getConfig().getBoolean("Check-For-Update"))
             return;
 
-        new UpdateChecker(plugin, 82612).getVersion(version -> {
-            int old = Integer.parseInt(plugin.getDescription().getVersion().replaceAll("\\.", ""));
-            int newVer = Integer.parseInt(version.replaceAll("\\.", ""));
-            if (old >= newVer) {
-                ChatUtil.logMsg("&bYou are running the latest version.");
-                return;
-            }
-            plugin.updateMsg = true;
-            ChatUtil.logMsg("&aThere is a new update available. &ehttps://www.spigotmc.org/resources/b.82612/");
-        });
+        UpdateChecker.checkForUpdate();
     }
 
     /**
@@ -90,7 +81,5 @@ public class Backend {
         }
 
         plugin.getCommand("bpp").setExecutor(new MainCommand());
-        plugin.getCommand("bpp").setPermissionMessage(plugin.getMessageService()
-                .getRawMessage(MessageKey.PERMISSION_COMMAND));
     }
 }
