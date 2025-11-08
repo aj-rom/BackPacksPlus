@@ -32,24 +32,20 @@ public class MessageService {
 
     private final YamlConfiguration messages;
 
-    public MessageService(String language)
+    public MessageService()
     {
         final BackPacksPlus plugin = BackPacksPlus.getInstance();
-        String lang = language;
-        if (language.equalsIgnoreCase("custom")) {
-            File langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
-            messages = YamlConfiguration.loadConfiguration(langFile);
-            return;
-        }
-        else if (plugin.getResource("lang/" + language + ".yml") == null) {
-            ChatUtil.error("Could not find language file: &e" + language + ".yml");
-            ChatUtil.error("Defaulting to &een.yml &c...");
-            lang = "en";
+        final String language = plugin.getConfig().getString("Language", "en");
+        final String langPath = "lang/" + language + ".yml";
+
+        if (plugin.getResource(langPath) == null) {
+            ChatUtil.error("Could not find language file: &e: " + langPath);
+            throw new RuntimeException("Could not find language file: &e" + langPath);
         }
 
-        plugin.saveResource("lang/" + lang + ".yml", false);
-        File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
-        messages = YamlConfiguration.loadConfiguration(langFile);
+        plugin.saveResource(langPath, false);
+        File file = new File(plugin.getDataFolder(), langPath);
+        messages = YamlConfiguration.loadConfiguration(file);
     }
 
     public void sendMessage(CommandSender sender, MessageKey messageKey)
