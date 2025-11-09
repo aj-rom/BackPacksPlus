@@ -21,6 +21,7 @@
 package io.github.coachluck.backpacksplus.utils;
 
 import io.github.coachluck.backpacksplus.BackPacksPlus;
+import io.github.coachluck.backpacksplus.api.BackPackDataComponent;
 import io.github.coachluck.backpacksplus.api.InventorySerializerUtil;
 import io.github.coachluck.backpacksplus.api.SkullHelper;
 import io.github.coachluck.backpacksplus.utils.backend.ChatUtil;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class BackPack {
 
@@ -115,7 +117,7 @@ public class BackPack {
     /**
      * The custom model data for the backpack
      */
-    private int customModelData;
+    private  double customModelData;
 
     @Getter
     private ShapedRecipe shapedRecipe;
@@ -144,12 +146,12 @@ public class BackPack {
 
     public boolean hasWhiteList()
     {
-        return whiteList.size() > 0;
+        return !whiteList.isEmpty();
     }
 
     public boolean hasBlackList()
     {
-        return blackList.size() > 0;
+        return !blackList.isEmpty();
     }
 
     public boolean isCustomTextured()
@@ -213,19 +215,25 @@ public class BackPack {
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(plugin, "uuid"), PersistentDataType.STRING, UUID.randomUUID().toString());
 
         if (enchanted) {
-            itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
+            // REFLECTION (1.20.x -)
+            // itemMeta.addEnchant(Enchantment.DURABILITY, 1, true)
+            itemMeta.addEnchant(Enchantment.UNBREAKING, 1, true);
         }
 
-        if (customModelData != -1) {
-            itemMeta.setCustomModelData(customModelData);
+        if (customModelData >= 0) {
+            // REFLECTION (1.21.5 -)
+            // itemMeta.setCustomModelData(customModelData);
+            itemMeta.setCustomModelDataComponent(BackPackDataComponent.simpleData(customModelData));
         }
 
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         itemMeta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
         itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        // REFLECTION (1.21.x?)
+        // itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        // are there potentially more effects now we want to disable?
 
         bpItem.setItemMeta(itemMeta);
 
@@ -273,9 +281,7 @@ public class BackPack {
     }
 
     private void checkAndSetCustomData(ConfigurationSection s) {
-        if (s.isSet("CustomData")) {
-            this.customModelData = s.getInt("CustomData");
-        } else this.customModelData = -1;
+        this.customModelData = s.getDouble("CustomData", -1);
     }
 
     private void checkAndSetName(ConfigurationSection section)
@@ -329,21 +335,15 @@ public class BackPack {
 
     private void checkAndSetWhiteAndBlackList(ConfigurationSection section)
     {
-        List<String> wList = section.getStringList("Whitelist");
-        List<String> bList = section.getStringList("Blacklist");
+        // Set the whitelist
+        section.getStringList("Whitelist").forEach(s -> {
+            whiteList.add(Material.getMaterial(s));
+        });
 
-        if (wList.size() > 0) {
-            wList.forEach(s -> {
-                whiteList.add(Material.getMaterial(s));
-            });
-            return;
-        }
-
-        if (bList.size() > 0) {
-            bList.forEach(s -> {
-                blackList.add(Material.getMaterial(s));
-            });
-        }
+        // set the blacklist
+        section.getStringList("Blacklist").forEach(s -> {
+            blackList.add(Material.getMaterial(s));
+        });
     }
 
     private void checkAndSetRecipe(ConfigurationSection section)
@@ -374,12 +374,11 @@ public class BackPack {
 
         this.recipeShapeList = recipe;
     }
+
     private boolean isCustomTexture(String s)
     {
-        if (s == null || s.isEmpty()) return false;
-
-        return s.equalsIgnoreCase("skull") || s.equalsIgnoreCase("player_head")
-                || s.equalsIgnoreCase("custom") || s.equalsIgnoreCase("texture");
+       return Stream.of("skull", "player_head", "custom", "texture")
+                    .anyMatch(t -> t.equalsIgnoreCase(s));
     }
 
     private void configError(String error)
