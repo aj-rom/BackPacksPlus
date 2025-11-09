@@ -24,6 +24,8 @@ import io.github.coachluck.backpacksplus.BackPacksPlus;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.function.Consumer;
@@ -32,16 +34,18 @@ public final class UpdateChecker {
 
     private static final String resourceId = "82612";
 
-    // org.bukkit.consumer deprecated since 1.20.2
-    // use java.util.function.Consumer instead which has been included in Java 1.8+
     public static void getVersion(final Consumer<String> consumer) {
         BackPacksPlus.runTaskAsynchronously(() -> {
-            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream(); Scanner scanner = new Scanner(inputStream)) {
+            try {
+                URI uri = new URI("https", "api.spigotmc.org", "/legacy/update.php", "resource=" + resourceId);
+                URL resourceUrl = uri.toURL();
+                InputStream inputStream = resourceUrl.openStream();
+                Scanner scanner = new Scanner(inputStream);
                 if (scanner.hasNext()) {
                     consumer.accept(scanner.next());
                 }
-            } catch (IOException exception) {
-                ChatUtil.logMsg("&cCannot look for updates: &e" + exception.getMessage());
+            } catch (IOException | URISyntaxException exception) {
+                ChatUtil.logMsg("&cFailed to check for updates: &e" + exception.getMessage());
             }
         });
     }
