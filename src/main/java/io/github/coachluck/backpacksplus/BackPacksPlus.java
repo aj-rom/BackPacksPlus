@@ -29,6 +29,7 @@ import io.github.coachluck.backpacksplus.utils.lang.MessageService;
 import io.github.coachluck.backpacksplus.utils.multiversion.MultiVersionUtil;
 import io.github.coachluck.backpacksplus.utils.multiversion.Reflector;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,7 +56,6 @@ public final class BackPacksPlus extends JavaPlugin {
 
     public HashMap<Player, Integer> viewingBackPack;
     public HashMap<UUID, InventoryWatcher> playerStackLimit;
-    public boolean updateMsg;
 
     @Override
     public void onLoad()
@@ -67,7 +67,7 @@ public final class BackPacksPlus extends JavaPlugin {
         playerStackLimit = new HashMap<>();
 
         multiVersionUtil = new Reflector().getMultiVersionUtil();
-        messageService = new MessageService(getConfig().getString("Language"));
+        messageService = new MessageService();
         ChatUtil.logMsg("&aLoaded backend services &7( &e" + timer.getDuration() + " ms &7)");
 
         timer.reset();
@@ -90,8 +90,8 @@ public final class BackPacksPlus extends JavaPlugin {
     {
         saveDefaultConfig();
         saveResource("backpacks.yml", false);
-        final int CONFIG_VERSION = getConfig().getInt("Config-Version");
-        Backend.checkConfigVersion(CONFIG_VERSION);
+        final int configVersion = getConfig().getInt("Config-Version", 3);
+        Backend.checkConfigVersion(configVersion);
     }
 
     public void loadBackPacks()
@@ -115,15 +115,28 @@ public final class BackPacksPlus extends JavaPlugin {
         return null;
     }
 
+    /*
+        Tasks to be completed on server reloads or force reloads
+     */
     public void reload()
     {
         reloadConfig();
         backPacksYaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "backpacks.yml"));
-        messageService = new MessageService(getConfig().getString("Language"));
+        messageService = new MessageService();
         loadBackPacks();
     }
 
+    /*
+        The main plugin instance
+     */
     public static BackPacksPlus getInstance() {
         return JavaPlugin.getPlugin(BackPacksPlus.class);
+    }
+
+    /*
+        Wrapper method to simplify DSL to schedule async tasks for this plugin
+     */
+    public static void runTaskAsynchronously(Runnable task) {
+        Bukkit.getScheduler().runTaskAsynchronously(getInstance(), task);
     }
 }
