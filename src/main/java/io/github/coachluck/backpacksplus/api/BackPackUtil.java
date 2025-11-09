@@ -28,15 +28,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class BackPackUtil {
-
-    public static boolean enderChestEnabled;
 
     private static final BackPacksPlus plugin = BackPacksPlus.getInstance();
 
@@ -51,14 +49,10 @@ public class BackPackUtil {
 
     public static boolean isBackPack(ItemStack item)
     {
-        if(item == null)
+        if(item == null || !item.hasItemMeta())
             return false;
 
-        final ItemMeta meta = item.getItemMeta();
-        if(meta == null)
-            return false;
-
-        return isBackPack(meta.getPersistentDataContainer());
+        return isBackPack(item.getItemMeta().getPersistentDataContainer());
     }
 
     public static boolean isBackPack(PersistentDataContainer data)
@@ -128,38 +122,35 @@ public class BackPackUtil {
         return amt;
     }
 
+    @Nullable
     public static BackPack getBackPackFromItem(ItemStack item)
     {
-        if (item.getItemMeta() == null) {
+        if(item == null || !item.hasItemMeta() || item.getItemMeta() == null) {
             return null;
         }
 
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-
-        for (BackPack bp : plugin.getBackPacks()) {
-            if (getName(data).equalsIgnoreCase(bp.getKey())) {
-                return bp;
-            }
-        }
-
-        return null;
+        final PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        final String containerName = getName(data);
+        return plugin.getBackPacks().stream()
+                .filter(backPack -> backPack.getKey().equalsIgnoreCase(containerName))
+                .findFirst()
+                .orElse(null);
     }
+
 
     public static boolean isEndChestEnabled() {
-        for (BackPack bp : plugin.getBackPacks()) {
-            if (bp.isEnderChestEnabled()) {
-                return true;
-            }
-        }
-
-        return false;
+        return plugin.getBackPacks().stream().anyMatch(BackPack::isEnderChestEnabled);
     }
 
+    /*
+        Get the enderchest pack if one exists
+     */
+    @Nullable
     public static ItemStack getEnderPack() {
-        for (BackPack bp :plugin.getBackPacks()) {
-            if (bp.isEnderChestEnabled()) return bp.getBackPackHoldItem();
-        }
-
-        return null;
+        return plugin.getBackPacks().stream()
+                .filter(BackPack::isEnderChestEnabled)
+                .findFirst()
+                .map(BackPack::getBackPackHoldItem)
+                .orElse(null);
     }
 }
