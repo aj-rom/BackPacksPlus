@@ -1,6 +1,7 @@
 package io.github.coachluck.backpacksplus.api;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
@@ -38,6 +39,7 @@ public class BackPackDataComponent implements CustomModelDataComponent {
     public List<String> strings = List.of();
 
     @Override
+    @NonNull
     public Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         map.put("colors", colors.stream().map(Color::serialize));
